@@ -7,6 +7,13 @@
 
 protocol Tool {
     var name: String { get }
+    var requiresConfirmation: Bool { get }
 
     func execute(argument: String) -> String
+}
+
+extension Tool {
+    var requiresConfirmation: Bool {
+        false
+    }
 }

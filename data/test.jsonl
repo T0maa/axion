@@ -1,90 +1,258 @@
-{"prompt":"open Safari","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Safari\"}}"}
-{"prompt":"open Xcode","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Xcode\"}}"}
-{"prompt":"open Terminal","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Terminal\"}}"}
-{"prompt":"open Finder","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Finder\"}}"}
-{"prompt":"launch Safari","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Safari\"}}"}
-{"prompt":"launch Xcode","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Xcode\"}}"}
-{"prompt":"launch the Terminal app","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Terminal\"}}"}
-{"prompt":"start Finder","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Finder\"}}"}
-{"prompt":"can you open Safari for me","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Safari\"}}"}
-{"prompt":"please open Xcode","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Xcode\"}}"}
-{"prompt":"open the macOS Terminal","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Terminal\"}}"}
-{"prompt":"show me Finder","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Finder\"}}"}
-{"prompt":"open github.com","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://github.com\"}}"}
-{"prompt":"open apple.com","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.apple.com\"}}"}
-{"prompt":"open google.com","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.google.com\"}}"}
-{"prompt":"open https://github.com","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://github.com\"}}"}
-{"prompt":"open https://www.apple.com","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.apple.com\"}}"}
-{"prompt":"open https://www.google.com","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.google.com\"}}"}
-{"prompt":"go to github.com","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://github.com\"}}"}
-{"prompt":"go to apple.com","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.apple.com\"}}"}
-{"prompt":"go to google.com","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.google.com\"}}"}
-{"prompt":"open the GitHub website","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://github.com\"}}"}
-{"prompt":"open the Apple website","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.apple.com\"}}"}
-{"prompt":"open the Google website","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.google.com\"}}"}
-{"prompt":"open stackoverflow.com","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://stackoverflow.com\"}}"}
-{"prompt":"open wikipedia.org","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.wikipedia.org\"}}"}
-{"prompt":"open /Users/thomas/Desktop/test.pdf","completion":"{\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"open /Users/thomas/Desktop/test.png","completion":"{\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
-{"prompt":"open /Users/thomas/Desktop/axon-note.txt","completion":"{\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
-{"prompt":"open /Users/thomas/Documents/report.md","completion":"{\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
-{"prompt":"open the file /Users/thomas/Desktop/test.pdf","completion":"{\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"open the file /Users/thomas/Desktop/test.png","completion":"{\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
-{"prompt":"launch /Applications/Calculator.app","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Calculator\"}}"}
-{"prompt":"open /Applications/Calculator.app","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Calculator\"}}"}
-{"prompt":"open ~/Desktop/axon-note.txt","completion":"{\"tool\":\"open_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
-{"prompt":"open ~/Desktop/test.png","completion":"{\"tool\":\"open_file\",\"params\":{\"path\":\"~/Desktop/test.png\"}}"}
-{"prompt":"reveal /Users/thomas/Desktop/test.pdf in Finder","completion":"{\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"reveal /Users/thomas/Desktop/test.png in Finder","completion":"{\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
-{"prompt":"show /Users/thomas/Desktop/axon-note.txt in Finder","completion":"{\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
-{"prompt":"locate /Users/thomas/Documents/report.md","completion":"{\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
-{"prompt":"find /Users/thomas/Desktop/test.pdf in Finder","completion":"{\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"show me where /Users/thomas/Desktop/test.png is","completion":"{\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
-{"prompt":"reveal ~/Desktop/axon-note.txt","completion":"{\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
-{"prompt":"locate ~/Desktop/test.png in Finder","completion":"{\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/test.png\"}}"}
-{"prompt":"read /Users/thomas/Desktop/axon-note.txt","completion":"{\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
-{"prompt":"read /Users/thomas/Documents/report.md","completion":"{\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
-{"prompt":"read /Users/thomas/Projects/AXION/README.md","completion":"{\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/README.md\"}}"}
-{"prompt":"show the content of /Users/thomas/Desktop/axon-note.txt","completion":"{\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
-{"prompt":"inspect /Users/thomas/Projects/AXION/data/test.jsonl","completion":"{\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/data/test.jsonl\"}}"}
-{"prompt":"read the file /Users/thomas/Projects/AXION/benchmark.py","completion":"{\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/benchmark.py\"}}"}
-{"prompt":"open and read /Users/thomas/Desktop/notes.txt","completion":"{\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/notes.txt\"}}"}
-{"prompt":"show me the content of ~/Desktop/axon-note.txt","completion":"{\"tool\":\"read_text_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
-{"prompt":"copy hello AXON to the clipboard","completion":"{\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"hello AXON\"}}"}
-{"prompt":"copy AXON benchmark ready to clipboard","completion":"{\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"AXON benchmark ready\"}}"}
-{"prompt":"copy this text: local-first AI assistant","completion":"{\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"local-first AI assistant\"}}"}
-{"prompt":"put hello world in my clipboard","completion":"{\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"hello world\"}}"}
-{"prompt":"copy the sentence SwiftUI plus C++ core","completion":"{\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"SwiftUI plus C++ core\"}}"}
-{"prompt":"copy Qwen local model to clipboard","completion":"{\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"Qwen local model\"}}"}
-{"prompt":"copy the path /Users/thomas/Desktop/test.pdf","completion":"{\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"copy AXION to the pasteboard","completion":"{\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"AXION\"}}"}
-{"prompt":"create /Users/thomas/Desktop/axon-note.txt with hello AXON","completion":"{\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\",\"content\":\"hello AXON\"}}"}
-{"prompt":"create a file /Users/thomas/Desktop/todo.txt with buy milk","completion":"{\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/todo.txt\",\"content\":\"buy milk\"}}"}
-{"prompt":"write hello world into /Users/thomas/Desktop/hello.txt","completion":"{\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/hello.txt\",\"content\":\"hello world\"}}"}
-{"prompt":"make a text file /Users/thomas/Desktop/meeting-notes.txt containing AXON meeting notes","completion":"{\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/meeting-notes.txt\",\"content\":\"AXON meeting notes\"}}"}
-{"prompt":"create /Users/thomas/Documents/axon-log.txt with initial log entry","completion":"{\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Documents/axon-log.txt\",\"content\":\"initial log entry\"}}"}
-{"prompt":"write project status ready into ~/Desktop/status.txt","completion":"{\"tool\":\"create_text_file\",\"params\":{\"path\":\"~/Desktop/status.txt\",\"content\":\"project status ready\"}}"}
-{"prompt":"create a note at ~/Desktop/quick-note.md with AXON works","completion":"{\"tool\":\"create_text_file\",\"params\":{\"path\":\"~/Desktop/quick-note.md\",\"content\":\"AXON works\"}}"}
-{"prompt":"create /Users/thomas/Desktop/shopping.txt with eggs and bread","completion":"{\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/shopping.txt\",\"content\":\"eggs and bread\"}}"}
-{"prompt":"append second line to /Users/thomas/Desktop/axon-note.txt","completion":"{\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\",\"content\":\"second line\"}}"}
-{"prompt":"add buy coffee to /Users/thomas/Desktop/todo.txt","completion":"{\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/todo.txt\",\"content\":\"buy coffee\"}}"}
-{"prompt":"append AXON benchmark passed to /Users/thomas/Documents/axon-log.txt","completion":"{\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Documents/axon-log.txt\",\"content\":\"AXON benchmark passed\"}}"}
-{"prompt":"add another note to ~/Desktop/quick-note.md","completion":"{\"tool\":\"append_text_file\",\"params\":{\"path\":\"~/Desktop/quick-note.md\",\"content\":\"another note\"}}"}
-{"prompt":"append eggs to /Users/thomas/Desktop/shopping.txt","completion":"{\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/shopping.txt\",\"content\":\"eggs\"}}"}
-{"prompt":"add final line to /Users/thomas/Desktop/hello.txt","completion":"{\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/hello.txt\",\"content\":\"final line\"}}"}
-{"prompt":"append task completed to ~/Desktop/status.txt","completion":"{\"tool\":\"append_text_file\",\"params\":{\"path\":\"~/Desktop/status.txt\",\"content\":\"task completed\"}}"}
-{"prompt":"add AXON is local-first to /Users/thomas/Desktop/meeting-notes.txt","completion":"{\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/meeting-notes.txt\",\"content\":\"AXON is local-first\"}}"}
-{"prompt":"what time is it","completion":"{\"tool\":\"get_current_datetime\",\"params\":{}}"}
-{"prompt":"what is the current time","completion":"{\"tool\":\"get_current_datetime\",\"params\":{}}"}
-{"prompt":"what date is it today","completion":"{\"tool\":\"get_current_datetime\",\"params\":{}}"}
-{"prompt":"give me the current date and time","completion":"{\"tool\":\"get_current_datetime\",\"params\":{}}"}
-{"prompt":"current datetime","completion":"{\"tool\":\"get_current_datetime\",\"params\":{}}"}
-{"prompt":"tell me today's date","completion":"{\"tool\":\"get_current_datetime\",\"params\":{}}"}
-{"prompt":"I need the timestamp now","completion":"{\"tool\":\"get_current_datetime\",\"params\":{}}"}
-{"prompt":"give me a timestamp for my note","completion":"{\"tool\":\"get_current_datetime\",\"params\":{}}"}
-{"prompt":"open Safari then go to github.com","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://github.com\"}}"}
-{"prompt":"open Finder and show /Users/thomas/Desktop/test.png","completion":"{\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
-{"prompt":"open the website not the app: safari.com","completion":"{\"tool\":\"open_url\",\"params\":{\"url\":\"https://safari.com\"}}"}
-{"prompt":"open the app Safari, not a website","completion":"{\"tool\":\"open_app\",\"params\":{\"app\":\"Safari\"}}"}
-{"prompt":"read /Users/thomas/Desktop/test.pdf","completion":"{\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"show /Users/thomas/Desktop/test.pdf in Finder","completion":"{\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
+{"prompt":"open Safari","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Safari\"}}"}
+{"prompt":"open Xcode","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Xcode\"}}"}
+{"prompt":"open Terminal","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Terminal\"}}"}
+{"prompt":"open Finder","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Finder\"}}"}
+{"prompt":"launch Safari","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Safari\"}}"}
+{"prompt":"launch Xcode","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Xcode\"}}"}
+{"prompt":"launch the Terminal app","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Terminal\"}}"}
+{"prompt":"start Finder","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Finder\"}}"}
+{"prompt":"can you open Safari for me","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Safari\"}}"}
+{"prompt":"please open Xcode","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Xcode\"}}"}
+{"prompt":"open the macOS Terminal","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Terminal\"}}"}
+{"prompt":"show me Finder","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Finder\"}}"}
+{"prompt":"open github.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://github.com\"}}"}
+{"prompt":"open apple.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.apple.com\"}}"}
+{"prompt":"open google.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.google.com\"}}"}
+{"prompt":"open https://github.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://github.com\"}}"}
+{"prompt":"open https://www.apple.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.apple.com\"}}"}
+{"prompt":"open https://www.google.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.google.com\"}}"}
+{"prompt":"go to github.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://github.com\"}}"}
+{"prompt":"go to apple.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.apple.com\"}}"}
+{"prompt":"go to google.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.google.com\"}}"}
+{"prompt":"open the GitHub website","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://github.com\"}}"}
+{"prompt":"open the Apple website","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.apple.com\"}}"}
+{"prompt":"open the Google website","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.google.com\"}}"}
+{"prompt":"open stackoverflow.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://stackoverflow.com\"}}"}
+{"prompt":"open wikipedia.org","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.wikipedia.org\"}}"}
+{"prompt":"open /Users/thomas/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
+{"prompt":"open /Users/thomas/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
+{"prompt":"open /Users/thomas/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
+{"prompt":"open /Users/thomas/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
+{"prompt":"open the file /Users/thomas/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
+{"prompt":"open the file /Users/thomas/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
+{"prompt":"launch /Applications/Calculator.app","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Calculator\"}}"}
+{"prompt":"open /Applications/Calculator.app","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Calculator\"}}"}
+{"prompt":"open ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
+{"prompt":"open ~/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"~/Desktop/test.png\"}}"}
+{"prompt":"reveal /Users/thomas/Desktop/test.pdf in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
+{"prompt":"reveal /Users/thomas/Desktop/test.png in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
+{"prompt":"show /Users/thomas/Desktop/axon-note.txt in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
+{"prompt":"locate /Users/thomas/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
+{"prompt":"find /Users/thomas/Desktop/test.pdf in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
+{"prompt":"show me where /Users/thomas/Desktop/test.png is","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
+{"prompt":"reveal ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
+{"prompt":"locate ~/Desktop/test.png in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/test.png\"}}"}
+{"prompt":"read /Users/thomas/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
+{"prompt":"read /Users/thomas/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
+{"prompt":"read /Users/thomas/Projects/AXION/README.md","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/README.md\"}}"}
+{"prompt":"show the content of /Users/thomas/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
+{"prompt":"inspect /Users/thomas/Projects/AXION/data/test.jsonl","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/data/test.jsonl\"}}"}
+{"prompt":"read the file /Users/thomas/Projects/AXION/benchmark.py","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/benchmark.py\"}}"}
+{"prompt":"open and read /Users/thomas/Desktop/notes.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/notes.txt\"}}"}
+{"prompt":"show me the content of ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
+{"prompt":"copy hello AXON to the clipboard","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"hello AXON\"}}"}
+{"prompt":"copy AXON benchmark ready to clipboard","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"AXON benchmark ready\"}}"}
+{"prompt":"copy this text: local-first AI assistant","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"local-first AI assistant\"}}"}
+{"prompt":"put hello world in my clipboard","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"hello world\"}}"}
+{"prompt":"copy the sentence SwiftUI plus C++ core","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"SwiftUI plus C++ core\"}}"}
+{"prompt":"copy Qwen local model to clipboard","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"Qwen local model\"}}"}
+{"prompt":"copy the path /Users/thomas/Desktop/test.pdf","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"/Users/thomas/Desktop/test.pdf\"}}"}
+{"prompt":"copy AXION to the pasteboard","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"AXION\"}}"}
+{"prompt":"create /Users/thomas/Desktop/axon-note.txt with hello AXON","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\",\"content\":\"hello AXON\"}}"}
+{"prompt":"create a file /Users/thomas/Desktop/todo.txt with buy milk","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/todo.txt\",\"content\":\"buy milk\"}}"}
+{"prompt":"write hello world into /Users/thomas/Desktop/hello.txt","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/hello.txt\",\"content\":\"hello world\"}}"}
+{"prompt":"make a text file /Users/thomas/Desktop/meeting-notes.txt containing AXON meeting notes","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/meeting-notes.txt\",\"content\":\"AXON meeting notes\"}}"}
+{"prompt":"create /Users/thomas/Documents/axon-log.txt with initial log entry","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Documents/axon-log.txt\",\"content\":\"initial log entry\"}}"}
+{"prompt":"write project status ready into ~/Desktop/status.txt","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"~/Desktop/status.txt\",\"content\":\"project status ready\"}}"}
+{"prompt":"create a note at ~/Desktop/quick-note.md with AXON works","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"~/Desktop/quick-note.md\",\"content\":\"AXON works\"}}"}
+{"prompt":"create /Users/thomas/Desktop/shopping.txt with eggs and bread","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/shopping.txt\",\"content\":\"eggs and bread\"}}"}
+{"prompt":"append second line to /Users/thomas/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\",\"content\":\"second line\"}}"}
+{"prompt":"add buy coffee to /Users/thomas/Desktop/todo.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/todo.txt\",\"content\":\"buy coffee\"}}"}
+{"prompt":"append AXON benchmark passed to /Users/thomas/Documents/axon-log.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Documents/axon-log.txt\",\"content\":\"AXON benchmark passed\"}}"}
+{"prompt":"add another note to ~/Desktop/quick-note.md","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"~/Desktop/quick-note.md\",\"content\":\"another note\"}}"}
+{"prompt":"append eggs to /Users/thomas/Desktop/shopping.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/shopping.txt\",\"content\":\"eggs\"}}"}
+{"prompt":"add final line to /Users/thomas/Desktop/hello.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/hello.txt\",\"content\":\"final line\"}}"}
+{"prompt":"append task completed to ~/Desktop/status.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"~/Desktop/status.txt\",\"content\":\"task completed\"}}"}
+{"prompt":"add AXON is local-first to /Users/thomas/Desktop/meeting-notes.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/meeting-notes.txt\",\"content\":\"AXON is local-first\"}}"}
+{"prompt":"what time is it","completion":"{\"category\":\"text\",\"tool\":\"get_current_datetime\",\"params\":{}}"}
+{"prompt":"what is the current time","completion":"{\"category\":\"text\",\"tool\":\"get_current_datetime\",\"params\":{}}"}
+{"prompt":"what date is it today","completion":"{\"category\":\"text\",\"tool\":\"get_current_datetime\",\"params\":{}}"}
+{"prompt":"give me the current date and time","completion":"{\"category\":\"text\",\"tool\":\"get_current_datetime\",\"params\":{}}"}
+{"prompt":"current datetime","completion":"{\"category\":\"text\",\"tool\":\"get_current_datetime\",\"params\":{}}"}
+{"prompt":"tell me today's date","completion":"{\"category\":\"text\",\"tool\":\"get_current_datetime\",\"params\":{}}"}
+{"prompt":"I need the timestamp now","completion":"{\"category\":\"text\",\"tool\":\"get_current_datetime\",\"params\":{}}"}
+{"prompt":"give me a timestamp for my note","completion":"{\"category\":\"text\",\"tool\":\"get_current_datetime\",\"params\":{}}"}
+{"prompt":"open Safari then go to github.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://github.com\"}}"}
+{"prompt":"open Finder and show /Users/thomas/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
+{"prompt":"open the website not the app: safari.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://safari.com\"}}"}
+{"prompt":"open the app Safari, not a website","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Safari\"}}"}
+{"prompt":"read /Users/thomas/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
+{"prompt":"show /Users/thomas/Desktop/test.pdf in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
+{"prompt":"list files in /Users/thomas/Desktop","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"/Users/thomas/Desktop\"}}"}
+{"prompt":"list files in ~/Downloads","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Downloads\"}}"}
+{"prompt":"show contents of /Users/thomas/Desktop","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"/Users/thomas/Desktop\"}}"}
+{"prompt":"show contents of ~/Downloads","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Downloads\"}}"}
+{"prompt":"what is inside /Users/thomas/Documents","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"/Users/thomas/Documents\"}}"}
+{"prompt":"list directory /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"show me the files in ~/Desktop","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Desktop\"}}"}
+{"prompt":"display the contents of /Users/thomas/Downloads","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"/Users/thomas/Downloads\"}}"}
+{"prompt":"create folder /Users/thomas/Desktop/AXIONTestFolder","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"/Users/thomas/Desktop/AXIONTestFolder\"}}"}
+{"prompt":"make folder /Users/thomas/Desktop/NewFolder","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"/Users/thomas/Desktop/NewFolder\"}}"}
+{"prompt":"create directory ~/Desktop/BenchFolder","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"~/Desktop/BenchFolder\"}}"}
+{"prompt":"make a new folder at ~/Downloads/TestFolder","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"~/Downloads/TestFolder\"}}"}
+{"prompt":"add folder /Users/thomas/Documents/AXIONFolder","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"/Users/thomas/Documents/AXIONFolder\"}}"}
+{"prompt":"create a directory named /Users/thomas/Desktop/ProjectsTest","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"/Users/thomas/Desktop/ProjectsTest\"}}"}
+{"prompt":"make the directory ~/Documents/LocalModels","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"~/Documents/LocalModels\"}}"}
+{"prompt":"create folder path /Users/thomas/Downloads/AXIONExports","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"/Users/thomas/Downloads/AXIONExports\"}}"}
+{"prompt":"get info about /Users/thomas/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
+{"prompt":"show file info for /Users/thomas/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
+{"prompt":"what is the size of /Users/thomas/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
+{"prompt":"metadata for /Users/thomas/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
+{"prompt":"get file information for ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
+{"prompt":"tell me the type of /Users/thomas/Downloads/params-test.txt","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"/Users/thomas/Downloads/params-test.txt\"}}"}
+{"prompt":"when was /Users/thomas/Desktop/note.txt modified","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"/Users/thomas/Desktop/note.txt\"}}"}
+{"prompt":"show metadata of ~/Downloads/params-test.txt","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"~/Downloads/params-test.txt\"}}"}
+{"prompt":"what is in my clipboard","completion":"{\"category\":\"text\",\"tool\":\"get_clipboard\",\"params\":{}}"}
+{"prompt":"show clipboard content","completion":"{\"category\":\"text\",\"tool\":\"get_clipboard\",\"params\":{}}"}
+{"prompt":"read my clipboard","completion":"{\"category\":\"text\",\"tool\":\"get_clipboard\",\"params\":{}}"}
+{"prompt":"get clipboard","completion":"{\"category\":\"text\",\"tool\":\"get_clipboard\",\"params\":{}}"}
+{"prompt":"what text is copied right now","completion":"{\"category\":\"text\",\"tool\":\"get_clipboard\",\"params\":{}}"}
+{"prompt":"what is on the pasteboard","completion":"{\"category\":\"text\",\"tool\":\"get_clipboard\",\"params\":{}}"}
+{"prompt":"show me what I copied","completion":"{\"category\":\"text\",\"tool\":\"get_clipboard\",\"params\":{}}"}
+{"prompt":"display the current clipboard text","completion":"{\"category\":\"text\",\"tool\":\"get_clipboard\",\"params\":{}}"}
+{"prompt":"show notification AXION Task completed","completion":"{\"category\":\"system\",\"tool\":\"show_notification\",\"params\":{\"title\":\"AXION\",\"message\":\"Task completed\"}}"}
+{"prompt":"send notification Build finished","completion":"{\"category\":\"system\",\"tool\":\"show_notification\",\"params\":{\"title\":\"AXION\",\"message\":\"Build finished\"}}"}
+{"prompt":"display notification Reminder Check benchmark","completion":"{\"category\":\"system\",\"tool\":\"show_notification\",\"params\":{\"title\":\"Reminder\",\"message\":\"Check benchmark\"}}"}
+{"prompt":"notify me AXION is ready","completion":"{\"category\":\"system\",\"tool\":\"show_notification\",\"params\":{\"title\":\"AXION\",\"message\":\"AXION is ready\"}}"}
+{"prompt":"show a notification with title Test and message Hello","completion":"{\"category\":\"system\",\"tool\":\"show_notification\",\"params\":{\"title\":\"Test\",\"message\":\"Hello\"}}"}
+{"prompt":"create notification AXION Benchmark passed","completion":"{\"category\":\"system\",\"tool\":\"show_notification\",\"params\":{\"title\":\"AXION\",\"message\":\"Benchmark passed\"}}"}
+{"prompt":"alert me with Local model loaded","completion":"{\"category\":\"system\",\"tool\":\"show_notification\",\"params\":{\"title\":\"AXION\",\"message\":\"Local model loaded\"}}"}
+{"prompt":"send local notification titled AXION saying Done","completion":"{\"category\":\"system\",\"tool\":\"show_notification\",\"params\":{\"title\":\"AXION\",\"message\":\"Done\"}}"}
+{"prompt":"take screenshot to /Users/thomas/Desktop/axon-screen.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-screen.png\"}}"}
+{"prompt":"capture screenshot at /Users/thomas/Desktop/screen.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"/Users/thomas/Desktop/screen.png\"}}"}
+{"prompt":"save screenshot to ~/Desktop/capture.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"~/Desktop/capture.png\"}}"}
+{"prompt":"take a screenshot and save it to ~/Downloads/screenshot.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"~/Downloads/screenshot.png\"}}"}
+{"prompt":"capture the screen to /Users/thomas/Downloads/axon-capture.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"/Users/thomas/Downloads/axon-capture.png\"}}"}
+{"prompt":"screenshot /Users/thomas/Desktop/current-screen.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"/Users/thomas/Desktop/current-screen.png\"}}"}
+{"prompt":"save my screen as /Users/thomas/Desktop/debug-screen.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"/Users/thomas/Desktop/debug-screen.png\"}}"}
+{"prompt":"take screenshot into ~/Desktop/test-screenshot.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"~/Desktop/test-screenshot.png\"}}"}
+{"prompt":"set volume to 40","completion":"{\"category\":\"system\",\"tool\":\"set_volume\",\"params\":{\"level\":\"40\"}}"}
+{"prompt":"change volume to 25","completion":"{\"category\":\"system\",\"tool\":\"set_volume\",\"params\":{\"level\":\"25\"}}"}
+{"prompt":"set the sound volume to 80","completion":"{\"category\":\"system\",\"tool\":\"set_volume\",\"params\":{\"level\":\"80\"}}"}
+{"prompt":"volume 10","completion":"{\"category\":\"system\",\"tool\":\"set_volume\",\"params\":{\"level\":\"10\"}}"}
+{"prompt":"put volume at 50 percent","completion":"{\"category\":\"system\",\"tool\":\"set_volume\",\"params\":{\"level\":\"50\"}}"}
+{"prompt":"lower volume to 15","completion":"{\"category\":\"system\",\"tool\":\"set_volume\",\"params\":{\"level\":\"15\"}}"}
+{"prompt":"raise volume to 70","completion":"{\"category\":\"system\",\"tool\":\"set_volume\",\"params\":{\"level\":\"70\"}}"}
+{"prompt":"set output volume to 100","completion":"{\"category\":\"system\",\"tool\":\"set_volume\",\"params\":{\"level\":\"100\"}}"}
+{"prompt":"what is my battery level","completion":"{\"category\":\"system\",\"tool\":\"get_battery_status\",\"params\":{}}"}
+{"prompt":"show battery status","completion":"{\"category\":\"system\",\"tool\":\"get_battery_status\",\"params\":{}}"}
+{"prompt":"is my Mac charging","completion":"{\"category\":\"system\",\"tool\":\"get_battery_status\",\"params\":{}}"}
+{"prompt":"get battery info","completion":"{\"category\":\"system\",\"tool\":\"get_battery_status\",\"params\":{}}"}
+{"prompt":"battery percentage","completion":"{\"category\":\"system\",\"tool\":\"get_battery_status\",\"params\":{}}"}
+{"prompt":"what is the current battery status","completion":"{\"category\":\"system\",\"tool\":\"get_battery_status\",\"params\":{}}"}
+{"prompt":"tell me if the computer is plugged in","completion":"{\"category\":\"system\",\"tool\":\"get_battery_status\",\"params\":{}}"}
+{"prompt":"show my power source","completion":"{\"category\":\"system\",\"tool\":\"get_battery_status\",\"params\":{}}"}
+{"prompt":"toggle dark mode","completion":"{\"category\":\"system\",\"tool\":\"toggle_dark_mode\",\"params\":{}}"}
+{"prompt":"switch dark mode","completion":"{\"category\":\"system\",\"tool\":\"toggle_dark_mode\",\"params\":{}}"}
+{"prompt":"toggle appearance mode","completion":"{\"category\":\"system\",\"tool\":\"toggle_dark_mode\",\"params\":{}}"}
+{"prompt":"switch between light and dark mode","completion":"{\"category\":\"system\",\"tool\":\"toggle_dark_mode\",\"params\":{}}"}
+{"prompt":"change macOS appearance mode","completion":"{\"category\":\"system\",\"tool\":\"toggle_dark_mode\",\"params\":{}}"}
+{"prompt":"turn on dark mode if it is off","completion":"{\"category\":\"system\",\"tool\":\"toggle_dark_mode\",\"params\":{}}"}
+{"prompt":"switch appearance to the other mode","completion":"{\"category\":\"system\",\"tool\":\"toggle_dark_mode\",\"params\":{}}"}
+{"prompt":"toggle light dark theme","completion":"{\"category\":\"system\",\"tool\":\"toggle_dark_mode\",\"params\":{}}"}
+{"prompt":"quit Calculator","completion":"{\"category\":\"web_apps\",\"tool\":\"quit_app\",\"params\":{\"app\":\"Calculator\"}}"}
+{"prompt":"close Safari","completion":"{\"category\":\"web_apps\",\"tool\":\"quit_app\",\"params\":{\"app\":\"Safari\"}}"}
+{"prompt":"quit the Terminal app","completion":"{\"category\":\"web_apps\",\"tool\":\"quit_app\",\"params\":{\"app\":\"Terminal\"}}"}
+{"prompt":"stop Xcode","completion":"{\"category\":\"web_apps\",\"tool\":\"quit_app\",\"params\":{\"app\":\"Xcode\"}}"}
+{"prompt":"close the Finder app","completion":"{\"category\":\"web_apps\",\"tool\":\"quit_app\",\"params\":{\"app\":\"Finder\"}}"}
+{"prompt":"terminate Notes","completion":"{\"category\":\"web_apps\",\"tool\":\"quit_app\",\"params\":{\"app\":\"Notes\"}}"}
+{"prompt":"quit Chrome","completion":"{\"category\":\"web_apps\",\"tool\":\"quit_app\",\"params\":{\"app\":\"Chrome\"}}"}
+{"prompt":"close Firefox","completion":"{\"category\":\"web_apps\",\"tool\":\"quit_app\",\"params\":{\"app\":\"Firefox\"}}"}
+{"prompt":"focus Xcode","completion":"{\"category\":\"web_apps\",\"tool\":\"focus_app\",\"params\":{\"app\":\"Xcode\"}}"}
+{"prompt":"bring Safari to front","completion":"{\"category\":\"web_apps\",\"tool\":\"focus_app\",\"params\":{\"app\":\"Safari\"}}"}
+{"prompt":"switch to Terminal","completion":"{\"category\":\"web_apps\",\"tool\":\"focus_app\",\"params\":{\"app\":\"Terminal\"}}"}
+{"prompt":"focus Finder","completion":"{\"category\":\"web_apps\",\"tool\":\"focus_app\",\"params\":{\"app\":\"Finder\"}}"}
+{"prompt":"bring Calculator forward","completion":"{\"category\":\"web_apps\",\"tool\":\"focus_app\",\"params\":{\"app\":\"Calculator\"}}"}
+{"prompt":"make Notes the active app","completion":"{\"category\":\"web_apps\",\"tool\":\"focus_app\",\"params\":{\"app\":\"Notes\"}}"}
+{"prompt":"switch to Chrome","completion":"{\"category\":\"web_apps\",\"tool\":\"focus_app\",\"params\":{\"app\":\"Chrome\"}}"}
+{"prompt":"focus the Firefox app","completion":"{\"category\":\"web_apps\",\"tool\":\"focus_app\",\"params\":{\"app\":\"Firefox\"}}"}
+{"prompt":"hide Safari","completion":"{\"category\":\"web_apps\",\"tool\":\"hide_app\",\"params\":{\"app\":\"Safari\"}}"}
+{"prompt":"hide Calculator","completion":"{\"category\":\"web_apps\",\"tool\":\"hide_app\",\"params\":{\"app\":\"Calculator\"}}"}
+{"prompt":"hide Xcode","completion":"{\"category\":\"web_apps\",\"tool\":\"hide_app\",\"params\":{\"app\":\"Xcode\"}}"}
+{"prompt":"hide the Terminal app","completion":"{\"category\":\"web_apps\",\"tool\":\"hide_app\",\"params\":{\"app\":\"Terminal\"}}"}
+{"prompt":"minimize Finder","completion":"{\"category\":\"web_apps\",\"tool\":\"hide_app\",\"params\":{\"app\":\"Finder\"}}"}
+{"prompt":"make Notes invisible","completion":"{\"category\":\"web_apps\",\"tool\":\"hide_app\",\"params\":{\"app\":\"Notes\"}}"}
+{"prompt":"hide Chrome","completion":"{\"category\":\"web_apps\",\"tool\":\"hide_app\",\"params\":{\"app\":\"Chrome\"}}"}
+{"prompt":"hide the Firefox app","completion":"{\"category\":\"web_apps\",\"tool\":\"hide_app\",\"params\":{\"app\":\"Firefox\"}}"}
+{"prompt":"list running processes","completion":"{\"category\":\"dev\",\"tool\":\"list_processes\",\"params\":{}}"}
+{"prompt":"show running processes","completion":"{\"category\":\"dev\",\"tool\":\"list_processes\",\"params\":{}}"}
+{"prompt":"show process list","completion":"{\"category\":\"dev\",\"tool\":\"list_processes\",\"params\":{}}"}
+{"prompt":"list active processes","completion":"{\"category\":\"dev\",\"tool\":\"list_processes\",\"params\":{}}"}
+{"prompt":"what processes are running","completion":"{\"category\":\"dev\",\"tool\":\"list_processes\",\"params\":{}}"}
+{"prompt":"display current processes","completion":"{\"category\":\"dev\",\"tool\":\"list_processes\",\"params\":{}}"}
+{"prompt":"show active macOS processes","completion":"{\"category\":\"dev\",\"tool\":\"list_processes\",\"params\":{}}"}
+{"prompt":"get process list","completion":"{\"category\":\"dev\",\"tool\":\"list_processes\",\"params\":{}}"}
+{"prompt":"open /Users/thomas/Projects/AXION in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"open ~/Projects/AXION in Visual Studio Code","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
+{"prompt":"open /Users/thomas/Desktop in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Desktop\"}}"}
+{"prompt":"open the folder /Users/thomas/Projects/AXION in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"open project ~/Projects/AXION with VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
+{"prompt":"open /Users/thomas/Projects/AXION/README.md in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/README.md\"}}"}
+{"prompt":"open this path in Visual Studio Code /Users/thomas/Documents","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Documents\"}}"}
+{"prompt":"launch VSCode for /Users/thomas/Downloads","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Downloads\"}}"}
+{"prompt":"git status in /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"show git status for /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"repo status in ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
+{"prompt":"show git changes in /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"check repository status for ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
+{"prompt":"git state of /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"what changed in git for /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"run git status on ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
+{"prompt":"search Spotlight for benchmark.py","completion":"{\"category\":\"text\",\"tool\":\"search_in_spotlight\",\"params\":{\"query\":\"benchmark.py\"}}"}
+{"prompt":"find with Spotlight AXION","completion":"{\"category\":\"text\",\"tool\":\"search_in_spotlight\",\"params\":{\"query\":\"AXION\"}}"}
+{"prompt":"search macOS files for README.md","completion":"{\"category\":\"text\",\"tool\":\"search_in_spotlight\",\"params\":{\"query\":\"README.md\"}}"}
+{"prompt":"mdfind test.jsonl","completion":"{\"category\":\"text\",\"tool\":\"search_in_spotlight\",\"params\":{\"query\":\"test.jsonl\"}}"}
+{"prompt":"spotlight search for ChatService.swift","completion":"{\"category\":\"text\",\"tool\":\"search_in_spotlight\",\"params\":{\"query\":\"ChatService.swift\"}}"}
+{"prompt":"find file with Spotlight llama-server","completion":"{\"category\":\"text\",\"tool\":\"search_in_spotlight\",\"params\":{\"query\":\"llama-server\"}}"}
+{"prompt":"search Spotlight AXION benchmark","completion":"{\"category\":\"text\",\"tool\":\"search_in_spotlight\",\"params\":{\"query\":\"AXION benchmark\"}}"}
+{"prompt":"search on macOS for params-test.txt","completion":"{\"category\":\"text\",\"tool\":\"search_in_spotlight\",\"params\":{\"query\":\"params-test.txt\"}}"}
+{"prompt":"rename /Users/thomas/Desktop/old.txt to new.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/old.txt\",\"new_name\":\"new.txt\"}}"}
+{"prompt":"rename /Users/thomas/Desktop/note.txt to final-note.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/note.txt\",\"new_name\":\"final-note.txt\"}}"}
+{"prompt":"change file name /Users/thomas/Downloads/test.txt to renamed.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"/Users/thomas/Downloads/test.txt\",\"new_name\":\"renamed.txt\"}}"}
+{"prompt":"rename ~/Desktop/axon-note.txt as axon-final.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\",\"new_name\":\"axon-final.txt\"}}"}
+{"prompt":"rename file /Users/thomas/Documents/report.md to report-final.md","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\",\"new_name\":\"report-final.md\"}}"}
+{"prompt":"change the name of ~/Downloads/params-test.txt to params-final.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"~/Downloads/params-test.txt\",\"new_name\":\"params-final.txt\"}}"}
+{"prompt":"rename /Users/thomas/Desktop/shopping.txt new-shopping.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/shopping.txt\",\"new_name\":\"new-shopping.txt\"}}"}
+{"prompt":"rename path /Users/thomas/Desktop/status.txt to status-final.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/status.txt\",\"new_name\":\"status-final.txt\"}}"}
+{"prompt":"move /Users/thomas/Desktop/file.txt to /Users/thomas/Documents/file.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"/Users/thomas/Desktop/file.txt\",\"destination\":\"/Users/thomas/Documents/file.txt\"}}"}
+{"prompt":"move /Users/thomas/Desktop/note.txt to /Users/thomas/Downloads/note.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"/Users/thomas/Desktop/note.txt\",\"destination\":\"/Users/thomas/Downloads/note.txt\"}}"}
+{"prompt":"move ~/Desktop/axon-note.txt to ~/Documents/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"~/Desktop/axon-note.txt\",\"destination\":\"~/Documents/axon-note.txt\"}}"}
+{"prompt":"move file /Users/thomas/Downloads/test.txt into /Users/thomas/Desktop/test.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"/Users/thomas/Downloads/test.txt\",\"destination\":\"/Users/thomas/Desktop/test.txt\"}}"}
+{"prompt":"move /Users/thomas/Documents/report.md /Users/thomas/Desktop/report.md","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"/Users/thomas/Documents/report.md\",\"destination\":\"/Users/thomas/Desktop/report.md\"}}"}
+{"prompt":"move ~/Downloads/params-test.txt to ~/Desktop/params-test.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"~/Downloads/params-test.txt\",\"destination\":\"~/Desktop/params-test.txt\"}}"}
+{"prompt":"move the file /Users/thomas/Desktop/shopping.txt to /Users/thomas/Documents/shopping.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"/Users/thomas/Desktop/shopping.txt\",\"destination\":\"/Users/thomas/Documents/shopping.txt\"}}"}
+{"prompt":"put /Users/thomas/Desktop/status.txt into /Users/thomas/Downloads/status.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"/Users/thomas/Desktop/status.txt\",\"destination\":\"/Users/thomas/Downloads/status.txt\"}}"}
+{"prompt":"delete /Users/thomas/Desktop/file.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/file.txt\"}}"}
+{"prompt":"remove /Users/thomas/Desktop/note.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/note.txt\"}}"}
+{"prompt":"trash /Users/thomas/Downloads/test.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"/Users/thomas/Downloads/test.txt\"}}"}
+{"prompt":"move /Users/thomas/Desktop/old.txt to Trash","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/old.txt\"}}"}
+{"prompt":"delete ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
+{"prompt":"remove file /Users/thomas/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
+{"prompt":"trash ~/Downloads/params-test.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"~/Downloads/params-test.txt\"}}"}
+{"prompt":"delete the file /Users/thomas/Desktop/shopping.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/shopping.txt\"}}"}
+{"prompt":"remind me to buy milk tomorrow at 18:00","completion":"{\"category\":\"third_party\",\"tool\":\"create_reminder\",\"params\":{\"title\":\"buy milk\",\"due_date\":\"tomorrow at 18:00\"}}"}
+{"prompt":"create reminder call the bank tomorrow morning","completion":"{\"category\":\"third_party\",\"tool\":\"create_reminder\",\"params\":{\"title\":\"call the bank\",\"due_date\":\"tomorrow morning\"}}"}
+{"prompt":"add reminder submit AXION benchmark tonight","completion":"{\"category\":\"third_party\",\"tool\":\"create_reminder\",\"params\":{\"title\":\"submit AXION benchmark\",\"due_date\":\"tonight\"}}"}
+{"prompt":"set reminder check calendar at 09:00","completion":"{\"category\":\"third_party\",\"tool\":\"create_reminder\",\"params\":{\"title\":\"check calendar\",\"due_date\":\"09:00\"}}"}
+{"prompt":"remind me to push code","completion":"{\"category\":\"third_party\",\"tool\":\"create_reminder\",\"params\":{\"title\":\"push code\"}}"}
+{"prompt":"create reminder finish project","completion":"{\"category\":\"third_party\",\"tool\":\"create_reminder\",\"params\":{\"title\":\"finish project\"}}"}
+{"prompt":"remind me tomorrow to test AXION","completion":"{\"category\":\"third_party\",\"tool\":\"create_reminder\",\"params\":{\"title\":\"test AXION\",\"due_date\":\"tomorrow\"}}"}
+{"prompt":"add a reminder for clean Downloads this weekend","completion":"{\"category\":\"third_party\",\"tool\":\"create_reminder\",\"params\":{\"title\":\"clean Downloads\",\"due_date\":\"this weekend\"}}"}
+{"prompt":"create calendar event Meeting tomorrow 14:00 to 15:00","completion":"{\"category\":\"third_party\",\"tool\":\"create_calendar_event\",\"params\":{\"title\":\"Meeting\",\"start\":\"tomorrow 14:00\",\"end\":\"tomorrow 15:00\"}}"}
+{"prompt":"add calendar event Dentist Friday 10:00 to 11:00","completion":"{\"category\":\"third_party\",\"tool\":\"create_calendar_event\",\"params\":{\"title\":\"Dentist\",\"start\":\"Friday 10:00\",\"end\":\"Friday 11:00\"}}"}
+{"prompt":"schedule meeting AXION review tomorrow 16:00 to 17:00","completion":"{\"category\":\"third_party\",\"tool\":\"create_calendar_event\",\"params\":{\"title\":\"AXION review\",\"start\":\"tomorrow 16:00\",\"end\":\"tomorrow 17:00\"}}"}
+{"prompt":"add to calendar Code session Monday 09:00 to 12:00","completion":"{\"category\":\"third_party\",\"tool\":\"create_calendar_event\",\"params\":{\"title\":\"Code session\",\"start\":\"Monday 09:00\",\"end\":\"Monday 12:00\"}}"}
+{"prompt":"create calendar event Lunch tomorrow at 12:30","completion":"{\"category\":\"third_party\",\"tool\":\"create_calendar_event\",\"params\":{\"title\":\"Lunch\",\"start\":\"tomorrow at 12:30\",\"end\":\"tomorrow at 13:30\"}}"}
+{"prompt":"schedule Gym tonight 19:00 to 20:30","completion":"{\"category\":\"third_party\",\"tool\":\"create_calendar_event\",\"params\":{\"title\":\"Gym\",\"start\":\"tonight 19:00\",\"end\":\"tonight 20:30\"}}"}
+{"prompt":"add event Project call next Tuesday 15:00 to 16:00","completion":"{\"category\":\"third_party\",\"tool\":\"create_calendar_event\",\"params\":{\"title\":\"Project call\",\"start\":\"next Tuesday 15:00\",\"end\":\"next Tuesday 16:00\"}}"}
+{"prompt":"calendar event Doctor appointment tomorrow 08:00 to 08:30","completion":"{\"category\":\"third_party\",\"tool\":\"create_calendar_event\",\"params\":{\"title\":\"Doctor appointment\",\"start\":\"tomorrow 08:00\",\"end\":\"tomorrow 08:30\"}}"}

@@ -8,106 +8,99 @@
 import Foundation
 
 final class ChatService {
-    func send(messages: [ChatMessage]) async -> String {
-        let recentMessages = Array(messages.suffix(8))
-
-        var payload: [[String: String]] = [
-            [
-                "role": "system",
-                "content": """
+    private static let systemPrompt = """
 You are AXION, a concise local macOS assistant.
 
-If no tool is needed, answer normally and briefly.
-
-If a tool is needed, answer ONLY with valid compact JSON.
+If no tool is needed, answer briefly.
+If a tool is needed, answer ONLY with one compact JSON object.
 No markdown. No explanation. No extra text.
 
-Tool format:
-{"tool":"TOOL_NAME","params":{"KEY":"VALUE"}}
+Format:
+{"category":"CATEGORY","tool":"TOOL_NAME","params":{}}
 
-Available tools:
-- open_app: opens a known macOS application
-- open_url: opens a website URL
-- open_file: opens a local file or application path
-- reveal_file: reveals a local file in Finder
-- read_text_file: reads the content of a local text/code file
-- copy_to_clipboard: copies text to the macOS clipboard
-- create_text_file: creates or overwrites a local text file
-- append_text_file: appends text to a local text file
-- get_current_datetime: returns the current local date and time
+Categories and tools:
+- files: open_file, reveal_file, read_text_file, create_text_file, append_text_file, list_directory, create_folder, get_file_info, rename_file, move_file, delete_file
+- web_apps: open_app, open_url, quit_app, focus_app, hide_app
+- text: copy_to_clipboard, get_clipboard, get_current_datetime, search_in_spotlight
+- system: show_notification, take_screenshot, set_volume, get_battery_status, toggle_dark_mode
+- dev: list_processes, open_in_vscode, git_status
+- third_party: create_reminder, create_calendar_event
 
-Parameter schemas:
-- open_app: {"app":"Safari"}
-- open_url: {"url":"https://github.com"}
-- open_file: {"path":"/Users/thomas/Desktop/test.png"}
-- reveal_file: {"path":"/Users/thomas/Desktop/test.png"}
-- read_text_file: {"path":"/Users/thomas/Desktop/notes.txt"}
-- copy_to_clipboard: {"text":"hello AXION"}
-- create_text_file: {"path":"/Users/thomas/Desktop/note.txt","content":"hello AXION"}
-- append_text_file: {"path":"/Users/thomas/Desktop/note.txt","content":"second line"}
-- get_current_datetime: {}
-
-Priority rules:
-1. If the user asks to open a known macOS application, use open_app.
-2. Never use open_url for known app names.
-3. Known apps: Safari, Xcode, Terminal, Finder, Firefox, Chrome, Calculator, Notes.
-4. Use open_url only for domains, websites, or explicit URLs.
-5. Use open_file only for local paths starting with / or ~ when the user wants to open the file.
-6. Use reveal_file when the user asks to show, locate, reveal, or find a file in Finder.
-7. Use read_text_file only for readable text/code files such as .txt, .md, .json, .csv, .log, .swift, .cpp, .hpp, .h, .c, .py.
-8. For binary files such as .pdf, .png, .jpg, .jpeg, do not use read_text_file. Use open_file or reveal_file.
-9. Use create_text_file when the user asks to create or write a text file.
-10. Use append_text_file when the user asks to add or append text to an existing file.
-11. Use copy_to_clipboard when the user asks to copy text to the clipboard or pasteboard.
-12. Use get_current_datetime when the user asks for the current date, time, datetime, or timestamp.
+Rules:
+- Apps: open/launch/start/show app => open_app {"app":"Safari"}; quit/close/stop => quit_app; focus/bring/switch to => focus_app; hide/minimize => hide_app.
+- Websites/domains/URLs => open_url {"url":"https://github.com"}.
+- Local file open => open_file {"path":"/path/file"}; show/reveal/locate/find in Finder => reveal_file.
+- Read/show/inspect content of text/code files (.txt .md .json .csv .log .swift .cpp .hpp .h .c .py) => read_text_file.
+- Binary files (.pdf .png .jpg .jpeg .webp .mp4 .zip) are never read_text_file; use open_file unless Finder/reveal is requested.
+- Folder contents/list files/what is inside => list_directory {"path":"/path/folder"}.
+- Create/make/add folder => create_folder. File info/metadata/size/type/modified => get_file_info.
+- Create/write file with content => create_text_file {"path":"/path/file","content":"text"}; add/append text => append_text_file. Preserve content exactly.
+- Copy text/path to clipboard/pasteboard => copy_to_clipboard {"text":"text"}; ask clipboard content => get_clipboard.
+- Date/time/datetime/timestamp => get_current_datetime.
+- Notification/alert => show_notification {"title":"AXION","message":"text"}. Screenshot => take_screenshot {"path":"/path/image.png"}.
+- Volume to N => set_volume {"level":"50"}. Battery/charging/power source => get_battery_status. Toggle/switch dark/light appearance => toggle_dark_mode.
+- Processes => list_processes. Open in VSCode => open_in_vscode {"path":"/path"}. Git status/changes/repo state => git_status {"path":"/path"}.
+- Spotlight/mdfind/macOS file search => search_in_spotlight {"query":"text"}.
+- Rename file => rename_file {"path":"/old/path.txt","new_name":"new.txt"}. Move file => move_file {"source":"/old/path","destination":"/new/path"}. Delete/trash/remove file => delete_file {"path":"/path"}. These require confirmation.
+- Reminder => create_reminder {"title":"task","due_date":"tomorrow at 18:00"}. Calendar event => create_calendar_event {"title":"Meeting","start":"tomorrow 14:00","end":"tomorrow 15:00"}; if no end time, use start + 1 hour.
 
 Examples:
 User: open Safari
-Assistant: {"tool":"open_app","params":{"app":"Safari"}}
-
-User: open github.com
-Assistant: {"tool":"open_url","params":{"url":"https://github.com"}}
-
-User: open /Users/thomas/Desktop/test.png
-Assistant: {"tool":"open_file","params":{"path":"/Users/thomas/Desktop/test.png"}}
-
-User: reveal /Users/thomas/Desktop/test.png in Finder
-Assistant: {"tool":"reveal_file","params":{"path":"/Users/thomas/Desktop/test.png"}}
-
+Assistant: {"category":"web_apps","tool":"open_app","params":{"app":"Safari"}}
 User: read /Users/thomas/Desktop/notes.txt
-Assistant: {"tool":"read_text_file","params":{"path":"/Users/thomas/Desktop/notes.txt"}}
-
-User: copy hello AXION to the clipboard
-Assistant: {"tool":"copy_to_clipboard","params":{"text":"hello AXION"}}
-
-User: create /Users/thomas/Desktop/note.txt with hello AXION
-Assistant: {"tool":"create_text_file","params":{"path":"/Users/thomas/Desktop/note.txt","content":"hello AXION"}}
-
-User: append second line to /Users/thomas/Desktop/note.txt
-Assistant: {"tool":"append_text_file","params":{"path":"/Users/thomas/Desktop/note.txt","content":"second line"}}
-
-User: what time is it
-Assistant: {"tool":"get_current_datetime","params":{}}
-
-Never claim that an action was done yourself.
-Only tools may report action results.
+Assistant: {"category":"files","tool":"read_text_file","params":{"path":"/Users/thomas/Desktop/notes.txt"}}
+User: delete /Users/thomas/Desktop/file.txt
+Assistant: {"category":"files","tool":"delete_file","params":{"path":"/Users/thomas/Desktop/file.txt"}}
+User: remind me to buy milk tomorrow at 18:00
+Assistant: {"category":"third_party","tool":"create_reminder","params":{"title":"buy milk","due_date":"tomorrow at 18:00"}}
 """
-            ]
-        ]
 
-        payload += recentMessages.map { message in
-            [
-                "role": roleName(for: message),
-                "content": message.content
-            ]
+    func send(messages: [ChatMessage]) async -> String {
+        let payload = makePayload(from: messages)
+
+        guard let url = URL(string: "http://localhost:8080/v1/chat/completions") else {
+            return "Error: invalid local server URL"
         }
 
-        guard let data = try? JSONSerialization.data(withJSONObject: payload),
-              let json = String(data: data, encoding: .utf8) else {
+        let requestBody: [String: Any] = [
+            "model": "local",
+            "messages": payload,
+            "temperature": 0,
+            "max_tokens": 100,
+            "stream": false
+        ]
+
+        guard let body = try? JSONSerialization.data(withJSONObject: requestBody) else {
             return "Error: failed to encode conversation"
         }
 
-        return AxonBridge.shared().sendConversation(json)
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpBody = body
+
+        do {
+            let (data, response) = try await URLSession.shared.data(for: request)
+
+            if let httpResponse = response as? HTTPURLResponse,
+               !(200...299).contains(httpResponse.statusCode) {
+                let errorBody = String(data: data, encoding: .utf8) ?? "Unknown server error"
+                return "HTTP \(httpResponse.statusCode): \(errorBody)"
+            }
+
+            guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
+                  let choices = json["choices"] as? [[String: Any]],
+                  let firstChoice = choices.first,
+                  let message = firstChoice["message"] as? [String: Any],
+                  let content = message["content"] as? String else {
+                let raw = String(data: data, encoding: .utf8) ?? "Unreadable response"
+                return "Error: invalid model response: \(raw)"
+            }
+
+            return content.trimmingCharacters(in: .whitespacesAndNewlines)
+        } catch {
+            return "Error: \(error.localizedDescription)"
+        }
     }
     
     func stream(
@@ -115,123 +108,43 @@ Only tools may report action results.
         onToken: @escaping (String?) -> Void,
         completion: @escaping () -> Void
     ) {
-        let recentMessages = Array(messages.suffix(8))
-        var payload: [[String: String]] = [
+        Task {
+            let response = await send(messages: messages)
+
+            if !response.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                onToken(response)
+            }
+
+            completion()
+        }
+    }
+
+    private func makePayload(from messages: [ChatMessage]) -> [[String: String]] {
+        let recentMessages = Array(
+            messages
+                .filter { message in
+                    message.role == .user || message.role == .assistant
+                }
+                .compactMap { message -> [String: String]? in
+                    let content = message.content.trimmingCharacters(in: .whitespacesAndNewlines)
+
+                    guard !content.isEmpty else {
+                        return nil
+                    }
+
+                    return [
+                        "role": message.role == .user ? "user" : "assistant",
+                        "content": content
+                    ]
+                }
+                .suffix(4)
+        )
+
+        return [
             [
                 "role": "system",
-                "content": """
-            You are AXION, a concise local macOS assistant.
-
-            If no tool is needed, answer normally and briefly.
-
-            If a tool is needed, answer ONLY with valid compact JSON.
-            No markdown. No explanation. No extra text.
-            
-            Tool format:
-            {"tool":"TOOL_NAME","params":{"KEY":"VALUE"}}
-
-            Available tools:
-            - open_app: opens a known macOS application
-            - open_url: opens a website URL
-            - open_file: opens a local file or application path
-            - reveal_file: reveals a local file in Finder
-            - read_text_file: reads the content of a local text/code file
-            - copy_to_clipboard: copies text to the macOS clipboard
-            - create_text_file: creates or overwrites a local text file
-            - append_text_file: appends text to a local text file
-            - get_current_datetime: returns the current local date and time
-
-            Parameter schemas:
-            - open_app: {"app":"Safari"}
-            - open_url: {"url":"https://github.com"}
-            - open_file: {"path":"/Users/thomas/Desktop/test.png"}
-            - reveal_file: {"path":"/Users/thomas/Desktop/test.png"}
-            - read_text_file: {"path":"/Users/thomas/Desktop/notes.txt"}
-            - copy_to_clipboard: {"text":"hello AXION"}
-            - create_text_file: {"path":"/Users/thomas/Desktop/note.txt","content":"hello AXION"}
-            - append_text_file: {"path":"/Users/thomas/Desktop/note.txt","content":"second line"}
-            - get_current_datetime: {}
-
-            Priority rules:
-            1. If the user asks to open a known macOS application, use open_app.
-            2. Never use open_url for known app names.
-            3. Known apps: Safari, Xcode, Terminal, Finder, Firefox, Chrome, Calculator, Notes.
-            4. Use open_url only for domains, websites, or explicit URLs.
-            5. Use open_file only for local paths starting with / or ~ when the user wants to open the file.
-            6. Use reveal_file when the user asks to show, locate, reveal, or find a file in Finder.
-            7. Use read_text_file only for readable text/code files such as .txt, .md, .json, .csv, .log, .swift, .cpp, .hpp, .h, .c, .py.
-            8. For binary files such as .pdf, .png, .jpg, .jpeg, do not use read_text_file. Use open_file or reveal_file.
-            9. Use create_text_file when the user asks to create or write a text file.
-            10. Use append_text_file when the user asks to add or append text to an existing file.
-            11. Use copy_to_clipboard when the user asks to copy text to the clipboard or pasteboard.
-            12. Use get_current_datetime when the user asks for the current date, time, datetime, or timestamp.
-
-            Examples:
-            User: open Safari
-            Assistant: {"tool":"open_app","params":{"app":"Safari"}}
-
-            User: open github.com
-            Assistant: {"tool":"open_url","params":{"url":"https://github.com"}}
-
-            User: open /Users/thomas/Desktop/test.png
-            Assistant: {"tool":"open_file","params":{"path":"/Users/thomas/Desktop/test.png"}}
-
-            User: reveal /Users/thomas/Desktop/test.png in Finder
-            Assistant: {"tool":"reveal_file","params":{"path":"/Users/thomas/Desktop/test.png"}}
-
-            User: read /Users/thomas/Desktop/notes.txt
-            Assistant: {"tool":"read_text_file","params":{"path":"/Users/thomas/Desktop/notes.txt"}}
-
-            User: copy hello AXION to the clipboard
-            Assistant: {"tool":"copy_to_clipboard","params":{"text":"hello AXION"}}
-
-            User: create /Users/thomas/Desktop/note.txt with hello AXION
-            Assistant: {"tool":"create_text_file","params":{"path":"/Users/thomas/Desktop/note.txt","content":"hello AXION"}}
-
-            User: append second line to /Users/thomas/Desktop/note.txt
-            Assistant: {"tool":"append_text_file","params":{"path":"/Users/thomas/Desktop/note.txt","content":"second line"}}
-
-            User: what time is it
-            Assistant: {"tool":"get_current_datetime","params":{}}
-
-            Never claim that an action was done yourself.
-            Only tools may report action results.
-            """
+                "content": Self.systemPrompt
             ]
-        ]
-
-        payload += recentMessages.map { message in
-            [
-                "role": message.role == .user ? "user" : "assistant",
-                "content": message.content
-            ]
-        }
-
-        guard let data = try? JSONSerialization.data(withJSONObject: payload),
-              let json = String(data: data, encoding: .utf8) else {
-            onToken("Error: failed to encode conversation")
-            completion()
-            return
-        }
-
-        AxonBridge.shared().streamConversation(
-            json,
-            onToken: onToken,
-            completion: completion
-        )
-        
-    }
-    
-    private func roleName(for message: ChatMessage) -> String {
-        switch message.role {
-        case .user:
-            return "user"
-
-        case .assistant:
-            return "assistant"
-
-        case .tool:
-            return "tool"
-        }
+        ] + recentMessages
     }
 }

@@ -8,6 +8,13 @@ struct ChatView: View {
     @State private var inputText = ""
     @State private var isLoading = false
     @State private var showSettings = false
+    @State private var pendingToolCall: ToolCall?
+
+    private var visibleMessages: [ChatMessage] {
+        messages.filter {
+            !$0.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+    }
 
     private let chatService = ChatService()
     private let toolRegistry = ToolRegistry()
@@ -43,7 +50,7 @@ struct ChatView: View {
             ScrollViewReader { proxy in
                 ScrollView {
                     VStack(alignment: .leading, spacing: 12) {
-                        ForEach(messages) { message in
+                        ForEach(visibleMessages) { message in
                             HStack {
                                 if message.role == .user {
                                     Spacer(minLength: 40)
@@ -70,13 +77,19 @@ struct ChatView: View {
                 }
             }
 
+            if let pendingToolCall {
+                confirmationPanel(for: pendingToolCall)
+                    .padding(.horizontal)
+            }
+
             TextField("Message AXON...", text: $inputText)
                 .textFieldStyle(.roundedBorder)
                 .onSubmit {
                     sendMessage()
                 }
                 .padding()
-                .disabled(isLoading)
+                .disabled(isLoading || pendingToolCall != nil)
+
             if isLoading {
                 Text("AXON is thinking...")
                     .foregroundStyle(.secondary)
@@ -90,6 +103,39 @@ struct ChatView: View {
         }
     }
     
+    @ViewBuilder
+    private func confirmationPanel(for toolCall: ToolCall) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Text("Confirmation required")
+                .font(.headline)
+
+            Text("Tool: \(toolCall.tool)")
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            Text(toolCall.argument)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+                .lineLimit(3)
+
+            HStack(spacing: 10) {
+                Button("Confirm") {
+                    executeToolCall(toolCall, confirmed: true)
+                }
+                .keyboardShortcut(.defaultAction)
+
+                Button("Cancel") {
+                    cancelPendingToolCall()
+                }
+                .keyboardShortcut(.cancelAction)
+            }
+        }
+        .padding(12)
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .background(Color.orange.opacity(0.15))
+        .cornerRadius(12)
+    }
+
     @ViewBuilder
     private func messageBubble(_ message: ChatMessage) -> some View {
         Text(message.content)
@@ -132,33 +178,39 @@ struct ChatView: View {
         }
         
         messages.append(ChatMessage(role: .user, content: text))
+
+        let requestMessages = messages.filter { message in
+            message.role == .user || message.role == .assistant
+        }.filter { message in
+            !message.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        }
+
         inputText = ""
         isLoading = true
 
-        messages.append(ChatMessage(role: .assistant, content: ""))
+        Task {
+            let response = await chatService.send(messages: requestMessages)
+            let content = response.trimmingCharacters(in: .whitespacesAndNewlines)
 
-        let assistantIndex = messages.count - 1
-
-        chatService.stream(
-            messages: messages,
-            onToken: { token in
-                guard let token else {
+            await MainActor.run {
+                guard !content.isEmpty else {
+                    isLoading = false
                     return
                 }
 
-                messages[assistantIndex].content.append(token)
-            },
-            completion: {
-                if let toolCall = parseToolCall(
-                    messages[assistantIndex].content
-                ) {
-                    messages.remove(at: assistantIndex)
+                if let toolCall = parseToolCall(content) {
                     executeToolCall(toolCall)
                     return
                 }
+
+                messages.append(ChatMessage(
+                    role: .assistant,
+                    content: content
+                ))
+
                 isLoading = false
             }
-        )
+        }
     }
     
     private func handleDirectURLCommand(_ text: String) -> Bool {
@@ -207,14 +259,51 @@ struct ChatView: View {
         return try? JSONDecoder().decode(ToolCall.self, from: data)
     }
 
-    private func executeToolCall(_ toolCall: ToolCall) {
-        let result = toolRegistry.execute(toolCall)
+    private func executeToolCall(_ toolCall: ToolCall, confirmed: Bool = false) {
+        let sensitiveTools = [
+            "rename_file",
+            "move_file",
+            "delete_file"
+        ]
+
+        if sensitiveTools.contains(toolCall.tool), !confirmed {
+            pendingToolCall = toolCall
+
+            messages.append(ChatMessage(
+                role: .tool,
+                content: """
+                Confirmation required.
+                Tool: \(toolCall.tool)
+                Action: \(toolCall.argument)
+                """
+            ))
+
+            isLoading = false
+            return
+        }
+
+        let result = toolRegistry.execute(toolCall, confirmed: confirmed)
+        let cleanResult = result.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        if !cleanResult.isEmpty {
+            messages.append(ChatMessage(
+                role: .tool,
+                content: cleanResult
+            ))
+        }
+
+        pendingToolCall = nil
+        isLoading = false
+    }
+
+    private func cancelPendingToolCall() {
+        pendingToolCall = nil
 
         messages.append(ChatMessage(
             role: .tool,
-            content: result
+            content: "Action cancelled."
         ))
-        
+
         isLoading = false
     }
 }
