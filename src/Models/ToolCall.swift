@@ -45,6 +45,15 @@ struct ToolCall: Decodable {
              "move_file",
              "delete_file":
             return "files"
+            
+        case "search_file_content",
+             "read_pdf_text",
+             "compress_file",
+             "extract_archive":
+            return "files"
+
+        case "open_terminal_here":
+            return "dev"
 
         case "create_reminder",
              "create_calendar_event":
@@ -96,7 +105,28 @@ struct ToolCall: Decodable {
 
             case "open_url":
                 return params["url"] ?? ""
+            
+            case "search_file_content":
+                let path = params["path"] ?? ""
+                let query = params["query"] ?? ""
+                return "\(path)|\(query)"
 
+            case "read_pdf_text":
+                return params["path"] ?? ""
+
+            case "compress_file":
+                let source = params["source"] ?? ""
+                let destination = params["destination"] ?? ""
+                return "\(source)|\(destination)"
+
+            case "extract_archive":
+                let source = params["source"] ?? ""
+                let destination = params["destination"] ?? ""
+                return "\(source)|\(destination)"
+
+            case "open_terminal_here":
+                return params["path"] ?? ""
+                
             case "open_file",
                 "reveal_file",
                 "read_text_file",

@@ -13,11 +13,11 @@ Always use this shape: {"category":"...","tool":"...","params":{...}}
 Never output multiple JSON objects. Never output params{}.
 
 Tool categories:
-files: open_file, reveal_file, read_text_file, create_text_file, append_text_file, list_directory, create_folder, get_file_info, rename_file, move_file, delete_file
+files: open_file, reveal_file, read_text_file, create_text_file, append_text_file, list_directory, create_folder, get_file_info, rename_file, move_file, delete_file, search_file_content, read_pdf_text, compress_file, extract_archive
 web_apps: open_app, open_url, quit_app, focus_app, hide_app
 text: copy_to_clipboard, get_clipboard, get_current_datetime, search_in_spotlight
 system: show_notification, take_screenshot, set_volume, get_battery_status, toggle_dark_mode
-dev: list_processes, open_in_vscode, git_status
+dev: list_processes, open_in_vscode, git_status, open_terminal_here
 third_party: create_reminder, create_calendar_event
 
 Rules:
@@ -31,8 +31,9 @@ Rules:
 - Copy to clipboard/pasteboard => copy_to_clipboard with params text. The copied text is before "to clipboard/pasteboard". Clipboard content => get_clipboard. Date/time/timestamp => get_current_datetime.
 - Notification/alert => show_notification with title,message. If title missing, title is AXION.
 - Screenshot => take_screenshot. Volume N => set_volume with level. Battery/charging/power => get_battery_status. Toggle appearance => toggle_dark_mode.
-- Processes => list_processes. VSCode => open_in_vscode. Git status/changes => git_status. Spotlight/mdfind/search macOS files => search_in_spotlight.
+- Processes => list_processes. VSCode => open_in_vscode. Git status/changes => git_status. Terminal in folder/open shell here => open_terminal_here. Spotlight/mdfind/search macOS files => search_in_spotlight.
 - Rename file => rename_file with path,new_name. Move file from path to path => move_file with source,destination. Delete/remove/trash/move to Trash => delete_file with path. Destination "Trash" means delete_file, not move_file.
+- Search text inside file/folder => search_file_content with path,query. Read/extract PDF text => read_pdf_text with path. Zip/compress/archive => compress_file with source,destination. Unzip/extract archive => extract_archive with source,destination.
 - Reminder => create_reminder with title,due_date optional. Keep date wording from the prompt, e.g. "tomorrow morning", not "tomorrow at morning".
 - Calendar event => create_calendar_event with title,start,end. Preserve date wording from the prompt. Use "tomorrow 14:00", not "tomorrow at 14:00", unless prompt says "at". If no end, end=start+1h.
 
@@ -55,6 +56,11 @@ list running processes => {"category":"dev","tool":"list_processes","params":{}}
 search Spotlight for benchmark.py => {"category":"text","tool":"search_in_spotlight","params":{"query":"benchmark.py"}}
 check repository status for ~/Projects/AXION => {"category":"dev","tool":"git_status","params":{"path":"~/Projects/AXION"}}
 move /Users/thomas/Desktop/old.txt to Trash => {"category":"files","tool":"delete_file","params":{"path":"/Users/thomas/Desktop/old.txt"}}
+search ToolRegistry in /Users/thomas/Projects/AXION => {"category":"files","tool":"search_file_content","params":{"path":"/Users/thomas/Projects/AXION","query":"ToolRegistry"}}
+read pdf /Users/thomas/Desktop/test.pdf => {"category":"files","tool":"read_pdf_text","params":{"path":"/Users/thomas/Desktop/test.pdf"}}
+zip /Users/thomas/Desktop/AXIONZipTest to /Users/thomas/Desktop/AXIONZipTest.zip => {"category":"files","tool":"compress_file","params":{"source":"/Users/thomas/Desktop/AXIONZipTest","destination":"/Users/thomas/Desktop/AXIONZipTest.zip"}}
+unzip /Users/thomas/Desktop/AXIONZipTest.zip to /Users/thomas/Desktop/AXIONExtracted => {"category":"files","tool":"extract_archive","params":{"source":"/Users/thomas/Desktop/AXIONZipTest.zip","destination":"/Users/thomas/Desktop/AXIONExtracted"}}
+open terminal in /Users/thomas/Projects/AXION => {"category":"dev","tool":"open_terminal_here","params":{"path":"/Users/thomas/Projects/AXION"}}
 rename /Users/thomas/Desktop/old.txt to new.txt => {"category":"files","tool":"rename_file","params":{"path":"/Users/thomas/Desktop/old.txt","new_name":"new.txt"}}
 remind me to buy milk tomorrow at 18:00 => {"category":"third_party","tool":"create_reminder","params":{"title":"buy milk","due_date":"tomorrow at 18:00"}}
 create reminder call the bank tomorrow morning => {"category":"third_party","tool":"create_reminder","params":{"title":"call the bank","due_date":"tomorrow morning"}}
@@ -75,6 +81,10 @@ CATEGORY_BY_TOOL = {
     "rename_file": "files",
     "move_file": "files",
     "delete_file": "files",
+    "search_file_content": "files",
+    "read_pdf_text": "files",
+    "compress_file": "files",
+    "extract_archive": "files",
     "open_app": "web_apps",
     "open_url": "web_apps",
     "quit_app": "web_apps",
@@ -92,6 +102,7 @@ CATEGORY_BY_TOOL = {
     "list_processes": "dev",
     "open_in_vscode": "dev",
     "git_status": "dev",
+    "open_terminal_here": "dev",
     "create_reminder": "third_party",
     "create_calendar_event": "third_party",
 }
@@ -326,6 +337,8 @@ def params_from_legacy_param(tool, param):
         "open_in_vscode",
         "git_status",
         "delete_file",
+        "read_pdf_text",
+        "open_terminal_here",
     ):
         return {"path": param}
 
@@ -350,6 +363,14 @@ def params_from_legacy_param(tool, param):
         return {"path": path, "new_name": new_name} if separator else {"path": param, "new_name": ""}
 
     if tool == "move_file":
+        source, separator, destination = param.partition("|")
+        return {"source": source, "destination": destination} if separator else {"source": param, "destination": ""}
+
+    if tool == "search_file_content":
+        path, separator, query = param.partition("|")
+        return {"path": path, "query": query} if separator else {"path": param, "query": ""}
+
+    if tool in ("compress_file", "extract_archive"):
         source, separator, destination = param.partition("|")
         return {"source": source, "destination": destination} if separator else {"source": param, "destination": ""}
 
@@ -396,8 +417,14 @@ def canonical_params(tool, data):
             canonical_key = "due_date"
         elif tool == "rename_file" and key in ("name", "filename"):
             canonical_key = "new_name"
-        elif tool in ("git_status", "open_in_vscode") and key in ("repo_path", "folder", "directory"):
+        elif tool in ("git_status", "open_in_vscode", "open_terminal_here") and key in ("repo_path", "folder", "directory"):
             canonical_key = "path"
+        elif tool == "search_file_content" and key in ("text", "term", "keyword", "search"):
+            canonical_key = "query"
+        elif tool in ("compress_file", "extract_archive") and key in ("path", "input"):
+            canonical_key = "source"
+        elif tool in ("compress_file", "extract_archive") and key in ("output", "target", "to"):
+            canonical_key = "destination"
 
         if canonical_key == "url":
             normalized[canonical_key] = normalize_url(value)

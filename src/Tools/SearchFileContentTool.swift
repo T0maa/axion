@@ -1,0 +1,126 @@
+//
+//  SearchFileContentTool.swift
+//  AXION
+//
+//  Created by Thomas Chamard on 22/06/2026.
+//
+
+import Foundation
+
+final class SearchFileContentTool: Tool {
+    let name = "search_file_content"
+
+    func execute(argument: String) -> String {
+        let parts = argument.split(separator: "|", maxSplits: 1).map(String.init)
+
+        guard parts.count == 2 else {
+            return "Invalid search arguments. Expected path|query."
+        }
+
+        let path = clean(parts[0])
+        let query = clean(parts[1])
+
+        guard !path.isEmpty, !query.isEmpty else {
+            return "Missing path or query."
+        }
+
+        let expandedPath = (path as NSString).expandingTildeInPath
+        let url = URL(fileURLWithPath: expandedPath)
+
+        guard FileManager.default.fileExists(atPath: expandedPath) else {
+            return "Path not found: \(expandedPath)"
+        }
+
+        var isDirectory: ObjCBool = false
+        FileManager.default.fileExists(atPath: expandedPath, isDirectory: &isDirectory)
+
+        if isDirectory.boolValue {
+            return searchDirectory(url, query: query)
+        }
+
+        return searchFile(url, query: query)
+    }
+
+    private func searchDirectory(_ url: URL, query: String) -> String {
+        guard let enumerator = FileManager.default.enumerator(
+            at: url,
+            includingPropertiesForKeys: [.isRegularFileKey],
+            options: [.skipsHiddenFiles]
+        ) else {
+            return "Failed to read directory: \(url.path)"
+        }
+
+        var results: [String] = []
+
+        for case let fileURL as URL in enumerator {
+            guard isReadableTextFile(fileURL) else {
+                continue
+            }
+
+            let matches = findMatches(in: fileURL, query: query)
+
+            results.append(contentsOf: matches)
+
+            if results.count >= 30 {
+                break
+            }
+        }
+
+        if results.isEmpty {
+            return "No matches found for: \(query)"
+        }
+
+        return results.joined(separator: "\n")
+    }
+
+    private func searchFile(_ url: URL, query: String) -> String {
+        guard isReadableTextFile(url) else {
+            return "Unsupported file type: \(url.path)"
+        }
+
+        let results = findMatches(in: url, query: query)
+
+        if results.isEmpty {
+            return "No matches found for: \(query)"
+        }
+
+        return results.joined(separator: "\n")
+    }
+
+    private func findMatches(in url: URL, query: String) -> [String] {
+        guard let content = try? String(contentsOf: url, encoding: .utf8) else {
+            return []
+        }
+
+        let lines = content.components(separatedBy: .newlines)
+        var results: [String] = []
+
+        for (index, line) in lines.enumerated() {
+            if line.localizedCaseInsensitiveContains(query) {
+                results.append("\(url.path):\(index + 1): \(line)")
+            }
+
+            if results.count >= 30 {
+                break
+            }
+        }
+
+        return results
+    }
+
+    private func isReadableTextFile(_ url: URL) -> Bool {
+        let allowedExtensions = [
+            "txt", "md", "json", "csv", "log",
+            "swift", "cpp", "hpp", "h", "c", "py",
+            "js", "ts", "html", "css", "xml", "yml", "yaml"
+        ]
+
+        return allowedExtensions.contains(url.pathExtension.lowercased())
+    }
+
+    private func clean(_ value: String) -> String {
+        value.trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "\"", with: "")
+            .replacingOccurrences(of: "'", with: "")
+    }
+}

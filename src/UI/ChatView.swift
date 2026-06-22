@@ -16,8 +16,8 @@ struct ChatView: View {
         }
     }
 
-    private let chatService = ChatService()
     private let toolRegistry = ToolRegistry()
+    private let agentService = AgentService()
     
     var body: some View {
         HStack {
@@ -179,36 +179,29 @@ struct ChatView: View {
         
         messages.append(ChatMessage(role: .user, content: text))
 
-        let requestMessages = messages.filter { message in
-            message.role == .user || message.role == .assistant
-        }.filter { message in
-            !message.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-        }
-
         inputText = ""
         isLoading = true
 
         Task {
-            let response = await chatService.send(messages: requestMessages)
-            let content = response.trimmingCharacters(in: .whitespacesAndNewlines)
+            await agentService.run(
+                messages: messages,
+                onMessage: { message in
+                    Task { @MainActor in
+                        messages.append(message)
+                    }
+                },
+                onConfirmationRequired: { toolCall in
+                    Task { @MainActor in
+                        pendingToolCall = toolCall
+                        isLoading = false
+                    }
+                }
+            )
 
             await MainActor.run {
-                guard !content.isEmpty else {
+                if pendingToolCall == nil {
                     isLoading = false
-                    return
                 }
-
-                if let toolCall = parseToolCall(content) {
-                    executeToolCall(toolCall)
-                    return
-                }
-
-                messages.append(ChatMessage(
-                    role: .assistant,
-                    content: content
-                ))
-
-                isLoading = false
             }
         }
     }
@@ -244,26 +237,13 @@ struct ChatView: View {
         return true
     }
     
-    private func parseToolCall(_ text: String) -> ToolCall? {
-        guard let start = text.firstIndex(of: "{"),
-              let end = text.lastIndex(of: "}") else {
-            return nil
-        }
-
-        let jsonText = String(text[start...end])
-
-        guard let data = jsonText.data(using: .utf8) else {
-            return nil
-        }
-
-        return try? JSONDecoder().decode(ToolCall.self, from: data)
-    }
-
     private func executeToolCall(_ toolCall: ToolCall, confirmed: Bool = false) {
         let sensitiveTools = [
             "rename_file",
             "move_file",
-            "delete_file"
+            "delete_file",
+            "compress_file",
+            "extract_archive"
         ]
 
         if sensitiveTools.contains(toolCall.tool), !confirmed {
@@ -288,7 +268,7 @@ struct ChatView: View {
         if !cleanResult.isEmpty {
             messages.append(ChatMessage(
                 role: .tool,
-                content: cleanResult
+                content: "Tool result for \(toolCall.tool):\n\(cleanResult)"
             ))
         }
 

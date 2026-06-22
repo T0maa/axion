@@ -53,7 +53,6 @@ final class ListDirectoryTool: Tool {
                         .contentModificationDateKey
                     ])
 
-                    let type = values.isDirectory == true ? "folder" : "file"
                     let size = values.fileSize ?? 0
 
                     if values.isDirectory == true {

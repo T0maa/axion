@@ -25,7 +25,7 @@ final class FocusAppTool: Tool {
             return "App is not running: \(appName)"
         }
 
-        if app.activate(options: [.activateAllWindows, .activateIgnoringOtherApps]) {
+        if app.activate() {
             return "App focused: \(appName)"
         }
 

@@ -37,7 +37,7 @@ final class LlamaServerManager: ObservableObject {
         process.arguments = [
             "-m", settings.modelPath,
             "--port", "8080",
-            "-c", "2048",
+            "-c", "4096",
             "-ngl", "99"
         ]
 

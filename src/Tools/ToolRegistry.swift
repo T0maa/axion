@@ -19,6 +19,10 @@ final class ToolRegistry {
         "rename_file": "files",
         "move_file": "files",
         "delete_file": "files",
+        "search_file_content": "files",
+        "read_pdf_text": "files",
+        "compress_file": "files",
+        "extract_archive": "files",
 
         "open_app": "web_apps",
         "open_url": "web_apps",
@@ -29,6 +33,7 @@ final class ToolRegistry {
         "list_processes": "dev",
         "open_in_vscode": "dev",
         "git_status": "dev",
+        "open_terminal_here": "dev",
         
         "show_notification": "system",
         "take_screenshot": "system",
@@ -76,6 +81,11 @@ final class ToolRegistry {
         register(DeleteFileTool())
         register(CreateReminderTool())
         register(CreateCalendarEventTool())
+        register(SearchFileContentTool())
+        register(ReadPDFTextTool())
+        register(CompressFileTool())
+        register(ExtractArchiveTool())
+        register(OpenTerminalHereTool())
     }
 
     func register(_ tool: Tool) {
