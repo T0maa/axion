@@ -10,7 +10,7 @@ import Foundation
 final class ListProcessesTool: Tool {
     let name = "list_processes"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let process = Process()
         let pipe = Pipe()
 
@@ -23,7 +23,7 @@ final class ListProcessesTool: Tool {
             process.waitUntilExit()
 
             guard process.terminationStatus == 0 else {
-                return "Failed to list processes."
+                return .failure(title: "Failed to list processes")
             }
 
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
@@ -34,9 +34,16 @@ final class ListProcessesTool: Tool {
                 .prefix(40)
                 .map(String.init)
 
-            return "Running processes:\n" + lines.joined(separator: "\n")
+            let result = "Running processes:\n" + lines.joined(separator: "\n")
+
+            return .success(
+                title: "Running processes",
+                detail: result,
+                rawOutput: result,
+                displayStyle: .codeBlock
+            )
         } catch {
-            return "Failed to list processes."
+            return .failure(title: "Failed to list processes")
         }
     }
 }

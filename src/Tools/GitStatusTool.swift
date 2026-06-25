@@ -10,7 +10,7 @@ import Foundation
 final class GitStatusTool: Tool {
     let name = "git_status"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
 
@@ -20,7 +20,7 @@ final class GitStatusTool: Tool {
             atPath: expandedPath,
             isDirectory: &isDirectory
         ), isDirectory.boolValue else {
-            return "Directory not found: \(expandedPath)"
+            return .failure(title: "Directory not found", detail: expandedPath)
         }
 
         let process = Process()
@@ -47,14 +47,22 @@ final class GitStatusTool: Tool {
             ) ?? ""
 
             if process.terminationStatus != 0 {
-                return "Git status failed:\n\(error)"
+                return .failure(title: "Git status failed", detail: error.trimmingCharacters(in: .whitespacesAndNewlines))
             }
 
-            return output.isEmpty
-                ? "Git status: clean."
-                : "Git status:\n\(output)"
+            let cleanOutput = output.trimmingCharacters(in: .whitespacesAndNewlines)
+            let result = cleanOutput.isEmpty
+                ? "Git status:\nclean"
+                : "Git status:\n\(cleanOutput)"
+
+            return .success(
+                title: "Git status",
+                detail: result,
+                rawOutput: result,
+                displayStyle: .codeBlock
+            )
         } catch {
-            return "Git status failed."
+            return .failure(title: "Git status failed")
         }
     }
 

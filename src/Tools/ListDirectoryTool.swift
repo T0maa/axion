@@ -10,7 +10,7 @@ import Foundation
 final class ListDirectoryTool: Tool {
     let name = "list_directory"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
         let url = URL(fileURLWithPath: expandedPath)
@@ -21,11 +21,11 @@ final class ListDirectoryTool: Tool {
             atPath: expandedPath,
             isDirectory: &isDirectory
         ) else {
-            return "Directory not found: \(expandedPath)"
+            return .failure(title: "Directory not found", detail: expandedPath)
         }
 
         guard isDirectory.boolValue else {
-            return "Path is not a directory: \(expandedPath)"
+            return .failure(title: "Path is not a directory", detail: expandedPath)
         }
 
         do {
@@ -40,7 +40,7 @@ final class ListDirectoryTool: Tool {
             )
 
             if items.isEmpty {
-                return "Directory is empty: \(expandedPath)"
+                return .neutral(title: "Directory is empty", detail: expandedPath)
             }
 
             let lines = try items
@@ -62,12 +62,16 @@ final class ListDirectoryTool: Tool {
                     return "[file] \(item.lastPathComponent) (\(formatBytes(size)))"
                 }
 
-            return """
-            Directory: \(expandedPath)
-            \(lines.joined(separator: "\n"))
-            """
+            let output = "Directory: \(expandedPath)\n\(lines.joined(separator: "\n"))"
+
+            return .success(
+                title: "Directory contents",
+                detail: output,
+                rawOutput: output,
+                displayStyle: .list
+            )
         } catch {
-            return "Failed to list directory: \(expandedPath)"
+            return .failure(title: "Failed to list directory", detail: expandedPath)
         }
     }
 

@@ -10,11 +10,11 @@ import AppKit
 final class QuitAppTool: Tool {
     let name = "quit_app"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let appName = clean(argument)
 
         guard !appName.isEmpty else {
-            return "Missing app name."
+            return .failure(title: "Missing app name")
         }
 
         let apps = NSWorkspace.shared.runningApplications.filter {
@@ -22,14 +22,14 @@ final class QuitAppTool: Tool {
         }
 
         guard let app = apps.first else {
-            return "App is not running: \(appName)"
+            return .failure(title: "App is not running", detail: appName)
         }
 
         if app.terminate() {
-            return "App quit: \(appName)"
+            return .success(title: "App quit", detail: appName)
         }
 
-        return "Failed to quit app: \(appName)"
+        return .failure(title: "Failed to quit app", detail: appName)
     }
 
     private func clean(_ value: String) -> String {

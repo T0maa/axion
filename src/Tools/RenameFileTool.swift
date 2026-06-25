@@ -11,18 +11,18 @@ final class RenameFileTool: Tool {
     let name = "rename_file"
     let requiresConfirmation = true
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let parts = argument.split(separator: "|", maxSplits: 1).map(String.init)
 
         guard parts.count == 2 else {
-            return "Invalid rename arguments. Expected old_path|new_name."
+            return .failure(title: "Invalid rename arguments", detail: "Expected old_path|new_name.")
         }
 
         let oldPath = clean(parts[0])
         let newName = clean(parts[1])
 
         guard !oldPath.isEmpty, !newName.isEmpty else {
-            return "Missing rename path or new name."
+            return .failure(title: "Missing rename path or new name")
         }
 
         let expandedOldPath = (oldPath as NSString).expandingTildeInPath
@@ -30,18 +30,22 @@ final class RenameFileTool: Tool {
         let newURL = oldURL.deletingLastPathComponent().appendingPathComponent(newName)
 
         guard FileManager.default.fileExists(atPath: expandedOldPath) else {
-            return "File not found: \(expandedOldPath)"
+            return .failure(title: "File not found", detail: expandedOldPath)
         }
 
         guard !FileManager.default.fileExists(atPath: newURL.path) else {
-            return "Destination already exists: \(newURL.path)"
+            return .failure(title: "Destination already exists", detail: newURL.path)
         }
 
         do {
             try FileManager.default.moveItem(at: oldURL, to: newURL)
-            return "File renamed:\n\(expandedOldPath)\n→ \(newURL.path)"
+            return .success(
+                title: "File renamed",
+                detail: "\(expandedOldPath) -> \(newURL.path)",
+                rawOutput: "File renamed:\n\(expandedOldPath)\n→ \(newURL.path)"
+            )
         } catch {
-            return "Failed to rename file: \(expandedOldPath)"
+            return .failure(title: "Failed to rename file", detail: expandedOldPath)
         }
     }
 

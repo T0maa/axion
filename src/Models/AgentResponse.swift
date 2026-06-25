@@ -33,10 +33,11 @@ enum AgentResponse {
                 return nil
             }
 
+            let normalizedCategory = Self.normalizeCategory(category)
             let params = json["params"] as? [String: String] ?? [:]
 
             let normalizedJSON: [String: Any] = [
-                "category": category,
+                "category": normalizedCategory,
                 "tool": tool,
                 "params": params
             ]
@@ -51,6 +52,37 @@ enum AgentResponse {
         }
 
         return nil
+    }
+
+    private static func normalizeCategory(_ category: String) -> String {
+        let normalized = category
+            .lowercased()
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+            .replacingOccurrences(of: "_", with: " ")
+            .replacingOccurrences(of: "-", with: " ")
+
+        switch normalized {
+        case "dev", "developer", "development", "developer tools", "dev tools", "coding", "code":
+            return "dev"
+
+        case "file", "files", "filesystem", "file system", "finder":
+            return "files"
+
+        case "web apps", "web app", "web", "apps", "app", "application", "applications":
+            return "web_apps"
+
+        case "text", "clipboard", "date", "datetime", "time":
+            return "text"
+
+        case "system", "macos", "mac os", "os":
+            return "system"
+
+        case "third party", "thirdparty", "third party tools", "calendar", "calendars", "reminder", "reminders":
+            return "third_party"
+
+        default:
+            return category
+        }
     }
 
     private static func extractFirstJSONObject(from text: String) -> String {

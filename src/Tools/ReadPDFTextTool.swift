@@ -11,21 +11,21 @@ import PDFKit
 final class ReadPDFTextTool: Tool {
     let name = "read_pdf_text"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
         let url = URL(fileURLWithPath: expandedPath)
 
         guard FileManager.default.fileExists(atPath: expandedPath) else {
-            return "PDF not found: \(expandedPath)"
+            return .failure(title: "PDF not found", detail: expandedPath)
         }
 
         guard url.pathExtension.lowercased() == "pdf" else {
-            return "Not a PDF file: \(expandedPath)"
+            return .failure(title: "Not a PDF file", detail: expandedPath)
         }
 
         guard let document = PDFDocument(url: url) else {
-            return "Failed to open PDF: \(expandedPath)"
+            return .failure(title: "Failed to open PDF", detail: expandedPath)
         }
 
         var text = ""
@@ -44,14 +44,18 @@ final class ReadPDFTextTool: Tool {
         let cleanText = text.trimmingCharacters(in: .whitespacesAndNewlines)
 
         if cleanText.isEmpty {
-            return "No readable text found in PDF: \(expandedPath)"
+            return .neutral(title: "No readable text found in PDF", detail: expandedPath)
         }
 
         if cleanText.count > 12000 {
-            return String(cleanText.prefix(12000)) + "\n\n[Output truncated]"
+            return .success(
+                title: "PDF text extracted",
+                detail: expandedPath,
+                rawOutput: String(cleanText.prefix(12000)) + "\n\n[Output truncated]"
+            )
         }
 
-        return cleanText
+        return .success(title: "PDF text extracted", detail: expandedPath, rawOutput: cleanText)
     }
 
     private func clean(_ value: String) -> String {

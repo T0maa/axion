@@ -12,20 +12,20 @@ final class DeleteFileTool: Tool {
     let name = "delete_file"
     let requiresConfirmation = true
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
         let url = URL(fileURLWithPath: expandedPath)
 
         guard FileManager.default.fileExists(atPath: expandedPath) else {
-            return "File not found: \(expandedPath)"
+            return .failure(title: "File not found", detail: expandedPath)
         }
 
         do {
             try FileManager.default.trashItem(at: url, resultingItemURL: nil)
-            return "File moved to Trash: \(expandedPath)"
+            return .success(title: "File moved to Trash", detail: expandedPath)
         } catch {
-            return "Failed to move file to Trash: \(expandedPath)"
+            return .failure(title: "Failed to move file to Trash", detail: expandedPath)
         }
     }
 

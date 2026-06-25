@@ -10,12 +10,12 @@ import Foundation
 final class OpenInVSCodeTool: Tool {
     let name = "open_in_vscode"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
 
         guard FileManager.default.fileExists(atPath: expandedPath) else {
-            return "Path not found: \(expandedPath)"
+            return .failure(title: "Path not found", detail: expandedPath)
         }
 
         let process = Process()
@@ -27,12 +27,12 @@ final class OpenInVSCodeTool: Tool {
             process.waitUntilExit()
 
             if process.terminationStatus == 0 {
-                return "Opened in VSCode: \(expandedPath)"
+                return .success(title: "Opened in VSCode", detail: expandedPath)
             }
 
-            return "Failed to open in VSCode."
+            return .failure(title: "Failed to open in VSCode")
         } catch {
-            return "Failed to open in VSCode."
+            return .failure(title: "Failed to open in VSCode")
         }
     }
 

@@ -10,7 +10,7 @@ import Foundation
 final class CompressFileTool: Tool {
     let name = "compress_file"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let parts = argument.split(separator: "|", maxSplits: 1).map(String.init)
 
         guard parts.count == 2 else {
@@ -28,7 +28,7 @@ final class CompressFileTool: Tool {
         let destinationPath = (destination as NSString).expandingTildeInPath
 
         guard FileManager.default.fileExists(atPath: sourcePath) else {
-            return "Source not found: \(sourcePath)"
+            return .failure(title: "Source not found", detail: sourcePath)
         }
 
         let finalDestination = destinationPath.hasSuffix(".zip")
@@ -56,12 +56,12 @@ final class CompressFileTool: Tool {
             process.waitUntilExit()
 
             if process.terminationStatus != 0 {
-                return "Failed to compress: \(sourcePath)"
+                return .failure(title: "Failed to compress", detail: sourcePath)
             }
 
-            return "Archive created: \(finalDestination)"
+            return .success(title: "Archive created", detail: finalDestination)
         } catch {
-            return "Failed to compress: \(sourcePath)"
+            return .failure(title: "Failed to compress", detail: sourcePath)
         }
     }
 

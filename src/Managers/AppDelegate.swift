@@ -78,7 +78,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             )
 
             newWindow.contentViewController = hostingController
-            newWindow.title = "AXON"
+            newWindow.title = "AXION"
             newWindow.isReleasedWhenClosed = false
             newWindow.level = .floating
 

@@ -9,7 +9,7 @@ protocol Tool {
     var name: String { get }
     var requiresConfirmation: Bool { get }
 
-    func execute(argument: String) -> String
+    func execute(argument: String) -> ToolExecutionResult
 }
 
 extension Tool {

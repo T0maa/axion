@@ -10,11 +10,11 @@ import Foundation
 final class AppendTextFileTool: Tool {
     let name = "append_text_file"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let parts = argument.split(separator: "|", maxSplits: 1)
 
         guard parts.count == 2 else {
-            return "Invalid format. Expected: FILE_PATH|CONTENT"
+            return .failure(title: "Invalid format", detail: "Expected: FILE_PATH|CONTENT")
         }
 
         let path = clean(String(parts[0]))
@@ -54,9 +54,9 @@ final class AppendTextFileTool: Tool {
                 )
             }
 
-            return "Text appended to file: \(expandedPath)"
+            return .success(title: "Text appended to file", detail: expandedPath)
         } catch {
-            return "Failed to append text to file: \(expandedPath)"
+            return .failure(title: "Failed to append text to file", detail: expandedPath)
         }
     }
 

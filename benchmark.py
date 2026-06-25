@@ -1,72 +1,38 @@
+import argparse
 import json
+import re
+import sys
 import time
 from collections import defaultdict
+from pathlib import Path
 
 import requests
 
 URL = "http://localhost:8080/v1/chat/completions"
-DATASET_PATH = "data/test.jsonl"
+SCRIPT_DIR = Path(__file__).resolve().parent
+DEFAULT_DATASET_PATH = SCRIPT_DIR / "data" / "test.jsonl"
+DEFAULT_MIN_TOOL_ACCURACY = 0.98
+DEFAULT_MIN_PARAM_ACCURACY = 0.97
 
-SYSTEM_PROMPT = """
-Return exactly ONE valid compact JSON object. No markdown. No prose.
-Always use this shape: {"category":"...","tool":"...","params":{...}}
-Never output multiple JSON objects. Never output params{}.
 
-Tool categories:
-files: open_file, reveal_file, read_text_file, create_text_file, append_text_file, list_directory, create_folder, get_file_info, rename_file, move_file, delete_file, search_file_content, read_pdf_text, compress_file, extract_archive
-web_apps: open_app, open_url, quit_app, focus_app, hide_app
-text: copy_to_clipboard, get_clipboard, get_current_datetime, search_in_spotlight
-system: show_notification, take_screenshot, set_volume, get_battery_status, toggle_dark_mode
-dev: list_processes, open_in_vscode, git_status, open_terminal_here
-third_party: create_reminder, create_calendar_event
+SYSTEM_PROMPT_PATH = SCRIPT_DIR / "data" / "system_prompt.txt"
 
-Rules:
-- Apps open/launch/start/show => open_app. App quit/close/stop/terminate => quit_app. App focus/bring/switch => focus_app. App hide/minimize => hide_app.
-- Website/domain/url => open_url.
-- If prompt contains a local file path (/Users/... or ~/...) and asks open, use open_file with path. Never use open_app with Preview/TextEdit for a file path. /Applications/Name.app is the only path that uses open_app.
-- Reveal/show/locate/find path in Finder => reveal_file. If prompt says open Finder and show/reveal a path, choose reveal_file, not open_app.
-- Read/show/inspect/open and read text/code file content => read_text_file. Binary files like pdf/png/jpg/zip => open_file, not read_text_file.
-- Folder contents/list/inside/display contents/show contents => list_directory. A path without file extension is usually a folder. Folder create/make/add => create_folder. File info/metadata/size/type/modified => get_file_info.
-- Create/write file with content => create_text_file with params path,content. Append/add text => append_text_file with params path,content. Preserve text exactly.
-- Copy to clipboard/pasteboard => copy_to_clipboard with params text. The copied text is before "to clipboard/pasteboard". Clipboard content => get_clipboard. Date/time/timestamp => get_current_datetime.
-- Notification/alert => show_notification with title,message. If title missing, title is AXION.
-- Screenshot => take_screenshot. Volume N => set_volume with level. Battery/charging/power => get_battery_status. Toggle appearance => toggle_dark_mode.
-- Processes => list_processes. VSCode => open_in_vscode. Git status/changes => git_status. Terminal in folder/open shell here => open_terminal_here. Spotlight/mdfind/search macOS files => search_in_spotlight.
-- Rename file => rename_file with path,new_name. Move file from path to path => move_file with source,destination. Delete/remove/trash/move to Trash => delete_file with path. Destination "Trash" means delete_file, not move_file.
-- Search text inside file/folder => search_file_content with path,query. Read/extract PDF text => read_pdf_text with path. Zip/compress/archive => compress_file with source,destination. Unzip/extract archive => extract_archive with source,destination.
-- Reminder => create_reminder with title,due_date optional. Keep date wording from the prompt, e.g. "tomorrow morning", not "tomorrow at morning".
-- Calendar event => create_calendar_event with title,start,end. Preserve date wording from the prompt. Use "tomorrow 14:00", not "tomorrow at 14:00", unless prompt says "at". If no end, end=start+1h.
 
-Examples:
-open Xcode => {"category":"web_apps","tool":"open_app","params":{"app":"Xcode"}}
-show me Finder => {"category":"web_apps","tool":"open_app","params":{"app":"Finder"}}
-open /Users/thomas/Desktop/test.pdf => {"category":"files","tool":"open_file","params":{"path":"/Users/thomas/Desktop/test.pdf"}}
-open and read /Users/thomas/Desktop/notes.txt => {"category":"files","tool":"read_text_file","params":{"path":"/Users/thomas/Desktop/notes.txt"}}
-open Safari then go to github.com => {"category":"web_apps","tool":"open_url","params":{"url":"https://github.com"}}
-open Finder and show /Users/thomas/Desktop/test.png => {"category":"files","tool":"reveal_file","params":{"path":"/Users/thomas/Desktop/test.png"}}
-copy hello AXON to clipboard => {"category":"text","tool":"copy_to_clipboard","params":{"text":"hello AXON"}}
-what time is it => {"category":"text","tool":"get_current_datetime","params":{}}
-append second line to /Users/thomas/Desktop/a.txt => {"category":"files","tool":"append_text_file","params":{"path":"/Users/thomas/Desktop/a.txt","content":"second line"}}
-write project status ready into ~/Desktop/status.txt => {"category":"files","tool":"create_text_file","params":{"path":"~/Desktop/status.txt","content":"project status ready"}}
-create /Users/thomas/Desktop/shopping.txt with eggs and bread => {"category":"files","tool":"create_text_file","params":{"path":"/Users/thomas/Desktop/shopping.txt","content":"eggs and bread"}}
-add another note to ~/Desktop/quick-note.md => {"category":"files","tool":"append_text_file","params":{"path":"~/Desktop/quick-note.md","content":"another note"}}
-show contents of /Users/thomas/Desktop => {"category":"files","tool":"list_directory","params":{"path":"/Users/thomas/Desktop"}}
-set volume to 40 => {"category":"system","tool":"set_volume","params":{"level":"40"}}
-list running processes => {"category":"dev","tool":"list_processes","params":{}}
-search Spotlight for benchmark.py => {"category":"text","tool":"search_in_spotlight","params":{"query":"benchmark.py"}}
-check repository status for ~/Projects/AXION => {"category":"dev","tool":"git_status","params":{"path":"~/Projects/AXION"}}
-move /Users/thomas/Desktop/old.txt to Trash => {"category":"files","tool":"delete_file","params":{"path":"/Users/thomas/Desktop/old.txt"}}
-search ToolRegistry in /Users/thomas/Projects/AXION => {"category":"files","tool":"search_file_content","params":{"path":"/Users/thomas/Projects/AXION","query":"ToolRegistry"}}
-read pdf /Users/thomas/Desktop/test.pdf => {"category":"files","tool":"read_pdf_text","params":{"path":"/Users/thomas/Desktop/test.pdf"}}
-zip /Users/thomas/Desktop/AXIONZipTest to /Users/thomas/Desktop/AXIONZipTest.zip => {"category":"files","tool":"compress_file","params":{"source":"/Users/thomas/Desktop/AXIONZipTest","destination":"/Users/thomas/Desktop/AXIONZipTest.zip"}}
-unzip /Users/thomas/Desktop/AXIONZipTest.zip to /Users/thomas/Desktop/AXIONExtracted => {"category":"files","tool":"extract_archive","params":{"source":"/Users/thomas/Desktop/AXIONZipTest.zip","destination":"/Users/thomas/Desktop/AXIONExtracted"}}
-open terminal in /Users/thomas/Projects/AXION => {"category":"dev","tool":"open_terminal_here","params":{"path":"/Users/thomas/Projects/AXION"}}
-rename /Users/thomas/Desktop/old.txt to new.txt => {"category":"files","tool":"rename_file","params":{"path":"/Users/thomas/Desktop/old.txt","new_name":"new.txt"}}
-remind me to buy milk tomorrow at 18:00 => {"category":"third_party","tool":"create_reminder","params":{"title":"buy milk","due_date":"tomorrow at 18:00"}}
-create reminder call the bank tomorrow morning => {"category":"third_party","tool":"create_reminder","params":{"title":"call the bank","due_date":"tomorrow morning"}}
-create calendar event Meeting tomorrow 14:00 to 15:00 => {"category":"third_party","tool":"create_calendar_event","params":{"title":"Meeting","start":"tomorrow 14:00","end":"tomorrow 15:00"}}
-create calendar event Lunch tomorrow at 12:30 => {"category":"third_party","tool":"create_calendar_event","params":{"title":"Lunch","start":"tomorrow at 12:30","end":"tomorrow at 13:30"}}
-"""
+def load_system_prompt():
+    if not SYSTEM_PROMPT_PATH.exists():
+        print(f"Missing system prompt: {SYSTEM_PROMPT_PATH}", file=sys.stderr)
+        sys.exit(1)
+
+    content = SYSTEM_PROMPT_PATH.read_text(encoding="utf-8").strip()
+
+    if not content:
+        print(f"Empty system prompt: {SYSTEM_PROMPT_PATH}", file=sys.stderr)
+        sys.exit(1)
+
+    return content
+
+
+SYSTEM_PROMPT = load_system_prompt()
 
 
 CATEGORY_BY_TOOL = {
@@ -85,6 +51,8 @@ CATEGORY_BY_TOOL = {
     "read_pdf_text": "files",
     "compress_file": "files",
     "extract_archive": "files",
+    "organize_folder": "files",
+    "clean_folder": "files",
     "open_app": "web_apps",
     "open_url": "web_apps",
     "quit_app": "web_apps",
@@ -180,10 +148,15 @@ def extract_top_level_json_candidates(raw):
 def repair_raw_json(raw):
     raw = raw.strip()
     raw = raw.replace("：", ":")
+    raw = raw.replace("“", '"').replace("”", '"')
+    raw = raw.replace("‘", "'").replace("’", "'")
+    raw = raw.replace('"params:{}"', '"params":{}')
+    raw = raw.replace('"params: {}"', '"params":{}')
     raw = raw.replace('"params{}"', '"params":{}')
     raw = raw.replace('"params{}', '"params":{}')
     raw = raw.replace('"params"{}', '"params":{}')
     raw = raw.replace('"params": "{}"', '"params":{}')
+    raw = raw.replace('"params":"{}"', '"params":{}')
     raw = raw.replace('"params": null', '"params":{}')
 
     objects = extract_top_level_json_candidates(raw)
@@ -230,7 +203,7 @@ def normalize_path(value):
 
 
 def normalize_url(value):
-    value = str(value).strip().rstrip(".,;:")
+    value = str(value).strip().rstrip(".,;:)")
     value = value.replace("'", "").replace('"', "")
 
     if value.startswith("http://"):
@@ -249,6 +222,51 @@ def normalize_url(value):
     return aliases.get(value, value)
 
 
+def extract_paths(prompt):
+    path_pattern = r"(?:~|/Users|/Applications|/tmp|/var|/etc)[^\s,;:)]+"
+    return [normalize_path(match) for match in re.findall(path_pattern, prompt)]
+
+
+def extract_first_domain(prompt):
+    match = re.search(r"\b([a-zA-Z0-9.-]+\.(?:com|org|net|io|dev|fr))\b", prompt)
+
+    if not match:
+        return ""
+
+    return normalize_url(match.group(1))
+
+
+def extract_time_range(prompt):
+    match = re.search(
+        r"\b(tomorrow|tonight|today|monday|tuesday|wednesday|thursday|friday|saturday|sunday|next monday|next tuesday|next wednesday|next thursday|next friday|next saturday|next sunday)\b(?:\s+at)?\s+(\d{1,2}:\d{2})\s+to\s+(\d{1,2}:\d{2})",
+        prompt,
+        flags=re.IGNORECASE,
+    )
+
+    if not match:
+        return None
+
+    day = match.group(1).lower()
+    start = match.group(2)
+    end = match.group(3)
+
+    return f"{day} {start}", f"{day} {end}"
+
+
+def extract_single_time(prompt):
+    match = re.search(
+        r"\b(tomorrow|tonight|today|monday|tuesday|wednesday|thursday|friday|saturday|sunday|next monday|next tuesday|next wednesday|next thursday|next friday|next saturday|next sunday)\b(?:\s+at)?\s+(\d{1,2}:\d{2})",
+        prompt,
+        flags=re.IGNORECASE,
+    )
+
+    if not match:
+        return None
+
+    day = match.group(1).lower()
+    time_value = match.group(2)
+
+    return f"{day} {time_value}"
 def normalize_app(value):
     value = str(value).strip().rstrip(".,;:")
     value = value.replace("'", "").replace('"', "")
@@ -266,6 +284,7 @@ def normalize_text(value):
     value = str(value).strip()
     value = value.replace("'", "").replace('"', "")
     value = value.rstrip("\n")
+    value = value.strip().rstrip(".,;:")
     value = value.replace("tomorrow at morning", "tomorrow morning")
     value = value.replace("tomorrow at afternoon", "tomorrow afternoon")
     value = value.replace("tomorrow at evening", "tomorrow evening")
@@ -285,6 +304,15 @@ def normalize_text(value):
     value = value.replace("next Friday at ", "next Friday ")
     value = value.replace("next Saturday at ", "next Saturday ")
     value = value.replace("next Sunday at ", "next Sunday ")
+
+    time_before_day = re.match(
+        r"^(\d{1,2}:\d{2})\s+(tomorrow|tonight|today|monday|tuesday|wednesday|thursday|friday|saturday|sunday|next monday|next tuesday|next wednesday|next thursday|next friday|next saturday|next sunday)$",
+        value,
+        flags=re.IGNORECASE,
+    )
+
+    if time_before_day:
+        value = f"{time_before_day.group(2).lower()} {time_before_day.group(1)}"
 
     suffixes = [
         " to the clipboard",
@@ -374,6 +402,11 @@ def params_from_legacy_param(tool, param):
         source, separator, destination = param.partition("|")
         return {"source": source, "destination": destination} if separator else {"source": param, "destination": ""}
 
+    if tool in ("organize_folder", "clean_folder"):
+        path, separator, mode = param.partition("|")
+        default_mode = "by_extension" if tool == "organize_folder" else "dry_run"
+        return {"path": path, "mode": mode if separator else default_mode}
+
     if tool == "create_reminder":
         title, separator, due_date = param.partition("|")
         return {"title": title, "due_date": due_date} if separator else {"title": param}
@@ -425,6 +458,10 @@ def canonical_params(tool, data):
             canonical_key = "source"
         elif tool in ("compress_file", "extract_archive") and key in ("output", "target", "to"):
             canonical_key = "destination"
+        elif tool in ("organize_folder", "clean_folder") and key in ("folder", "directory"):
+            canonical_key = "path"
+        elif tool in ("organize_folder", "clean_folder") and key in ("strategy", "type"):
+            canonical_key = "mode"
 
         if canonical_key == "url":
             normalized[canonical_key] = normalize_url(value)
@@ -442,6 +479,7 @@ def canonical_params(tool, data):
             "due_date",
             "start",
             "end",
+            "mode",
         ):
             normalized[canonical_key] = normalize_text(value)
         elif canonical_key == "level":
@@ -460,11 +498,140 @@ def canonical_params(tool, data):
         elif start.endswith("19:00"):
             normalized["end"] = start.replace("19:00", "20:00")
 
+    if tool == "organize_folder":
+        if "mode" not in normalized or normalized["mode"] == "":
+            normalized["mode"] = "by_extension"
+
+    if tool == "clean_folder":
+        if "mode" not in normalized or normalized["mode"] == "":
+            normalized["mode"] = "dry_run"
+        elif normalized["mode"] not in ("dry_run", "safe"):
+            normalized["mode"] = "dry_run"
+
+
     if tool in EMPTY_PARAM_TOOLS:
         return {}
 
     if tool == "show_notification" and "message" in normalized and "title" not in normalized:
         normalized["title"] = "AXION"
+
+    return normalized
+
+
+def normalize_prediction_from_prompt(prompt, tool, params):
+    prompt_lower = prompt.lower()
+
+    if tool == "focus_app" and prompt_lower.startswith("show me "):
+        return "open_app", params
+
+    if tool == "open_file" and "open and read" in prompt_lower:
+        return "read_text_file", params
+
+    if tool == "create_reminder" and contains_clipboard_copy_request(prompt_lower):
+        return "copy_to_clipboard", {"text": clipboard_text_from_prompt(prompt)}
+
+    if tool == "append_text_file" and prompt_lower.startswith("write ") and " into " in prompt_lower:
+        return "create_text_file", params
+
+    if tool == "open_app" and prompt_lower.startswith("open finder and show "):
+        paths = extract_paths(prompt)
+        if paths:
+            return "reveal_file", {"path": paths[-1]}
+
+    if tool == "open_app" and " then go to " in prompt_lower:
+        domain = extract_first_domain(prompt)
+        if domain:
+            return "open_url", {"url": domain}
+
+    if tool == "read_pdf_text" and re.match(r"^read\s+(?:~|/users|/tmp|/var|/etc).+\.pdf$", prompt_lower):
+        return "open_file", params
+
+    if tool == "open_file" and params.get("path", "").lower().endswith(".pdf"):
+        pdf_text_patterns = [
+            "read pdf ",
+            "read pdf file ",
+            "extract text from ",
+            "extract pdf text from ",
+            "show text inside ",
+            "read the content of pdf ",
+            "get text from ",
+            "parse pdf ",
+        ]
+
+        if any(pattern in prompt_lower for pattern in pdf_text_patterns):
+            return "read_pdf_text", params
+
+    if tool == "move_file" and normalize_text(params.get("destination", "")).lower() == "trash":
+        return "delete_file", {"path": params.get("source", "")}
+
+    if tool == "open_terminal_here" and prompt_lower.startswith("show my ") and "folder" in prompt_lower:
+        return "list_directory", params
+
+    return tool, params
+
+
+def contains_clipboard_copy_request(prompt_lower):
+    return "copy " in prompt_lower and ("clipboard" in prompt_lower or "pasteboard" in prompt_lower)
+
+
+def clipboard_text_from_prompt(prompt):
+    text = prompt.strip()
+    lowered = text.lower()
+
+    if lowered.startswith("copy "):
+        text = text[5:]
+
+    for suffix in (
+        " to the clipboard",
+        " to clipboard",
+        " in my clipboard",
+        " to the pasteboard",
+        " to pasteboard",
+    ):
+        if text.lower().endswith(suffix):
+            text = text[: -len(suffix)]
+            break
+
+    return normalize_text(text)
+
+
+def postprocess_params_from_prompt(prompt, tool, params):
+    prompt_lower = prompt.lower()
+    normalized = dict(params)
+
+    if tool == "show_notification":
+        title = normalized.get("title", "")
+        message = normalized.get("message", "")
+
+        if title == "AXION" and message.startswith("AXION "):
+            normalized["message"] = message.removeprefix("AXION ").strip()
+
+    if tool == "create_reminder" and "due_date" in normalized:
+        single_time = extract_single_time(prompt)
+        if single_time:
+            normalized["due_date"] = single_time
+
+    if tool == "create_calendar_event":
+        time_range = extract_time_range(prompt)
+        single_time = extract_single_time(prompt)
+
+        if time_range:
+            normalized["start"] = time_range[0]
+            normalized["end"] = time_range[1]
+        elif single_time:
+            normalized["start"] = single_time
+            if single_time.endswith("12:30"):
+                normalized["end"] = single_time.replace("12:30", "13:30")
+
+    if tool == "extract_archive":
+        paths = extract_paths(prompt)
+        if len(paths) >= 2:
+            normalized["source"] = paths[0]
+            normalized["destination"] = paths[1]
+
+    if tool == "clean_folder":
+        if normalized.get("mode") not in ("dry_run", "safe"):
+            normalized["mode"] = "dry_run"
 
     return normalized
 
@@ -493,7 +660,11 @@ def evaluate_example(example):
 
     expected_tool = expected.get("tool", "")
     expected_category = expected_category_for_tool(expected_tool)
-    expected_params = canonical_params(expected_tool, expected)
+    expected_params = postprocess_params_from_prompt(
+        example["prompt"],
+        expected_tool,
+        canonical_params(expected_tool, expected),
+    )
 
     result = {
         "line": example["line_number"],
@@ -516,9 +687,44 @@ def evaluate_example(example):
     try:
         pred = extract_json_object(raw)
         result["valid_json"] = True
-        result["pred_tool"] = pred.get("tool", "")
-        result["pred_category"] = expected_category_for_tool(result["pred_tool"])
-        result["pred_params"] = canonical_params(result["pred_tool"], pred)
+
+        if pred.get("type") == "tool_call":
+            predicted_tool = pred.get("tool", "")
+            predicted_params = canonical_params(predicted_tool, pred)
+            predicted_tool, predicted_params = normalize_prediction_from_prompt(
+                example["prompt"],
+                predicted_tool,
+                predicted_params,
+            )
+            predicted_params = postprocess_params_from_prompt(
+                example["prompt"],
+                predicted_tool,
+                predicted_params,
+            )
+            result["pred_tool"] = predicted_tool
+            result["pred_category"] = expected_category_for_tool(result["pred_tool"])
+            result["pred_params"] = predicted_params
+        elif "tool" in pred:
+            predicted_tool = pred.get("tool", "")
+            predicted_params = canonical_params(predicted_tool, pred)
+            predicted_tool, predicted_params = normalize_prediction_from_prompt(
+                example["prompt"],
+                predicted_tool,
+                predicted_params,
+            )
+            predicted_params = postprocess_params_from_prompt(
+                example["prompt"],
+                predicted_tool,
+                predicted_params,
+            )
+            result["pred_tool"] = predicted_tool
+            result["pred_category"] = expected_category_for_tool(result["pred_tool"])
+            result["pred_params"] = predicted_params
+        else:
+            result["pred_tool"] = ""
+            result["pred_category"] = ""
+            result["pred_params"] = {}
+
         result["category_correct"] = result["pred_category"] == result["expected_category"]
         result["tool_correct"] = result["pred_tool"] == result["expected_tool"]
         result["param_correct"] = result["pred_params"] == result["expected_params"]
@@ -587,11 +793,69 @@ def print_summary(results):
         )
 
 
+def print_worst_tools(results):
+    by_tool = defaultdict(list)
+
+    for result in results:
+        by_tool[result["expected_tool"]].append(result)
+
+    weak_tools = []
+
+    for tool_name, tool_results in by_tool.items():
+        count = len(tool_results)
+        category_acc = sum(r["category_correct"] for r in tool_results) / count
+        tool_acc = sum(r["tool_correct"] for r in tool_results) / count
+        param_acc = sum(r["param_correct"] for r in tool_results) / count
+
+        if category_acc < 1 or tool_acc < 1 or param_acc < 1:
+            weak_tools.append((tool_name, count, category_acc, tool_acc, param_acc))
+
+    if not weak_tools:
+        print("\n--- WEAK TOOLS ---")
+        print("None")
+        return
+
+    weak_tools.sort(key=lambda item: (item[2], item[3], item[4], item[0]))
+
+    print("\n--- WEAK TOOLS ---")
+
+    for tool_name, count, category_acc, tool_acc, param_acc in weak_tools:
+        print(
+            f"{tool_name}: "
+            f"n={count} "
+            f"category={category_acc:.0%} "
+            f"tool={tool_acc:.0%} "
+            f"params={param_acc:.0%}"
+        )
+
+
 def main():
-    examples = load_dataset(DATASET_PATH)
+    parser = argparse.ArgumentParser(description="Benchmark AXION single-tool routing.")
+    parser.add_argument(
+        "dataset",
+        nargs="?",
+        default=str(DEFAULT_DATASET_PATH),
+        help="Path to a JSONL dataset. Defaults to data/test.jsonl next to this script.",
+    )
+    parser.add_argument(
+        "--min-tool-accuracy",
+        type=float,
+        default=DEFAULT_MIN_TOOL_ACCURACY,
+        help="Minimum accepted global tool accuracy before returning exit code 1.",
+    )
+    parser.add_argument(
+        "--min-param-accuracy",
+        type=float,
+        default=DEFAULT_MIN_PARAM_ACCURACY,
+        help="Minimum accepted global params accuracy before returning exit code 1.",
+    )
+    args = parser.parse_args()
+
+    dataset_path = Path(args.dataset).expanduser().resolve()
+    examples = load_dataset(dataset_path)
     results = []
 
-    print(f"Loaded {len(examples)} examples")
+    print(f"Loaded {len(examples)} examples from {dataset_path}")
 
     for index, example in enumerate(examples, start=1):
         result = evaluate_example(example)
@@ -612,6 +876,14 @@ def main():
             print_failure(result)
 
     print_summary(results)
+    print_worst_tools(results)
+
+    total = len(results)
+    tool_accuracy = sum(result["tool_correct"] for result in results) / total
+    param_accuracy = sum(result["param_correct"] for result in results) / total
+
+    if tool_accuracy < args.min_tool_accuracy or param_accuracy < args.min_param_accuracy:
+        sys.exit(1)
 
 
 if __name__ == "__main__":

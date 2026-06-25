@@ -10,7 +10,7 @@ import Foundation
 final class ShowNotificationTool: Tool {
     let name = "show_notification"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let parts = argument.split(separator: "|", maxSplits: 1).map(String.init)
 
         let title = parts.first?.trimmingCharacters(in: .whitespacesAndNewlines)
@@ -19,7 +19,7 @@ final class ShowNotificationTool: Tool {
             : ""
 
         guard let title, !title.isEmpty else {
-            return "Missing notification title."
+            return .failure(title: "Missing notification title")
         }
 
         let script = """
@@ -35,12 +35,12 @@ final class ShowNotificationTool: Tool {
             process.waitUntilExit()
 
             if process.terminationStatus == 0 {
-                return "Notification shown."
+                return .success(title: "Notification shown")
             }
 
-            return "Failed to show notification."
+            return .failure(title: "Failed to show notification")
         } catch {
-            return "Failed to show notification."
+            return .failure(title: "Failed to show notification")
         }
     }
 

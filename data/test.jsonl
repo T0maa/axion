@@ -296,3 +296,25 @@
 {"prompt":"open a terminal window in /Users/thomas/Documents","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"/Users/thomas/Documents\"}}"}
 {"prompt":"start Terminal in ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
 {"prompt":"open shell at /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"sort my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"by_extension\"}}"}
+{"prompt":"organize my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"by_extension\"}}"}
+{"prompt":"tidy my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"by_extension\"}}"}
+{"prompt":"arrange files in my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"by_extension\"}}"}
+{"prompt":"classify files in ~/Downloads","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"by_extension\"}}"}
+{"prompt":"organize /Users/thomas/Desktop by file type","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"/Users/thomas/Desktop\",\"mode\":\"by_extension\"}}"}
+{"prompt":"sort /Users/thomas/Downloads by extension","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"/Users/thomas/Downloads\",\"mode\":\"by_extension\"}}"}
+{"prompt":"organize folder /Users/thomas/Documents","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"/Users/thomas/Documents\",\"mode\":\"by_extension\"}}"}
+{"prompt":"clean my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"dry_run\"}}"}
+{"prompt":"clean ~/Downloads","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"dry_run\"}}"}
+{"prompt":"find junk files in my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"dry_run\"}}"}
+{"prompt":"find duplicates in ~/Downloads","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"dry_run\"}}"}
+{"prompt":"scan /Users/thomas/Desktop for useless files","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"/Users/thomas/Desktop\",\"mode\":\"dry_run\"}}"}
+{"prompt":"check /Users/thomas/Downloads for junk files","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"/Users/thomas/Downloads\",\"mode\":\"dry_run\"}}"}
+{"prompt":"dry run clean /Users/thomas/Documents","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"/Users/thomas/Documents\",\"mode\":\"dry_run\"}}"}
+{"prompt":"safely clean my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"safe\"}}"}
+{"prompt":"move clean candidates from ~/Downloads safely","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"safe\"}}"}
+{"prompt":"safely move junk files from /Users/thomas/Desktop","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"/Users/thomas/Desktop\",\"mode\":\"safe\"}}"}
+{"prompt":"show my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Downloads\"}}"}
+{"prompt":"list my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Downloads\"}}"}
+{"prompt":"what is inside my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Downloads\"}}"}
+{"prompt":"show what is inside ~/Downloads","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Downloads\"}}"}

@@ -10,7 +10,7 @@ import AppKit
 final class FocusAppTool: Tool {
     let name = "focus_app"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let appName = clean(argument)
 
         guard !appName.isEmpty else {
@@ -22,14 +22,14 @@ final class FocusAppTool: Tool {
         }
 
         guard let app = apps.first else {
-            return "App is not running: \(appName)"
+            return .failure(title: "App is not running", detail: appName)
         }
 
         if app.activate() {
-            return "App focused: \(appName)"
+            return .success(title: "App focused", detail: appName)
         }
 
-        return "Failed to focus app: \(appName)"
+        return .failure(title: "Failed to focus app", detail: appName)
     }
 
     private func clean(_ value: String) -> String {

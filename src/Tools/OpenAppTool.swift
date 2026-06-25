@@ -10,20 +10,20 @@ import AppKit
 final class OpenAppTool: Tool {
     let name = "open_app"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let workspace = NSWorkspace.shared
         let bundleId = bundleId(for: argument)
 
         guard let appURL = workspace.urlForApplication(
             withBundleIdentifier: bundleId
         ) else {
-            return "Unable to open \(argument)."
+            return .failure(title: "Unable to open app", detail: argument)
         }
 
         let configuration = NSWorkspace.OpenConfiguration()
         workspace.openApplication(at: appURL, configuration: configuration)
 
-        return "Opened \(argument)."
+        return .success(title: "Opened app", detail: argument)
     }
 
     private func bundleId(for appName: String) -> String {

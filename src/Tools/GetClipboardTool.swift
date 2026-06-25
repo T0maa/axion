@@ -10,14 +10,20 @@ import AppKit
 final class GetClipboardTool: Tool {
     let name = "get_clipboard"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let pasteboard = NSPasteboard.general
 
         guard let text = pasteboard.string(forType: .string),
               !text.isEmpty else {
-            return "Clipboard is empty."
+            return .neutral(title: "Clipboard is empty")
         }
 
-        return "Clipboard content:\n\(text)"
-    }
+        let output = "Clipboard content:\n\(text)"
+
+        return .success(
+            title: "Clipboard content",
+            detail: output,
+            rawOutput: output,
+            displayStyle: .textBlock
+        )    }
 }

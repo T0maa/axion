@@ -23,6 +23,8 @@ final class ToolRegistry {
         "read_pdf_text": "files",
         "compress_file": "files",
         "extract_archive": "files",
+        "organize_folder": "files",
+        "clean_folder": "files",
 
         "open_app": "web_apps",
         "open_url": "web_apps",
@@ -86,19 +88,25 @@ final class ToolRegistry {
         register(CompressFileTool())
         register(ExtractArchiveTool())
         register(OpenTerminalHereTool())
+        register(OrganizeFolderTool())
+        register(CleanFolderTool())
     }
 
     func register(_ tool: Tool) {
         tools[tool.name] = tool
     }
 
-    func execute(_ toolCall: ToolCall, confirmed: Bool = false) -> String {
+    func execute(_ toolCall: ToolCall, confirmed: Bool = false) -> ToolExecutionResult {
         if let expectedCategory = categoryByTool[toolCall.tool],
            toolCall.resolvedCategory != expectedCategory {
-            return "Invalid category for tool \(toolCall.tool). Expected \(expectedCategory), got \(toolCall.resolvedCategory)."
+            return .failure(
+                title: "Invalid category for tool \(toolCall.tool)",
+                detail: "Expected \(expectedCategory), got \(toolCall.resolvedCategory)."
+            )
         }
+
         guard let tool = tools[toolCall.tool] else {
-            return "Tool inconnu: \(toolCall.tool)."
+            return .failure(title: "Tool inconnu", detail: toolCall.tool)
         }
 
         let sensitiveTools = [
@@ -108,12 +116,10 @@ final class ToolRegistry {
         ]
 
         if sensitiveTools.contains(toolCall.tool), !confirmed {
-            return """
-            Confirmation required.
-            Tool: \(toolCall.tool)
-            Category: \(toolCall.resolvedCategory)
-            Action: \(toolCall.argument)
-            """
+            return .warning(
+                title: "Confirmation required",
+                detail: "Tool: \(toolCall.tool)\nCategory: \(toolCall.resolvedCategory)\nAction: \(toolCall.argument)"
+            )
         }
 
         return tool.execute(argument: toolCall.argument)

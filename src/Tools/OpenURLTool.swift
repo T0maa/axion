@@ -10,19 +10,19 @@ import AppKit
 final class OpenURLTool: Tool {
     let name = "open_url"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let cleaned = clean(argument)
         let urlString = normalizedURL(cleaned)
 
         guard let url = URL(string: urlString) else {
-            return "Invalid URL: \(argument)."
+            return .failure(title: "Invalid URL", detail: argument)
         }
 
         if openWithFirefox(url.absoluteString) {
-            return "Opened URL in Firefox: \(url.absoluteString)"
+            return .success(title: "Opened URL in Firefox", detail: url.absoluteString)
         }
 
-        return "Unable to open URL in Firefox: \(url.absoluteString)"
+        return .failure(title: "Unable to open URL in Firefox", detail: url.absoluteString)
     }
 
     private func openWithFirefox(_ urlString: String) -> Bool {

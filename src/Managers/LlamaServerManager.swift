@@ -20,10 +20,20 @@ final class LlamaServerManager: ObservableObject {
             return
         }
 
-        let llamaServerPath = "/opt/homebrew/opt/llama.cpp/bin/llama-server"
+        guard let bundledLlamaServerPath = Bundle.main.path(forResource: "llama-server", ofType: nil) else {
+            errorMessage = "llama-server not found in app bundle"
+            return
+        }
+
+        let llamaServerPath = bundledLlamaServerPath
 
         guard FileManager.default.fileExists(atPath: llamaServerPath) else {
-            errorMessage = "llama-server not found"
+            errorMessage = "llama-server file does not exist at \(llamaServerPath)"
+            return
+        }
+
+        guard FileManager.default.isExecutableFile(atPath: llamaServerPath) else {
+            errorMessage = "llama-server is not executable at \(llamaServerPath)"
             return
         }
 

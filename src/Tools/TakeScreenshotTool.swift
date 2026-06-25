@@ -10,12 +10,12 @@ import Foundation
 final class TakeScreenshotTool: Tool {
     let name = "take_screenshot"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
 
         guard !expandedPath.isEmpty else {
-            return "Missing screenshot path."
+            return .failure(title: "Missing screenshot path")
         }
 
         let directory = URL(fileURLWithPath: expandedPath).deletingLastPathComponent()
@@ -26,7 +26,7 @@ final class TakeScreenshotTool: Tool {
                 withIntermediateDirectories: true
             )
         } catch {
-            return "Failed to create screenshot directory."
+            return .failure(title: "Failed to create screenshot directory")
         }
 
         let process = Process()
@@ -38,12 +38,12 @@ final class TakeScreenshotTool: Tool {
             process.waitUntilExit()
 
             if process.terminationStatus == 0 {
-                return "Screenshot saved: \(expandedPath)"
+                return .success(title: "Screenshot saved", detail: expandedPath)
             }
 
-            return "Failed to take screenshot."
+            return .failure(title: "Failed to take screenshot")
         } catch {
-            return "Failed to take screenshot."
+            return .failure(title: "Failed to take screenshot")
         }
     }
 

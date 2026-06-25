@@ -10,11 +10,11 @@ import AppKit
 final class HideAppTool: Tool {
     let name = "hide_app"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let appName = clean(argument)
 
         guard !appName.isEmpty else {
-            return "Missing app name."
+            return .failure(title: "Missing app name")
         }
 
         let apps = NSWorkspace.shared.runningApplications.filter {
@@ -22,16 +22,16 @@ final class HideAppTool: Tool {
         }
 
         guard let app = apps.first else {
-            return "App is not running: \(appName)"
+            return .failure(title: "App is not running", detail: appName)
         }
 
         app.hide()
 
         if app.isHidden {
-            return "App hidden: \(appName)"
+            return .success(title: "App hidden", detail: appName)
         }
 
-        return "Hide command sent: \(appName)"
+        return .success(title: "Hide command sent", detail: appName)
     }
 
     private func clean(_ value: String) -> String {

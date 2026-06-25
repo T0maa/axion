@@ -10,11 +10,11 @@ import Foundation
 final class SearchInSpotlightTool: Tool {
     let name = "search_in_spotlight"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let query = clean(argument)
 
         guard !query.isEmpty else {
-            return "Missing Spotlight search query."
+            return .failure(title: "Missing Spotlight search query")
         }
 
         let process = Process()
@@ -29,7 +29,7 @@ final class SearchInSpotlightTool: Tool {
             process.waitUntilExit()
 
             guard process.terminationStatus == 0 else {
-                return "Spotlight search failed."
+                return .failure(title: "Spotlight search failed")
             }
 
             let data = pipe.fileHandleForReading.readDataToEndOfFile()
@@ -41,12 +41,12 @@ final class SearchInSpotlightTool: Tool {
                 .map(String.init)
 
             if results.isEmpty {
-                return "No Spotlight results found for: \(query)"
+                return .neutral(title: "No Spotlight results found", detail: query)
             }
 
-            return "Spotlight results:\n" + results.joined(separator: "\n")
+            return .success(title: "Spotlight results", detail: query, rawOutput: "Spotlight results:\n" + results.joined(separator: "\n"))
         } catch {
-            return "Spotlight search failed."
+            return .failure(title: "Spotlight search failed")
         }
     }
 

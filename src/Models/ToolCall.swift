@@ -38,18 +38,18 @@ struct ToolCall: Decodable {
              "append_text_file",
              "list_directory",
              "create_folder",
-             "get_file_info":
+             "get_file_info",
+             "search_file_content",
+             "read_pdf_text",
+             "compress_file",
+             "extract_archive",
+             "organize_folder",
+             "clean_folder":
             return "files"
             
         case "rename_file",
              "move_file",
              "delete_file":
-            return "files"
-            
-        case "search_file_content",
-             "read_pdf_text",
-             "compress_file",
-             "extract_archive":
             return "files"
 
         case "open_terminal_here":
@@ -102,6 +102,16 @@ struct ToolCall: Decodable {
             switch tool {
             case "open_app":
                 return params["app"] ?? ""
+                
+            case "organize_folder":
+                let path = params["path"] ?? ""
+                let mode = params["mode"] ?? "by_extension"
+                return "\(path)|\(mode)"
+
+            case "clean_folder":
+                let path = params["path"] ?? ""
+                let mode = params["mode"] ?? "dry_run"
+                return "\(path)|\(mode)"
 
             case "open_url":
                 return params["url"] ?? ""

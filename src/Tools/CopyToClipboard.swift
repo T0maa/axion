@@ -10,19 +10,19 @@ import AppKit
 final class CopyToClipboardTool: Tool {
     let name = "copy_to_clipboard"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let text = argument.trimmingCharacters(
             in: .whitespacesAndNewlines
         )
 
         guard !text.isEmpty else {
-            return "No text to copy"
+            return .failure(title: "No text to copy")
         }
 
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
         pasteboard.setString(text, forType: .string)
 
-        return "Text copied in the clipboard."
+        return .success(title: "Text copied to clipboard")
     }
 }

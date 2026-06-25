@@ -14,7 +14,7 @@ struct SettingsView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            Text("AXON Settings")
+            Text("AXION Settings")
                 .font(.title2)
                 .bold()
 

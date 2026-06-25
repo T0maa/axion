@@ -10,20 +10,20 @@ import AppKit
 final class RevealFileTool: Tool {
     let name = "reveal_file"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
         let url = URL(fileURLWithPath: expandedPath)
 
         guard FileManager.default.fileExists(atPath: url.path) else {
-            return "File not found: \(expandedPath)"
+            return .failure(title: "File not found", detail: expandedPath)
         }
 
         DispatchQueue.main.async {
             NSWorkspace.shared.activateFileViewerSelecting([url])
         }
 
-        return "Revealed file in Finder: \(expandedPath)"
+        return .success(title: "Revealed file in Finder", detail: expandedPath)
     }
 
     private func clean(_ value: String) -> String {

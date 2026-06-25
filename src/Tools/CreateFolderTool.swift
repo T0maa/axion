@@ -10,7 +10,7 @@ import Foundation
 final class CreateFolderTool: Tool {
     let name = "create_folder"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
         let url = URL(fileURLWithPath: expandedPath)
@@ -21,9 +21,9 @@ final class CreateFolderTool: Tool {
                 withIntermediateDirectories: true
             )
 
-            return "Folder created: \(expandedPath)"
+            return .success(title: "Folder created", detail: expandedPath)
         } catch {
-            return "Failed to create folder: \(expandedPath)"
+            return .failure(title: "Failed to create folder", detail: expandedPath)
         }
     }
 

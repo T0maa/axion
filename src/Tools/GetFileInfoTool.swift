@@ -10,7 +10,7 @@ import Foundation
 final class GetFileInfoTool: Tool {
     let name = "get_file_info"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
         let url = URL(fileURLWithPath: expandedPath)
@@ -21,7 +21,7 @@ final class GetFileInfoTool: Tool {
             atPath: expandedPath,
             isDirectory: &isDirectory
         ) else {
-            return "Path not found: \(expandedPath)"
+            return .failure(title: "Path not found", detail: expandedPath)
         }
 
         do {
@@ -48,9 +48,16 @@ final class GetFileInfoTool: Tool {
 
             lines.append("Name: \(url.lastPathComponent)")
 
-            return "File info:\n" + lines.joined(separator: "\n")
+            let output = "File info:\n" + lines.joined(separator: "\n")
+
+            return .success(
+                title: "File info",
+                detail: output,
+                rawOutput: output,
+                displayStyle: .textBlock
+            )
         } catch {
-            return "Failed to get file info: \(expandedPath)"
+            return .failure(title: "Failed to get file info", detail: expandedPath)
         }
     }
 

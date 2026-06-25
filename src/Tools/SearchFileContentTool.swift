@@ -10,35 +10,62 @@ import Foundation
 final class SearchFileContentTool: Tool {
     let name = "search_file_content"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let parts = argument.split(separator: "|", maxSplits: 1).map(String.init)
 
         guard parts.count == 2 else {
-            return "Invalid search arguments. Expected path|query."
+            return .failure(title: "Invalid search arguments", detail: "Expected path|query.")
         }
 
         let path = clean(parts[0])
         let query = clean(parts[1])
 
         guard !path.isEmpty, !query.isEmpty else {
-            return "Missing path or query."
+            return .failure(title: "Missing path or query")
         }
 
         let expandedPath = (path as NSString).expandingTildeInPath
         let url = URL(fileURLWithPath: expandedPath)
 
         guard FileManager.default.fileExists(atPath: expandedPath) else {
-            return "Path not found: \(expandedPath)"
+            return .failure(title: "Path not found", detail: expandedPath)
         }
 
         var isDirectory: ObjCBool = false
         FileManager.default.fileExists(atPath: expandedPath, isDirectory: &isDirectory)
 
         if isDirectory.boolValue {
-            return searchDirectory(url, query: query)
+            return makeSearchResult(from: searchDirectory(url, query: query), query: query)
         }
 
-        return searchFile(url, query: query)
+        return makeSearchResult(from: searchFile(url, query: query), query: query)
+    }
+
+    private func makeSearchResult(from output: String, query: String) -> ToolExecutionResult {
+        if output.hasPrefix("No matches found") {
+            return .neutral(
+                title: "No matches found",
+                detail: output,
+                rawOutput: output,
+                displayStyle: .compact
+            )
+        }
+
+        if output.hasPrefix("Failed") || output.hasPrefix("Unsupported") {
+            return .failure(
+                title: "Search failed",
+                detail: output,
+                rawOutput: output,
+                displayStyle: .textBlock
+            )
+        }
+
+        return .success(
+            title: "Search results",
+            detail: output,
+            rawOutput: output,
+            displayStyle: .textBlock
+        )
     }
 
     private func searchDirectory(_ url: URL, query: String) -> String {

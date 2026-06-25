@@ -11,13 +11,13 @@ import IOKit.ps
 final class GetBatteryStatusTool: Tool {
     let name = "get_battery_status"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         guard let snapshot = IOPSCopyPowerSourcesInfo()?.takeRetainedValue(),
               let sources = IOPSCopyPowerSourcesList(snapshot)?.takeRetainedValue() as? [CFTypeRef],
               let source = sources.first,
               let description = IOPSGetPowerSourceDescription(snapshot, source)?
                   .takeUnretainedValue() as? [String: Any] else {
-            return "Battery status unavailable."
+            return .failure(title: "Battery status unavailable")
         }
 
         let current = description[kIOPSCurrentCapacityKey] as? Int ?? 0
@@ -26,11 +26,10 @@ final class GetBatteryStatusTool: Tool {
         let charging = description[kIOPSIsChargingKey] as? Bool ?? false
         let powerSource = description[kIOPSPowerSourceStateKey] as? String ?? "Unknown"
 
-        return """
-        Battery status:
-        Level: \(percent)%
-        Charging: \(charging ? "yes" : "no")
-        Power source: \(powerSource)
-        """
+        return .success(
+            title: "Battery status",
+            detail: "\(percent)%",
+            rawOutput: "Battery status:\nLevel: \(percent)%\nCharging: \(charging ? "yes" : "no")\nPower source: \(powerSource)"
+        )
     }
 }

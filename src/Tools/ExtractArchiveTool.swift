@@ -10,29 +10,29 @@ import Foundation
 final class ExtractArchiveTool: Tool {
     let name = "extract_archive"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let parts = argument.split(separator: "|", maxSplits: 1).map(String.init)
 
         guard parts.count == 2 else {
-            return "Invalid extract arguments. Expected source|destination."
+            return .failure(title: "Invalid extract arguments", detail: "Expected source|destination.")
         }
 
         let source = clean(parts[0])
         let destination = clean(parts[1])
 
         guard !source.isEmpty, !destination.isEmpty else {
-            return "Missing source or destination."
+            return .failure(title: "Missing source or destination")
         }
 
         let sourcePath = (source as NSString).expandingTildeInPath
         let destinationPath = (destination as NSString).expandingTildeInPath
 
         guard FileManager.default.fileExists(atPath: sourcePath) else {
-            return "Archive not found: \(sourcePath)"
+            return .failure(title: "Archive not found", detail: sourcePath)
         }
 
         guard sourcePath.lowercased().hasSuffix(".zip") else {
-            return "Unsupported archive type. Only .zip is supported: \(sourcePath)"
+            return .failure(title: "Unsupported archive type", detail: "Only .zip is supported: \(sourcePath)")
         }
 
         let process = Process()
@@ -54,12 +54,16 @@ final class ExtractArchiveTool: Tool {
             process.waitUntilExit()
 
             if process.terminationStatus != 0 {
-                return "Failed to extract archive: \(sourcePath)"
+                return .failure(title: "Failed to extract archive", detail: sourcePath)
             }
 
-            return "Archive extracted:\n\(sourcePath)\n→ \(destinationPath)"
+            return .success(
+                title: "Archive extracted",
+                detail: "\(sourcePath) -> \(destinationPath)",
+                rawOutput: "Archive extracted:\n\(sourcePath)\n→ \(destinationPath)"
+            )
         } catch {
-            return "Failed to extract archive: \(sourcePath)"
+            return .failure(title: "Failed to extract archive", detail: sourcePath)
         }
     }
 

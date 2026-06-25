@@ -10,7 +10,7 @@ import Foundation
 final class ToggleDarkModeTool: Tool {
     let name = "toggle_dark_mode"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let script = """
         tell application "System Events"
             tell appearance preferences
@@ -40,10 +40,10 @@ final class ToggleDarkModeTool: Tool {
                 .trimmingCharacters(in: .whitespacesAndNewlines) ?? "unknown"
 
             return process.terminationStatus == 0
-                ? "Appearance switched to \(mode) mode."
-                : "Failed to toggle dark mode."
+                ? .success(title: "Appearance switched", detail: "\(mode) mode")
+                : .failure(title: "Failed to toggle dark mode")
         } catch {
-            return "Failed to toggle dark mode."
+            return .failure(title: "Failed to toggle dark mode")
         }
     }
 }

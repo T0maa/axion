@@ -10,24 +10,31 @@ import Foundation
 final class ReadTextFileTool: Tool {
     let name = "read_text_file"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
         let url = URL(fileURLWithPath: expandedPath)
 
         guard FileManager.default.fileExists(atPath: url.path) else {
-            return "File not found: \(expandedPath)"
+            return .failure(title: "File not found", detail: expandedPath)
         }
 
         guard isAllowedTextFile(url) else {
-            return "Unsupported file type for reading: \(expandedPath)"
+            return .failure(title: "Unsupported file type for reading", detail: expandedPath)
         }
 
         do {
             let content = try String(contentsOf: url, encoding: .utf8)
-            return formatResult(path: expandedPath, content: content)
+            let formattedContent = formatResult(path: expandedPath, content: content)
+
+            return .success(
+                title: "Read text file",
+                detail: formattedContent,
+                rawOutput: formattedContent,
+                displayStyle: .textBlock
+            )
         } catch {
-            return "Unable to read file: \(expandedPath)"
+            return .failure(title: "Unable to read file", detail: expandedPath)
         }
     }
 

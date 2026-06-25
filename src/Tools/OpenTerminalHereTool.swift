@@ -10,12 +10,12 @@ import Foundation
 final class OpenTerminalHereTool: Tool {
     let name = "open_terminal_here"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
 
         guard FileManager.default.fileExists(atPath: expandedPath) else {
-            return "Path not found: \(expandedPath)"
+            return .failure(title: "Path not found", detail: expandedPath)
         }
 
         var isDirectory: ObjCBool = false
@@ -47,12 +47,12 @@ final class OpenTerminalHereTool: Tool {
             process.waitUntilExit()
 
             if process.terminationStatus != 0 {
-                return "Failed to open Terminal at: \(directoryPath)"
+                return .failure(title: "Failed to open Terminal", detail: directoryPath)
             }
 
-            return "Terminal opened at: \(directoryPath)"
+            return .success(title: "Terminal opened", detail: directoryPath)
         } catch {
-            return "Failed to open Terminal at: \(directoryPath)"
+            return .failure(title: "Failed to open Terminal", detail: directoryPath)
         }
     }
 

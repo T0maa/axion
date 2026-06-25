@@ -10,12 +10,12 @@ import Foundation
 final class GetCurrentDateTimeTool: Tool {
     let name = "get_current_datetime"
 
-    func execute(argument: String) -> String {
+    func execute(argument: String) -> ToolExecutionResult {
         let formatter = DateFormatter()
 
         formatter.locale = Locale(identifier: "en_US_POSIX")
         formatter.dateFormat = "yyyy-MM-dd HH:mm:ss ZZZZ"
 
-        return "Current date and time: \(formatter.string(from: Date()))"
+        return .success(title: "Current date and time", detail: formatter.string(from: Date()))
     }
 }
