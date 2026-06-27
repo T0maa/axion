@@ -44,10 +44,10 @@
 {"prompt":"locate ~/Desktop/test.png in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/test.png\"}}"}
 {"prompt":"read /Users/thomas/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
 {"prompt":"read /Users/thomas/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
-{"prompt":"read /Users/thomas/Projects/AXION/README.md","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/README.md\"}}"}
+{"prompt":"read /Users/thomas/Projects/AXION/AXION/docs/tool_test_matrix.md","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/AXION/docs/tool_test_matrix.md\"}}"}
 {"prompt":"show the content of /Users/thomas/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
-{"prompt":"inspect /Users/thomas/Projects/AXION/data/test.jsonl","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/data/test.jsonl\"}}"}
-{"prompt":"read the file /Users/thomas/Projects/AXION/benchmark.py","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/benchmark.py\"}}"}
+{"prompt":"inspect /Users/thomas/Projects/AXION/AXION/data/test.jsonl","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/AXION/data/test.jsonl\"}}"}
+{"prompt":"read the file /Users/thomas/Projects/AXION/AXION/benchmark.py","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/AXION/benchmark.py\"}}"}
 {"prompt":"open and read /Users/thomas/Desktop/notes.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/notes.txt\"}}"}
 {"prompt":"show me the content of ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
 {"prompt":"copy hello AXON to the clipboard","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"hello AXON\"}}"}
@@ -197,7 +197,7 @@
 {"prompt":"open /Users/thomas/Desktop in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Desktop\"}}"}
 {"prompt":"open the folder /Users/thomas/Projects/AXION in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
 {"prompt":"open project ~/Projects/AXION with VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
-{"prompt":"open /Users/thomas/Projects/AXION/README.md in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/README.md\"}}"}
+{"prompt":"open /Users/thomas/Projects/AXION/AXION/docs/tool_test_matrix.md in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/AXION/docs/tool_test_matrix.md\"}}"}
 {"prompt":"open this path in Visual Studio Code /Users/thomas/Documents","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Documents\"}}"}
 {"prompt":"launch VSCode for /Users/thomas/Downloads","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Downloads\"}}"}
 {"prompt":"git status in /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
@@ -260,7 +260,7 @@
 {"prompt":"search ChatService in /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\",\"query\":\"ChatService\"}}"}
 {"prompt":"find PendingToolCall inside /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\",\"query\":\"PendingToolCall\"}}"}
 {"prompt":"search for executeToolCall in /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\",\"query\":\"executeToolCall\"}}"}
-{"prompt":"search category in /Users/thomas/Projects/AXION/data/test.jsonl","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/data/test.jsonl\",\"query\":\"category\"}}"}
+{"prompt":"search category in /Users/thomas/Projects/AXION/AXION/data/test.jsonl","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/AXION/data/test.jsonl\",\"query\":\"category\"}}"}
 {"prompt":"find search_file_content in /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\",\"query\":\"search_file_content\"}}"}
 {"prompt":"look for open_terminal_here in /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\",\"query\":\"open_terminal_here\"}}"}
 {"prompt":"search README in /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\",\"query\":\"README\"}}"}

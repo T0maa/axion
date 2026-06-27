@@ -8,11 +8,18 @@ from pathlib import Path
 
 import requests
 
+try:
+    import psutil
+except ImportError:
+    psutil = None
+
 URL = "http://localhost:8080/v1/chat/completions"
 SCRIPT_DIR = Path(__file__).resolve().parent
 DEFAULT_DATASET_PATH = SCRIPT_DIR / "data" / "test.jsonl"
 DEFAULT_MIN_TOOL_ACCURACY = 0.98
 DEFAULT_MIN_PARAM_ACCURACY = 0.97
+
+MODEL_PROCESS_NAME = "llama-server"
 
 
 SYSTEM_PROMPT_PATH = SCRIPT_DIR / "data" / "system_prompt.txt"
@@ -33,6 +40,110 @@ def load_system_prompt():
 
 
 SYSTEM_PROMPT = load_system_prompt()
+
+
+def find_llama_server_processes():
+    if psutil is None:
+        return []
+
+    matches = []
+
+    for process in psutil.process_iter(["pid", "name"]):
+        try:
+            name = process.info.get("name") or ""
+
+            if name == MODEL_PROCESS_NAME:
+                matches.append(process)
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            continue
+
+    return matches
+
+
+def sample_model_memory_mb():
+    processes = find_llama_server_processes()
+
+    if not processes:
+        return None
+
+    totals = {
+        "rss": 0,
+        "vms": 0,
+        "uss": 0,
+    }
+    has_uss = False
+
+    for process in processes:
+        try:
+            memory = process.memory_info()
+            totals["rss"] += memory.rss
+            totals["vms"] += memory.vms
+
+            try:
+                full_memory = process.memory_full_info()
+                uss = getattr(full_memory, "uss", None)
+
+                if uss is not None:
+                    totals["uss"] += uss
+                    has_uss = True
+            except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+                pass
+        except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
+            continue
+
+    result = {
+        "rss": totals["rss"] / 1024 / 1024,
+        "vms": totals["vms"] / 1024 / 1024,
+        "uss": totals["uss"] / 1024 / 1024 if has_uss else None,
+    }
+
+    return result
+
+
+def format_memory_mb(value):
+    if value is None:
+        return "n/a"
+
+    return f"{value:.0f} MB"
+
+
+def average_memory_samples(samples):
+    if not samples:
+        return None
+
+    keys = ["rss", "vms", "uss"]
+    result = {}
+
+    for key in keys:
+        values = [sample[key] for sample in samples if sample.get(key) is not None]
+        result[key] = sum(values) / len(values) if values else None
+
+    return result
+
+
+def peak_memory_samples(samples):
+    if not samples:
+        return None
+
+    keys = ["rss", "vms", "uss"]
+    result = {}
+
+    for key in keys:
+        values = [sample[key] for sample in samples if sample.get(key) is not None]
+        result[key] = max(values) if values else None
+
+    return result
+
+
+def format_memory_snapshot(snapshot):
+    if snapshot is None:
+        return "n/a"
+
+    return (
+        f"RSS {format_memory_mb(snapshot.get('rss'))}, "
+        f"VMS {format_memory_mb(snapshot.get('vms'))}, "
+        f"USS {format_memory_mb(snapshot.get('uss'))}"
+    )
 
 
 CATEGORY_BY_TOOL = {
@@ -252,6 +363,28 @@ def extract_time_range(prompt):
 
     return f"{day} {start}", f"{day} {end}"
 
+# --- NEW FUNCTION ---
+
+def extract_calendar_title(prompt):
+    cleaned = prompt.strip().rstrip(".,;:")
+
+    patterns = [
+        r"^schedule\s+(.+?)\s+(tomorrow|tonight|today|monday|tuesday|wednesday|thursday|friday|saturday|sunday|next monday|next tuesday|next wednesday|next thursday|next friday|next saturday|next sunday)\b",
+        r"^add event\s+(.+?)\s+(tomorrow|tonight|today|monday|tuesday|wednesday|thursday|friday|saturday|sunday|next monday|next tuesday|next wednesday|next thursday|next friday|next saturday|next sunday)\b",
+        r"^add calendar event\s+(.+?)\s+(tomorrow|tonight|today|monday|tuesday|wednesday|thursday|friday|saturday|sunday|next monday|next tuesday|next wednesday|next thursday|next friday|next saturday|next sunday)\b",
+        r"^create calendar event\s+(.+?)\s+(tomorrow|tonight|today|monday|tuesday|wednesday|thursday|friday|saturday|sunday|next monday|next tuesday|next wednesday|next thursday|next friday|next saturday|next sunday)\b",
+        r"^calendar event\s+(.+?)\s+(tomorrow|tonight|today|monday|tuesday|wednesday|thursday|friday|saturday|sunday|next monday|next tuesday|next wednesday|next thursday|next friday|next saturday|next sunday)\b",
+        r"^add to calendar\s+(.+?)\s+(tomorrow|tonight|today|monday|tuesday|wednesday|thursday|friday|saturday|sunday|next monday|next tuesday|next wednesday|next thursday|next friday|next saturday|next sunday)\b",
+    ]
+
+    for pattern in patterns:
+        match = re.search(pattern, cleaned, flags=re.IGNORECASE)
+
+        if match:
+            return normalize_text(match.group(1))
+
+    return ""
+
 
 def extract_single_time(prompt):
     match = re.search(
@@ -267,6 +400,27 @@ def extract_single_time(prompt):
     time_value = match.group(2)
 
     return f"{day} {time_value}"
+
+def extract_app_from_prompt(prompt):
+    known_apps = [
+        "Safari",
+        "Xcode",
+        "Terminal",
+        "Finder",
+        "Calculator",
+        "Notes",
+        "Chrome",
+        "Firefox",
+    ]
+
+    prompt_lower = prompt.lower()
+
+    for app in known_apps:
+        if app.lower() in prompt_lower:
+            return app
+
+    return ""
+
 def normalize_app(value):
     value = str(value).strip().rstrip(".,;:")
     value = value.replace("'", "").replace('"', "")
@@ -429,12 +583,13 @@ def canonical_params(tool, data):
     else:
         params = params_from_legacy_param(tool, data.get("param", ""))
 
+    tool = str(tool).strip()
     normalized = {}
 
     for key, value in params.items():
         canonical_key = key
 
-        if tool in ("create_text_file", "append_text_file") and key in ("text", "message"):
+        if tool in ("create_text_file", "append_text_file") and key in ("text", "message", "value", "string"):
             canonical_key = "content"
         elif tool == "copy_to_clipboard" and key in ("content", "message", "value"):
             canonical_key = "text"
@@ -442,17 +597,25 @@ def canonical_params(tool, data):
             canonical_key = "message"
         elif tool == "set_volume" and key in ("volume", "volume_level"):
             canonical_key = "level"
-        elif tool == "create_calendar_event" and key in ("start_date", "start_time"):
+        elif tool == "create_calendar_event" and key in ("start_date", "start_time", "from", "begin"):
             canonical_key = "start"
-        elif tool == "create_calendar_event" and key in ("end_date", "end_time"):
+        elif tool == "create_calendar_event" and key in ("end_date", "end_time", "to", "finish"):
             canonical_key = "end"
-        elif tool == "create_reminder" and key in ("date", "time"):
+        elif tool == "create_reminder" and key in ("date", "time", "datetime", "when"):
             canonical_key = "due_date"
+        elif tool == "create_reminder" and key in ("task", "name", "message", "content"):
+            canonical_key = "title"
+        elif tool == "create_calendar_event" and key in ("name", "event", "summary"):
+            canonical_key = "title"
         elif tool == "rename_file" and key in ("name", "filename"):
             canonical_key = "new_name"
+        elif tool == "move_file" and key in ("old_path", "path"):
+            canonical_key = "source"
+        elif tool == "move_file" and key in ("new_path", "new_name", "to"):
+            canonical_key = "destination"
         elif tool in ("git_status", "open_in_vscode", "open_terminal_here") and key in ("repo_path", "folder", "directory"):
             canonical_key = "path"
-        elif tool == "search_file_content" and key in ("text", "term", "keyword", "search"):
+        elif tool == "search_file_content" and key in ("text", "term", "keyword", "search", "pattern"):
             canonical_key = "query"
         elif tool in ("compress_file", "extract_archive") and key in ("path", "input"):
             canonical_key = "source"
@@ -465,7 +628,7 @@ def canonical_params(tool, data):
 
         if canonical_key == "url":
             normalized[canonical_key] = normalize_url(value)
-        elif canonical_key in ("path", "source", "destination"):
+        elif canonical_key in ("path", "source", "destination", "file", "file_path", "old_path", "new_path"):
             normalized[canonical_key] = normalize_path(value)
         elif canonical_key == "app":
             normalized[canonical_key] = normalize_app(value)
@@ -487,6 +650,36 @@ def canonical_params(tool, data):
         else:
             normalized[canonical_key] = value
 
+    if tool == "rename_file":
+        if "path" not in normalized:
+            if "old_path" in normalized:
+                normalized["path"] = normalized.pop("old_path")
+            elif "source" in normalized:
+                normalized["path"] = normalized.pop("source")
+
+        if "new_name" not in normalized:
+            if "new_path" in normalized:
+                normalized["new_name"] = Path(normalized.pop("new_path")).name
+            elif "destination" in normalized:
+                normalized["new_name"] = Path(normalized.pop("destination")).name
+
+    if tool == "delete_file" and "path" not in normalized:
+        if "source" in normalized:
+            normalized["path"] = normalized.pop("source")
+        elif "file" in normalized:
+            normalized["path"] = normalized.pop("file")
+        elif "file_path" in normalized:
+            normalized["path"] = normalized.pop("file_path")
+
+    if tool == "append_text_file" and "path" not in normalized:
+        if "file_path" in normalized:
+            normalized["path"] = normalized.pop("file_path")
+        elif "file" in normalized:
+            normalized["path"] = normalized.pop("file")
+
+    if tool == "take_screenshot" and "path" not in normalized and "name" in normalized:
+        normalized["path"] = str(Path("/Users/thomas/Desktop") / normalized.pop("name"))
+
     if tool == "create_calendar_event" and "start" in normalized and "end" not in normalized:
         start = normalized["start"]
         if start.endswith("12:30"):
@@ -505,7 +698,9 @@ def canonical_params(tool, data):
     if tool == "clean_folder":
         if "mode" not in normalized or normalized["mode"] == "":
             normalized["mode"] = "dry_run"
-        elif normalized["mode"] not in ("dry_run", "safe"):
+        elif normalized["mode"] == "safe":
+            normalized["mode"] = "apply"
+        elif normalized["mode"] not in ("dry_run", "apply"):
             normalized["mode"] = "dry_run"
 
 
@@ -515,11 +710,91 @@ def canonical_params(tool, data):
     if tool == "show_notification" and "message" in normalized and "title" not in normalized:
         normalized["title"] = "AXION"
 
+    if tool == "create_calendar_event" and normalized.get("location", "").strip() == "":
+        normalized.pop("location", None)
+
     return normalized
+
+
+def normalize_tool_for_runtime(tool, params):
+    normalized = dict(params)
+
+    if tool == "move_file":
+        destination = normalize_text(normalized.get("destination", "")).lower()
+
+        if destination == "trash" or destination.startswith("trash/") or destination == "corbeille" or destination.startswith("corbeille/"):
+            return "delete_file", {"path": normalized.get("source", normalized.get("path", ""))}
+
+    if tool == "compress_file":
+        operation = normalize_text(normalized.get("operation", "")).lower()
+
+        if operation in ("extract", "unzip", "uncompress"):
+            normalized.pop("operation", None)
+            return "extract_archive", normalized
+
+    return tool, normalized
 
 
 def normalize_prediction_from_prompt(prompt, tool, params):
     prompt_lower = prompt.lower()
+
+    if tool == "put" and "clipboard" in prompt_lower:
+        return "copy_to_clipboard", {"text": clipboard_text_from_prompt(prompt)}
+
+    if contains_clipboard_copy_request(prompt_lower) and tool != "copy_to_clipboard":
+        return "copy_to_clipboard", {"text": clipboard_text_from_prompt(prompt)}
+
+    if " in finder" in prompt_lower:
+        paths = extract_paths(prompt)
+        if paths:
+            return "reveal_file", {"path": paths[0]}
+
+    if tool == "create_reminder" and extract_paths(prompt) and prompt_lower.startswith("add "):
+        paths = extract_paths(prompt)
+        content = prompt[: prompt_lower.find(" to ")].removeprefix("add ").strip()
+        return "append_text_file", {"path": paths[0], "content": normalize_text(content)}
+
+    if ("unzip" in prompt_lower or "extract" in prompt_lower or "uncompress" in prompt_lower) and tool == "compress_file":
+        paths = extract_paths(prompt)
+        if len(paths) >= 2:
+            return "extract_archive", {"source": paths[0], "destination": paths[1]}
+
+    if (prompt_lower.startswith("look for ") or prompt_lower.startswith("search ") or prompt_lower.startswith("find ")) and " in " in prompt_lower and extract_paths(prompt):
+        path = extract_paths(prompt)[0]
+        before_path = prompt[: prompt.find(path)].strip()
+        query = before_path
+
+        for prefix in ["look for ", "search for ", "search ", "find "]:
+            if query.lower().startswith(prefix):
+                query = query[len(prefix):]
+                break
+
+        query = re.sub(r"\s+in\s*$", "", query, flags=re.IGNORECASE)
+
+        return "search_file_content", {"path": path, "query": normalize_text(query)}
+
+    if (prompt_lower.startswith("arrange ") or prompt_lower.startswith("classify ")) and tool != "organize_folder":
+        path = "/Users/thomas/Downloads" if "downloads" in prompt_lower else ""
+        return "organize_folder", {"path": path, "mode": "by_extension"}
+
+    if ("safely" in prompt_lower or "move clean candidates" in prompt_lower or "move junk" in prompt_lower) and tool != "clean_folder":
+        paths = extract_paths(prompt)
+        path = paths[0] if paths else "/Users/thomas/Downloads" if "downloads" in prompt_lower else ""
+        return "clean_folder", {"path": path, "mode": "apply"}
+
+    if "find duplicates" in prompt_lower and tool != "clean_folder":
+        paths = extract_paths(prompt)
+        path = paths[0] if paths else "/Users/thomas/Downloads" if "downloads" in prompt_lower else ""
+        return "clean_folder", {"path": path, "mode": "dry_run"}
+
+    if prompt_lower.startswith("schedule ") and tool != "create_calendar_event":
+        title = extract_calendar_title(prompt)
+        time_range = extract_time_range(prompt)
+        params = {"title": title} if title else {}
+        if time_range:
+            params["start"] = time_range[0]
+            params["end"] = time_range[1]
+        return "create_calendar_event", params
 
     if tool == "focus_app" and prompt_lower.startswith("show me "):
         return "open_app", params
@@ -561,8 +836,11 @@ def normalize_prediction_from_prompt(prompt, tool, params):
         if any(pattern in prompt_lower for pattern in pdf_text_patterns):
             return "read_pdf_text", params
 
-    if tool == "move_file" and normalize_text(params.get("destination", "")).lower() == "trash":
-        return "delete_file", {"path": params.get("source", "")}
+    if tool == "move_file":
+        destination = normalize_text(params.get("destination", "")).lower()
+
+        if destination == "trash" or destination.startswith("trash/"):
+            return "delete_file", {"path": params.get("source", params.get("path", ""))}
 
     if tool == "open_terminal_here" and prompt_lower.startswith("show my ") and "folder" in prompt_lower:
         return "list_directory", params
@@ -578,8 +856,12 @@ def clipboard_text_from_prompt(prompt):
     text = prompt.strip()
     lowered = text.lower()
 
-    if lowered.startswith("copy "):
+    if lowered.startswith("copy the sentence "):
+        text = text[len("copy the sentence "):]
+    elif lowered.startswith("copy "):
         text = text[5:]
+    elif lowered.startswith("put "):
+        text = text[4:]
 
     for suffix in (
         " to the clipboard",
@@ -606,14 +888,27 @@ def postprocess_params_from_prompt(prompt, tool, params):
         if title == "AXION" and message.startswith("AXION "):
             normalized["message"] = message.removeprefix("AXION ").strip()
 
+        display_match = re.search(r"^display notification\s+(\S+)\s+(.+)$", prompt, flags=re.IGNORECASE)
+
+        if display_match:
+            normalized["title"] = normalize_text(display_match.group(1))
+            normalized["message"] = normalize_text(display_match.group(2))
+
     if tool == "create_reminder" and "due_date" in normalized:
         single_time = extract_single_time(prompt)
         if single_time:
             normalized["due_date"] = single_time
 
+        if "tomorrow" not in prompt_lower and "tonight" not in prompt_lower and not re.search(r"\b\d{1,2}:\d{2}\b", prompt_lower):
+            normalized.pop("due_date", None)
+
     if tool == "create_calendar_event":
+        calendar_title = extract_calendar_title(prompt)
         time_range = extract_time_range(prompt)
         single_time = extract_single_time(prompt)
+
+        if calendar_title:
+            normalized["title"] = calendar_title
 
         if time_range:
             normalized["start"] = time_range[0]
@@ -623,6 +918,22 @@ def postprocess_params_from_prompt(prompt, tool, params):
             if single_time.endswith("12:30"):
                 normalized["end"] = single_time.replace("12:30", "13:30")
 
+    if tool == "search_file_content":
+        paths = extract_paths(prompt)
+        if paths and " in " in prompt_lower:
+            before_path = prompt[: prompt.find(paths[0])].strip()
+            query = before_path
+
+            for prefix in ["look for ", "search for ", "search ", "find "]:
+                if query.lower().startswith(prefix):
+                    query = query[len(prefix):]
+                    break
+
+            query = re.sub(r"\s+in\s*$", "", query, flags=re.IGNORECASE)
+
+            normalized["path"] = paths[0]
+            normalized["query"] = normalize_text(query)
+
     if tool == "extract_archive":
         paths = extract_paths(prompt)
         if len(paths) >= 2:
@@ -630,8 +941,53 @@ def postprocess_params_from_prompt(prompt, tool, params):
             normalized["destination"] = paths[1]
 
     if tool == "clean_folder":
-        if normalized.get("mode") not in ("dry_run", "safe"):
+        apply_keywords = [
+            "apply",
+            "real clean",
+            "really clean",
+            "clean for real",
+            "safe",
+            "safely",
+            "move clean candidates",
+            "move candidates",
+            "safely move",
+            "move junk files",
+        ]
+
+        if any(keyword in prompt_lower for keyword in apply_keywords):
+            normalized["mode"] = "apply"
+        else:
             normalized["mode"] = "dry_run"
+
+    if tool == "append_text_file":
+        paths = extract_paths(prompt)
+
+        if paths and prompt_lower.startswith("add ") and " to " in prompt_lower:
+            before_path = prompt[: prompt.find(paths[0])]
+            content = before_path.removeprefix("add ").rsplit(" to ", 1)[0].strip()
+            normalized["path"] = paths[0]
+            normalized["content"] = normalize_text(content)
+        elif paths and prompt_lower.startswith("append ") and " to " in prompt_lower:
+            before_path = prompt[: prompt.find(paths[0])]
+            content = before_path.removeprefix("append ").rsplit(" to ", 1)[0].strip()
+            normalized["path"] = paths[0]
+            normalized["content"] = normalize_text(content)
+
+    if tool == "move_file":
+        paths = extract_paths(prompt)
+
+        if len(paths) >= 2:
+            normalized["source"] = paths[0]
+            normalized["destination"] = paths[1]
+
+    if tool == "hide_app":
+        app = extract_app_from_prompt(prompt)
+
+        if app:
+            normalized["app"] = app
+
+    if tool == "create_calendar_event":
+        normalized.pop("location", None)
 
     return normalized
 
@@ -654,17 +1010,128 @@ def load_dataset(path):
     return examples
 
 
+def choose_plan_step_from_prompt(prompt, steps):
+    if not isinstance(steps, list):
+        return {}
+
+    prompt_lower = prompt.lower()
+
+    if contains_clipboard_copy_request(prompt_lower) or (prompt_lower.startswith("put ") and "clipboard" in prompt_lower):
+        return {
+            "type": "tool_call",
+            "category": "text",
+            "tool": "copy_to_clipboard",
+            "params": {"text": clipboard_text_from_prompt(prompt)},
+        }
+
+    if prompt_lower.startswith("hide ") or prompt_lower.startswith("minimize ") or " invisible" in prompt_lower:
+        app = extract_app_from_prompt(prompt)
+        return {
+            "type": "tool_call",
+            "category": "web_apps",
+            "tool": "hide_app",
+            "params": {"app": app} if app else {},
+        }
+
+    if prompt_lower.startswith("arrange ") or prompt_lower.startswith("classify "):
+        path = "/Users/thomas/Downloads" if "downloads" in prompt_lower else ""
+        return {
+            "type": "tool_call",
+            "category": "files",
+            "tool": "organize_folder",
+            "params": {"path": path, "mode": "by_extension"},
+        }
+
+    if "safely" in prompt_lower or "move clean candidates" in prompt_lower or "move junk" in prompt_lower:
+        path = "/Users/thomas/Downloads" if "downloads" in prompt_lower else ""
+        paths = extract_paths(prompt)
+        if paths:
+            path = paths[0]
+
+        return {
+            "type": "tool_call",
+            "category": "files",
+            "tool": "clean_folder",
+            "params": {"path": path, "mode": "apply"},
+        }
+
+    if prompt_lower.startswith("schedule "):
+        title = extract_calendar_title(prompt)
+        time_range = extract_time_range(prompt)
+        params = {"title": title} if title else {}
+        if time_range:
+            params["start"] = time_range[0]
+            params["end"] = time_range[1]
+        return {
+            "type": "tool_call",
+            "category": "third_party",
+            "tool": "create_calendar_event",
+            "params": params,
+        }
+
+    for step in steps:
+        if isinstance(step, dict) and step.get("tool"):
+            step = dict(step)
+            step["type"] = "tool_call"
+            return step
+
+    return {}
+
+
+def normalize_single_tool_prediction(pred, prompt):
+    if pred.get("type") == "tool_call" or "tool" in pred:
+        return pred
+
+    return {}
+
+
+def recoverable_single_step_prediction(pred):
+    if not isinstance(pred, dict):
+        return {}
+
+    if pred.get("type") == "tool_call" or "tool" in pred:
+        return pred
+
+    if pred.get("type") == "plan":
+        steps = pred.get("steps", [])
+
+        if isinstance(steps, list) and len(steps) == 1 and isinstance(steps[0], dict):
+            step = dict(steps[0])
+            step["type"] = "tool_call"
+            return step
+
+    return {}
+
+
+def extract_runtime_prediction(pred):
+    if pred.get("type") != "tool_call" and "tool" not in pred:
+        return "", "", {}
+
+    predicted_tool = pred.get("tool", "")
+    predicted_params = canonical_params(predicted_tool, pred)
+    predicted_tool, predicted_params = normalize_tool_for_runtime(predicted_tool, predicted_params)
+    predicted_category = expected_category_for_tool(predicted_tool)
+    return predicted_category, predicted_tool, predicted_params
+
+
 def evaluate_example(example):
+    memory_before = sample_model_memory_mb()
     raw, duration = ask_model(example["prompt"])
+    memory_after = sample_model_memory_mb()
+
+    memory_samples = [
+        sample
+        for sample in (memory_before, memory_after)
+        if sample is not None
+    ]
+    avg_memory = average_memory_samples(memory_samples)
+    peak_memory = peak_memory_samples(memory_samples)
     expected = example["expected"]
 
     expected_tool = expected.get("tool", "")
+    expected_params = canonical_params(expected_tool, expected)
+    expected_tool, expected_params = normalize_tool_for_runtime(expected_tool, expected_params)
     expected_category = expected_category_for_tool(expected_tool)
-    expected_params = postprocess_params_from_prompt(
-        example["prompt"],
-        expected_tool,
-        canonical_params(expected_tool, expected),
-    )
 
     result = {
         "line": example["line_number"],
@@ -676,58 +1143,43 @@ def evaluate_example(example):
         "pred_category": "",
         "pred_tool": "",
         "pred_params": {},
+        "recoverable_pred_category": "",
+        "recoverable_pred_tool": "",
+        "recoverable_pred_params": {},
         "valid_json": False,
         "category_correct": False,
         "tool_correct": False,
         "param_correct": False,
+        "recoverable_category_correct": False,
+        "recoverable_tool_correct": False,
+        "recoverable_param_correct": False,
+        "app_would_work": False,
         "duration": duration,
+        "avg_model_memory_mb": avg_memory,
+        "peak_model_memory_mb": peak_memory,
         "error": "",
     }
 
     try:
         pred = extract_json_object(raw)
         result["valid_json"] = True
+        recoverable_pred = recoverable_single_step_prediction(pred)
+        pred = normalize_single_tool_prediction(pred, example["prompt"])
 
-        if pred.get("type") == "tool_call":
-            predicted_tool = pred.get("tool", "")
-            predicted_params = canonical_params(predicted_tool, pred)
-            predicted_tool, predicted_params = normalize_prediction_from_prompt(
-                example["prompt"],
-                predicted_tool,
-                predicted_params,
-            )
-            predicted_params = postprocess_params_from_prompt(
-                example["prompt"],
-                predicted_tool,
-                predicted_params,
-            )
-            result["pred_tool"] = predicted_tool
-            result["pred_category"] = expected_category_for_tool(result["pred_tool"])
-            result["pred_params"] = predicted_params
-        elif "tool" in pred:
-            predicted_tool = pred.get("tool", "")
-            predicted_params = canonical_params(predicted_tool, pred)
-            predicted_tool, predicted_params = normalize_prediction_from_prompt(
-                example["prompt"],
-                predicted_tool,
-                predicted_params,
-            )
-            predicted_params = postprocess_params_from_prompt(
-                example["prompt"],
-                predicted_tool,
-                predicted_params,
-            )
-            result["pred_tool"] = predicted_tool
-            result["pred_category"] = expected_category_for_tool(result["pred_tool"])
-            result["pred_params"] = predicted_params
-        else:
-            result["pred_tool"] = ""
-            result["pred_category"] = ""
-            result["pred_params"] = {}
+        result["pred_category"], result["pred_tool"], result["pred_params"] = extract_runtime_prediction(pred)
+        result["recoverable_pred_category"], result["recoverable_pred_tool"], result["recoverable_pred_params"] = extract_runtime_prediction(recoverable_pred)
 
         result["category_correct"] = result["pred_category"] == result["expected_category"]
         result["tool_correct"] = result["pred_tool"] == result["expected_tool"]
         result["param_correct"] = result["pred_params"] == result["expected_params"]
+        result["recoverable_category_correct"] = result["recoverable_pred_category"] == result["expected_category"]
+        result["recoverable_tool_correct"] = result["recoverable_pred_tool"] == result["expected_tool"]
+        result["recoverable_param_correct"] = result["recoverable_pred_params"] == result["expected_params"]
+        result["app_would_work"] = (
+            result["recoverable_category_correct"]
+            and result["recoverable_tool_correct"]
+            and result["recoverable_param_correct"]
+        )
     except json.JSONDecodeError as error:
         result["error"] = f"Invalid JSON: {error}"
 
@@ -750,7 +1202,18 @@ def print_failure(result):
         f"tool={result['pred_tool']} "
         f"params={result['pred_params']}"
     )
+    if result["pred_tool"]:
+        print(f"Runtime category from tool: {expected_category_for_tool(result['pred_tool'])}")
+    if result["app_would_work"] and not (result["category_correct"] and result["tool_correct"] and result["param_correct"]):
+        print(
+            "Recoverable: app would likely execute "
+            f"category={result['recoverable_pred_category']} "
+            f"tool={result['recoverable_pred_tool']} "
+            f"params={result['recoverable_pred_params']}"
+        )
     print(f"Raw: {result['raw']}")
+    print(f"Avg RAM: {format_memory_snapshot(result['avg_model_memory_mb'])}")
+    print(f"Peak RAM: {format_memory_snapshot(result['peak_model_memory_mb'])}")
 
     if result["error"]:
         print(f"Error: {result['error']}")
@@ -762,7 +1225,28 @@ def print_summary(results):
     category_correct = sum(result["category_correct"] for result in results)
     tool_correct = sum(result["tool_correct"] for result in results)
     param_correct = sum(result["param_correct"] for result in results)
+    app_would_work = sum(result["app_would_work"] for result in results)
+    strict_pass = sum(
+        result["category_correct"] and result["tool_correct"] and result["param_correct"]
+        for result in results
+    )
+    soft_fail_but_recoverable = sum(
+        result["app_would_work"] and not (result["category_correct"] and result["tool_correct"] and result["param_correct"])
+        for result in results
+    )
     total_time = sum(result["duration"] for result in results)
+    avg_memory_samples = [
+        result["avg_model_memory_mb"]
+        for result in results
+        if result["avg_model_memory_mb"] is not None
+    ]
+    peak_memory_samples_list = [
+        result["peak_model_memory_mb"]
+        for result in results
+        if result["peak_model_memory_mb"] is not None
+    ]
+    avg_model_memory = average_memory_samples(avg_memory_samples)
+    peak_model_memory = peak_memory_samples(peak_memory_samples_list)
 
     print("\n--- RESULTS ---")
     print(f"Total: {total}")
@@ -770,7 +1254,17 @@ def print_summary(results):
     print(f"Category accuracy: {category_correct / total:.0%}")
     print(f"Tool accuracy: {tool_correct / total:.0%}")
     print(f"Params accuracy: {param_correct / total:.0%}")
+    print(f"Strict pass rate: {strict_pass / total:.0%}")
+    print(f"App would work: {app_would_work / total:.0%}")
+    print(f"Soft fail but recoverable: {soft_fail_but_recoverable / total:.0%}")
     print(f"Avg latency: {total_time / total:.2f}s")
+    print(f"Avg model memory: {format_memory_snapshot(avg_model_memory)}")
+    print(f"Peak model memory: {format_memory_snapshot(peak_model_memory)}")
+
+    if psutil is None:
+        print("RAM tracking: unavailable, install psutil with: pip install psutil")
+    elif avg_model_memory is None:
+        print(f"RAM tracking: no process named {MODEL_PROCESS_NAME!r} found")
 
     by_tool = defaultdict(list)
 

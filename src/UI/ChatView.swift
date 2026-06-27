@@ -11,7 +11,6 @@ struct ChatView: View {
     @State private var pendingToolCall: ToolCall?
     @State private var lastVisibleToolResult: ToolExecutionResult?
     @State private var isDebugMode = false
-    private let maxToolCallsPerRun = 5
 
     private var visibleMessages: [ChatMessage] {
         messages.filter { message in
@@ -67,63 +66,6 @@ struct ChatView: View {
     private let toolRegistry = ToolRegistry()
     private let agentService = AgentService()
     
-    private struct AgentRunContext {
-        private(set) var messages: [ChatMessage]
-        private(set) var executedToolKeys: Set<String> = []
-        private(set) var toolCallCount = 0
-        let userText: String
-        let shouldContinueAfterTool: Bool
-
-        init(userMessage: ChatMessage) {
-            self.messages = [userMessage]
-            self.userText = userMessage.visibleContent
-            self.shouldContinueAfterTool = Self.detectMultiStep(in: userMessage.visibleContent)
-        }
-
-        mutating func appendToolResult(_ message: ChatMessage) {
-            messages.append(message)
-            toolCallCount += 1
-            executedToolKeys.insert(Self.toolKey(from: message))
-        }
-
-        func hasAlreadyExecuted(_ message: ChatMessage) -> Bool {
-            executedToolKeys.contains(Self.toolKey(from: message))
-        }
-
-        private static func toolKey(from message: ChatMessage) -> String {
-            normalize(message.content)
-        }
-
-        private static func normalize(_ text: String) -> String {
-            text
-                .trimmingCharacters(in: .whitespacesAndNewlines)
-                .replacingOccurrences(of: "\n", with: " ")
-                .replacingOccurrences(of: "  ", with: " ")
-                .lowercased()
-        }
-
-        private static func detectMultiStep(in userText: String) -> Bool {
-            let lowercasedText = userText.lowercased()
-            let multiStepIndicators = [
-                " and ",
-                " then ",
-                " after that ",
-                " also ",
-                " another ",
-                " both ",
-                " puis ",
-                " ensuite ",
-                " et ",
-                " aussi ",
-                " un autre ",
-                " une autre "
-            ]
-
-            return multiStepIndicators.contains {
-                lowercasedText.contains($0)
-            }
-        }
-    }
     
     @ViewBuilder
     private func toolResultCard(_ result: ToolExecutionResult) -> some View {
@@ -412,7 +354,7 @@ struct ChatView: View {
         inputText = ""
         isLoading = true
 
-        runAgentLoop(with: AgentRunContext(userMessage: userMessage))
+        runAgentLoop(with: userMessage)
     }
     
     private func appendAgentMessage(_ message: ChatMessage) {
@@ -473,78 +415,22 @@ struct ChatView: View {
     }
     
 
-    private func runAgentLoop(with initialContext: AgentRunContext) {
+    private func runAgentLoop(with userMessage: ChatMessage) {
         Task {
-            var context = initialContext
-            var lastToolMessage: ChatMessage?
-
-            while true {
-                lastToolMessage = nil
-
-                await agentService.run(
-                    messages: context.messages,
-                    onMessage: { message in
-                        if message.role == .tool {
-                            lastToolMessage = message
-
-                            Task { @MainActor in
-                                appendAgentMessage(message)
-                            }
-
-                            return
-                        }
-
-                        if message.role == .assistant,
-                           lastToolMessage != nil {
-                            return
-                        }
-
-                        Task { @MainActor in
-                            appendAgentMessage(message)
-                        }
-                    },
-                    onConfirmationRequired: { toolCall in
-                        Task { @MainActor in
-                            pendingToolCall = toolCall
-                            isLoading = false
-                        }
+            await agentService.run(
+                messages: [userMessage],
+                onMessage: { message in
+                    Task { @MainActor in
+                        appendAgentMessage(message)
                     }
-                )
-
-                guard await MainActor.run(body: { pendingToolCall == nil }) else {
-                    break
-                }
-
-                guard let lastToolMessage else {
-                    break
-                }
-
-                guard !context.hasAlreadyExecuted(lastToolMessage) else {
-                    await MainActor.run {
-                        messages.append(ChatMessage(
-                            role: .assistant,
-                            content: "Action stopped: AXION tried to repeat the same tool call."
-                        ))
+                },
+                onConfirmationRequired: { toolCall in
+                    Task { @MainActor in
+                        pendingToolCall = toolCall
+                        isLoading = false
                     }
-                    break
                 }
-
-                guard context.toolCallCount < maxToolCallsPerRun else {
-                    await MainActor.run {
-                        messages.append(ChatMessage(
-                            role: .assistant,
-                            content: "Action stopped: maximum number of tool calls reached."
-                        ))
-                    }
-                    break
-                }
-
-                context.appendToolResult(lastToolMessage)
-
-                guard context.shouldContinueAfterTool else {
-                    break
-                }
-            }
+            )
 
             await MainActor.run {
                 if pendingToolCall == nil {
@@ -590,17 +476,7 @@ struct ChatView: View {
     }
     
     private func executeToolCall(_ toolCall: ToolCall, confirmed: Bool = false) {
-        let sensitiveTools = [
-            "rename_file",
-            "move_file",
-            "delete_file",
-            "compress_file",
-            "extract_archive",
-            "organize_folder",
-            "clean_folder"
-        ]
-
-        if sensitiveTools.contains(toolCall.tool), !confirmed {
+        if requiresConfirmation(toolCall), !confirmed {
             pendingToolCall = toolCall
 
             messages.append(ChatMessage(
@@ -616,35 +492,65 @@ struct ChatView: View {
             return
         }
 
-        let result = toolRegistry.execute(toolCall, confirmed: confirmed)
-        let resultContent = result.userMessage.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-            ? "Done."
-            : result.userMessage
-
-        let toolResultMessage = ChatMessage(
-            role: .tool,
-            content: """
-            Tool result for \(toolCall.tool):
-            \(resultContent)
-
-            Continue with the next unfinished action from the original user request.
-            If all requested actions are complete, return final.
-            Do not repeat successful tools.
-            Do not invent extra actions.
-            """,
-            toolResult: result
-        )
-
-        messages.append(toolResultMessage)
-
-        messages.append(ChatMessage(
-            role: .assistant,
-            content: resultContent,
-            toolResult: result
-        ))
-
         pendingToolCall = nil
-        isLoading = false
+        isLoading = true
+
+        Task {
+            await agentService.confirmPendingToolCall(
+                toolCall,
+                onMessage: { message in
+                    Task { @MainActor in
+                        appendAgentMessage(message)
+                    }
+                },
+                onConfirmationRequired: { toolCall in
+                    Task { @MainActor in
+                        pendingToolCall = toolCall
+                        isLoading = false
+                    }
+                }
+            )
+
+            await MainActor.run {
+                if pendingToolCall == nil {
+                    isLoading = false
+                }
+            }
+        }
+    }
+
+    private func requiresConfirmation(_ toolCall: ToolCall) -> Bool {
+        if toolCall.tool == "clean_folder" {
+            return isRealCleanMode(toolCall)
+        }
+
+        let sensitiveTools = [
+            "rename_file",
+            "move_file",
+            "delete_file",
+            "compress_file",
+            "extract_archive",
+            "organize_folder"
+        ]
+
+        return sensitiveTools.contains(toolCall.tool)
+    }
+
+    private func isRealCleanMode(_ toolCall: ToolCall) -> Bool {
+        guard toolCall.tool == "clean_folder" else {
+            return false
+        }
+
+        let argument = toolCall.argument
+            .lowercased()
+            .replacingOccurrences(of: "-", with: "_")
+            .replacingOccurrences(of: " ", with: "_")
+
+        return argument.contains("|apply")
+            || argument.contains("|safe")
+            || argument.contains("|real")
+            || argument.contains("|clean")
+            || argument.contains("|execute")
     }
 
     private func cancelPendingToolCall() {

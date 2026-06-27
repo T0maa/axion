@@ -98,8 +98,8 @@ std::string LlamaServerRuntime::generate(const std::string &prompt)
         "\"messages\":["
         "{\"role\":\"user\",\"content\":\"" + prompt + "\"}"
         "],"
-        "\"temperature\":0.7,"
-        "\"max_tokens\":512"
+        "\"temperature\":0,"
+        "\"max_tokens\":160"
         "}";
 
     struct curl_slist *headers = nullptr;
@@ -153,8 +153,8 @@ std::string LlamaServerRuntime::generateFromConversation(
         "{"
         "\"model\":\"local\","
         "\"messages\":" + conversationJson + ","
-        "\"temperature\":0.7,"
-        "\"max_tokens\":256"
+        "\"temperature\":0,"
+        "\"max_tokens\":160"
         "}";
 
     struct curl_slist *headers = nullptr;
@@ -203,8 +203,8 @@ void LlamaServerRuntime::streamFromConversation(
         "{"
         "\"model\":\"local\","
         "\"messages\":" + conversationJson + ","
-        "\"temperature\":0.7,"
-        "\"max_tokens\":256,"
+        "\"temperature\":0,"
+        "\"max_tokens\":160,"
         "\"stream\":true"
         "}";
 

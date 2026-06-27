@@ -11,6 +11,35 @@ final class AgentService {
     private let chatService: ChatService
     private let toolRegistry: ToolRegistry
     private let maxSteps = 7
+    private let multistepContinuationRules = """
+    Continue the original user request.
+    Return exactly one valid compact JSON object.
+    After a Tool result:
+    - Never return a plan.
+    - Never repeat an already successful tool.
+    - Use exactly this JSON shape:
+    {"type":"tool_call","category":"CATEGORY","tool":"TOOL","params":{}}
+    - For copy to clipboard: category "text", tool "copy_to_clipboard".
+    - For notify: category "system", tool "show_notification".
+    - For open in VSCode: category "dev", tool "open_in_vscode".
+    - For open URL: category "web_apps", tool "open_url".
+    - For read file: category "files", tool "read_text_file".
+    - For open file/folder: category "files", tool "open_file".
+    - For create file: category "files", tool "create_text_file".
+    - For open terminal in folder: category "dev", tool "open_terminal_here".
+    - If all requested tools are done, return {"type":"final","content":"OK"}.
+    """
+
+    private struct PendingConfirmationContext {
+        let toolCall: ToolCall
+        let remainingPlan: [ToolCall]
+        var workingMessages: [ChatMessage]
+        var executedToolKeys: Set<String>
+        var executedToolNames: [String]
+        let initialUserPrompt: String
+    }
+
+    private var pendingConfirmationContext: PendingConfirmationContext?
 
     init(
         chatService: ChatService = ChatService(),
@@ -52,6 +81,7 @@ final class AgentService {
                         workingMessages: &workingMessages,
                         executedToolKeys: &executedToolKeys,
                         executedToolNames: &executedToolNames,
+                        remainingPlanAfterConfirmation: [],
                         onMessage: onMessage,
                         onConfirmationRequired: onConfirmationRequired
                     )
@@ -59,6 +89,45 @@ final class AgentService {
                     if !shouldContinue {
                         return
                     }
+
+                case .plan(let toolCalls):
+                    if !executedToolNames.isEmpty {
+                        let guardrailMessage = makeGuardrailMessage(
+                            "A plan was returned after a Tool result. After a Tool result, return exactly one next tool_call JSON object, or final if every requested action is complete."
+                        )
+                        onMessage(guardrailMessage)
+                        workingMessages.append(guardrailMessage)
+                        continue
+                    }
+
+                    let limitedToolCalls = Array(toolCalls.prefix(maxSteps))
+
+                    for index in limitedToolCalls.indices {
+                        let remainingPlan = Array(limitedToolCalls.dropFirst(index + 1))
+                        let shouldContinue = handleToolCall(
+                            limitedToolCalls[index],
+                            initialUserPrompt: initialUserPrompt,
+                            workingMessages: &workingMessages,
+                            executedToolKeys: &executedToolKeys,
+                            executedToolNames: &executedToolNames,
+                            remainingPlanAfterConfirmation: remainingPlan,
+                            onMessage: onMessage,
+                            onConfirmationRequired: onConfirmationRequired
+                        )
+
+                        if !shouldContinue {
+                            return
+                        }
+                    }
+
+                    if toolCalls.count > maxSteps {
+                        onMessage(ChatMessage(
+                            role: .assistant,
+                            content: "Maximum number of planned tool calls reached."
+                        ))
+                    }
+
+                    return
                 }
 
                 continue
@@ -72,6 +141,7 @@ final class AgentService {
                     workingMessages: &workingMessages,
                     executedToolKeys: &executedToolKeys,
                     executedToolNames: &executedToolNames,
+                    remainingPlanAfterConfirmation: [],
                     onMessage: onMessage,
                     onConfirmationRequired: onConfirmationRequired
                 )
@@ -99,6 +169,7 @@ final class AgentService {
         workingMessages: inout [ChatMessage],
         executedToolKeys: inout Set<String>,
         executedToolNames: inout [String],
+        remainingPlanAfterConfirmation: [ToolCall],
         onMessage: (ChatMessage) -> Void,
         onConfirmationRequired: (ToolCall) -> Void
     ) -> Bool {
@@ -131,32 +202,104 @@ final class AgentService {
         workingMessages.append(toolMessage)
 
         if requiresConfirmation(toolCall) {
+            pendingConfirmationContext = PendingConfirmationContext(
+                toolCall: toolCall,
+                remainingPlan: remainingPlanAfterConfirmation,
+                workingMessages: workingMessages,
+                executedToolKeys: executedToolKeys,
+                executedToolNames: executedToolNames,
+                initialUserPrompt: initialUserPrompt
+            )
             onConfirmationRequired(toolCall)
             return false
         }
 
+        executeToolCall(
+            toolCall,
+            confirmed: false,
+            workingMessages: &workingMessages,
+            executedToolKeys: &executedToolKeys,
+            executedToolNames: &executedToolNames,
+            onMessage: onMessage
+        )
+
+        return true
+    }
+
+    func confirmPendingToolCall(
+        _ confirmedToolCall: ToolCall,
+        onMessage: @escaping (ChatMessage) -> Void,
+        onConfirmationRequired: @escaping (ToolCall) -> Void
+    ) async {
+        guard var context = pendingConfirmationContext else {
+            let result = toolRegistry.execute(confirmedToolCall, confirmed: true)
+            onMessage(ChatMessage(
+                role: .tool,
+                content: compactToolResult(result),
+                toolResult: result
+            ))
+            return
+        }
+
+        pendingConfirmationContext = nil
+
+        executeToolCall(
+            context.toolCall,
+            confirmed: true,
+            workingMessages: &context.workingMessages,
+            executedToolKeys: &context.executedToolKeys,
+            executedToolNames: &context.executedToolNames,
+            onMessage: onMessage
+        )
+
+        guard !context.remainingPlan.isEmpty else {
+            return
+        }
+
+        for index in context.remainingPlan.indices {
+            let remainingPlan = Array(context.remainingPlan.dropFirst(index + 1))
+            let shouldContinue = handleToolCall(
+                context.remainingPlan[index],
+                initialUserPrompt: context.initialUserPrompt,
+                workingMessages: &context.workingMessages,
+                executedToolKeys: &context.executedToolKeys,
+                executedToolNames: &context.executedToolNames,
+                remainingPlanAfterConfirmation: remainingPlan,
+                onMessage: onMessage,
+                onConfirmationRequired: onConfirmationRequired
+            )
+
+            if !shouldContinue {
+                return
+            }
+        }
+    }
+
+    private func executeToolCall(
+        _ toolCall: ToolCall,
+        confirmed: Bool,
+        workingMessages: inout [ChatMessage],
+        executedToolKeys: inout Set<String>,
+        executedToolNames: inout [String],
+        onMessage: (ChatMessage) -> Void
+    ) {
         executedToolKeys.insert(toolExecutionKey(toolCall))
         executedToolNames.append(toolCall.tool)
 
-        let result = toolRegistry.execute(toolCall)
+        let result = toolRegistry.execute(toolCall, confirmed: confirmed)
         let resultMessage = ChatMessage(
             role: .tool,
             content: """
             Tool result for \(toolCall.tool):
             \(compactToolResult(result))
 
-            Continue with the next unfinished action from the original user request.
-            If all requested actions are complete, return final.
-            Do not repeat successful tools.
-            Do not invent extra actions.
+            \(multistepContinuationRules)
             """,
             toolResult: result
         )
 
         onMessage(resultMessage)
         workingMessages.append(resultMessage)
-
-        return true
     }
 
     private func latestUserPrompt(in messages: [ChatMessage]) -> String {
@@ -190,13 +333,16 @@ final class AgentService {
             \(reason)
 
             Return exactly one corrected tool_call JSON object for the original user request.
+            Use exactly this JSON shape:
+            {"type":"tool_call","category":"CATEGORY","tool":"TOOL","params":{}}
+            Do not return a plan. Do not repeat completed tools.
             Do not return final unless every requested action already has a Tool result.
             Do not ask for confirmation. Do not explain.
             """
         )
     }
 
-    private func compactToolResult(_ result: ToolExecutionResult, limit: Int = 1500) -> String {
+    private func compactToolResult(_ result: ToolExecutionResult, limit: Int = 600) -> String {
         let cleanResult = result.rawOutput.trimmingCharacters(in: .whitespacesAndNewlines)
 
         guard cleanResult.count > limit else {
@@ -232,8 +378,8 @@ final class AgentService {
             return "Moving to Trash must use delete_file, not move_file."
         }
 
-        if tool == "clean_folder" && argument.contains("safe") && !userRequestedSafeClean(prompt) {
-            return "clean_folder safe mode is blocked because the original user request did not explicitly ask for safe cleaning or moving clean candidates. Use dry_run or return final."
+        if tool == "clean_folder" && isRealCleanMode(toolCall) && !userRequestedRealClean(prompt) {
+            return "clean_folder apply mode is blocked because the original user request did not explicitly ask to really clean, apply cleaning, or safely move clean candidates. Use dry_run or return final."
         }
 
         if tool == "open_terminal_here" && !containsAny(prompt, ["terminal", "shell", "command line"]) {
@@ -246,12 +392,36 @@ final class AgentService {
             return "open_terminal_here is blocked because the original user request did not explicitly ask for Terminal, shell, or command line. Use open_file for opening folders normally. Do not ask for confirmation."
         }
 
+        if tool == "open_app" && toolCall.argument == "Finder" && containsAny(prompt, [" in finder", "show path in finder", "reveal", "locate", "where "]) {
+            return "The user asked to reveal a path in Finder. Call reveal_file, not open_app."
+        }
+
+        if tool == "focus_app" && toolCall.argument == "Finder" && containsAny(prompt, [" in finder", "show path in finder", "reveal", "locate", "where "]) {
+            return "The user asked to reveal a path in Finder. Call reveal_file, not focus_app."
+        }
+
+        if (tool == "open_app" || tool == "focus_app") && toolCall.argument == "Terminal" && containsAny(prompt, [" at /", " in /", " here /", " at ~/", " in ~/", " here ~/", "terminal at", "terminal in"]) {
+            return "The user asked to open Terminal at a specific path. Call open_terminal_here with that path."
+        }
+
         if tool == "search_in_spotlight" && promptRequiresPathContentSearch(prompt) {
             return "search_in_spotlight is blocked because the original user request asks to search inside a specific path/project. Your next response must call search_file_content with the requested path and query."
         }
 
+        if tool == "search_file_content" && containsAny(prompt, ["spotlight", "mdfind", "macos files", "search on macos", "find file globally"]) {
+            return "The user asked for a global macOS file search. Call search_in_spotlight, not search_file_content."
+        }
+
+        if tool == "search_file_content" && argument.hasPrefix("/|") {
+            return "Searching globally with path / is blocked. Use search_in_spotlight for global macOS file search."
+        }
+
         if tool == "list_processes" && !containsAny(prompt, ["process", "processes", "running", "active processes"]) {
             return "list_processes is blocked because the original user request did not ask for running processes."
+        }
+
+        if tool != "clean_folder" && containsAny(prompt, [" clean ", "clean my", "clean ~/", "find junk", "find duplicates", "move clean candidates", "safely move junk"]) {
+            return "The user asked for folder cleaning. Call clean_folder with the requested path and mode."
         }
 
         if tool == "copy_to_clipboard"
@@ -280,6 +450,42 @@ final class AgentService {
 
         if tool == "show_notification" && executedToolNames.contains("show_notification") {
             return "A notification was already shown for this request. Return final unless another notification was explicitly requested."
+        }
+
+        if tool == "clean_folder" && !isRealCleanMode(toolCall) && userRequestedRealClean(prompt) {
+            return "The user explicitly asked for real or safe cleaning. Call clean_folder with mode apply."
+        }
+
+        if tool == "read_text_file" && executedToolNames.contains("create_text_file") && containsAny(prompt, ["open it", "open the file", "then open"]) {
+            return "The user asked to open the file after creating it. Call open_file, not read_text_file."
+        }
+
+        if tool == "open_file" && containsAny(prompt, ["vscode", "visual studio code"]) {
+            return "The user asked to open in VSCode. Call open_in_vscode, not open_file."
+        }
+
+        if tool == "open_file" && prompt.wholeMatch(of: /^read\s+(?:~|\/users|\/tmp|\/var|\/etc).+\.pdf$/) != nil {
+            return "Plain read of a PDF should open the file. Return open_file only if the path is preserved exactly."
+        }
+
+        if tool == "read_pdf_text" && prompt.wholeMatch(of: /^read\s+(?:~|\/users|\/tmp|\/var|\/etc).+\.pdf$/) != nil {
+            return "Plain read of a PDF must use open_file, not read_pdf_text."
+        }
+
+        if tool == "open_file" && containsAny(prompt, ["show text inside ", "extract text from ", "extract pdf text", "parse pdf", "get text from ", "read the content of pdf "]) {
+            return "The user asked to extract text from the PDF. Call read_pdf_text, not open_file."
+        }
+
+        if tool == "open_file" && executedToolNames.contains("take_screenshot") && containsAny(prompt, ["reveal", "finder", "show in finder"]) {
+            return "The user asked to reveal the screenshot in Finder. Call reveal_file, not open_file."
+        }
+
+        if tool == "open_file" && executedToolNames.contains("search_file_content") && containsAny(prompt, ["terminal", "shell", "command line"]) {
+            return "The user asked to open Terminal after searching. Call open_terminal_here, not open_file."
+        }
+
+        if tool == "read_text_file" && executedToolNames.contains("move_file") && containsAny(prompt, ["open it", "open the file", "then open"]) {
+            return "The user asked to open the moved file. Call open_file, not read_text_file."
         }
 
         return nil
@@ -317,14 +523,17 @@ final class AgentService {
     }
 
     private func requiresConfirmation(_ toolCall: ToolCall) -> Bool {
+        if toolCall.tool == "clean_folder" {
+            return isRealCleanMode(toolCall)
+        }
+
         let sensitiveTools = [
             "rename_file",
             "move_file",
             "delete_file",
             "compress_file",
             "extract_archive",
-            "organize_folder",
-            "clean_folder"
+            "organize_folder"
         ]
 
         return sensitiveTools.contains(toolCall.tool)
@@ -340,8 +549,13 @@ final class AgentService {
         ])
     }
 
-    private func userRequestedSafeClean(_ prompt: String) -> Bool {
+    private func userRequestedRealClean(_ prompt: String) -> Bool {
         containsAny(prompt, [
+            "apply",
+            "real clean",
+            "really clean",
+            "true clean",
+            "clean for real",
             "safe",
             "safely",
             "move clean candidates",
@@ -349,6 +563,23 @@ final class AgentService {
             "safely move",
             "_cleancandidates"
         ])
+    }
+
+    private func isRealCleanMode(_ toolCall: ToolCall) -> Bool {
+        guard toolCall.tool == "clean_folder" else {
+            return false
+        }
+
+        let argument = toolCall.argument
+            .lowercased()
+            .replacingOccurrences(of: "-", with: "_")
+            .replacingOccurrences(of: " ", with: "_")
+
+        return argument.contains("|apply")
+            || argument.contains("|safe")
+            || argument.contains("|real")
+            || argument.contains("|clean")
+            || argument.contains("|execute")
     }
 
     private func promptContainsDatetimeThenCopy(_ prompt: String) -> Bool {

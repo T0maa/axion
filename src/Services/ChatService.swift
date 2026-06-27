@@ -8,7 +8,10 @@
 import Foundation
 
 final class ChatService {
-    private static let maxContextCharacters = 6000
+    private static let modelContextWindowTokens = 4096
+    private static let reservedResponseTokens = 160
+    private static let reservedMessageOverheadTokens = 96
+    private static let estimatedCharactersPerToken = 4.0
     
     private static let systemPrompt = loadSystemPrompt()
     
@@ -22,11 +25,14 @@ final class ChatService {
         
         let fileManager = FileManager.default
         let resourceURL = Bundle.main.url(forResource: "system_prompt", withExtension: "txt")
-        let developmentURL = URL(fileURLWithPath: fileManager.currentDirectoryPath)
+        let currentDirectoryURL = URL(fileURLWithPath: fileManager.currentDirectoryPath)
+        let developmentURL = currentDirectoryURL
             .appendingPathComponent("data/system_prompt.txt")
-        let projectURL = URL(fileURLWithPath: "/Users/thomas/Projects/AXION/data/system_prompt.txt")
+        let nestedDevelopmentURL = currentDirectoryURL
+            .appendingPathComponent("AXION/data/system_prompt.txt")
+        let projectURL = URL(fileURLWithPath: "/Users/thomas/Projects/AXION/AXION/data/system_prompt.txt")
         
-        let candidates = [resourceURL, developmentURL, projectURL].compactMap { $0 }
+        let candidates = [resourceURL, developmentURL, nestedDevelopmentURL, projectURL].compactMap { $0 }
         
         for url in candidates {
             guard fileManager.fileExists(atPath: url.path),
@@ -133,12 +139,13 @@ final class ChatService {
         
         var selectedMessages: [[String: String]] = []
         var currentCharacterCount = 0
+        let maxContextCharacters = Self.availableContextCharacters()
         
         for message in filteredMessages.reversed() {
             let content = message["content"] ?? ""
             let messageSize = content.count
             
-            if currentCharacterCount + messageSize > Self.maxContextCharacters {
+            if currentCharacterCount + messageSize > maxContextCharacters {
                 break
             }
             
@@ -152,6 +159,20 @@ final class ChatService {
                 "content": Self.systemPrompt
             ]
         ] + selectedMessages
+    }
+
+    private static func availableContextCharacters() -> Int {
+        let availableInputTokens = max(
+            0,
+            modelContextWindowTokens - reservedResponseTokens - reservedMessageOverheadTokens
+        )
+        let systemPromptTokens = estimatedTokenCount(for: systemPrompt)
+        let remainingTokens = max(0, availableInputTokens - systemPromptTokens)
+        return Int(Double(remainingTokens) * estimatedCharactersPerToken)
+    }
+
+    private static func estimatedTokenCount(for text: String) -> Int {
+        Int(ceil(Double(text.count) / estimatedCharactersPerToken))
     }
     
     private func compactContextContent(_ content: String, role: ChatMessage.Role) -> String {

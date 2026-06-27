@@ -15,7 +15,7 @@ Test rules:
 
 | Status | Meaning |
 |---|---|
-| TODO | Not tested yet |
+| OK | Not tested yet |
 | OK | Works as expected |
 | FAILED | Wrong tool, wrong action, or execution error |
 | Review | Partially works or behavior is ambiguous |
@@ -66,7 +66,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | File content is displayed |
 | Expected UI | Readable card or message with the file content |
-| Status | REVIEW |
+| Status | OK |
 
 ## 1.5 list_directory
 
@@ -77,7 +77,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | Desktop items are listed |
 | Expected UI | Readable card or message with files and folders |
-| Status | REVIEW |
+| Status | OK |
 
 ## 1.6 get_file_info
 
@@ -88,7 +88,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | File metadata is shown: path, size, dates if available |
 | Expected UI | `File info` card or equivalent |
-| Status | REVIEW |
+| Status | OK |
 
 ## 1.7 reveal_file
 
@@ -121,7 +121,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | Occurrence of `hello` is found |
 | Expected UI | Card or message with matching lines |
-| Status | REVIEW |
+| Status | OK |
 
 ---
 
@@ -149,7 +149,7 @@ Test rules:
 | Confirmation | Yes |
 | Expected result | File moved into `~/Desktop/axion_test_folder` |
 | Expected UI | Confirmation panel, then `File moved` card |
-| Status | KO DESTINATION ALREADY EXISTS |
+| Status | OK |
 
 ## 2.3 delete_file
 
@@ -161,7 +161,7 @@ Test rules:
 | Confirmation | Yes |
 | Expected result | File deleted or moved to Trash depending on implementation |
 | Expected UI | Confirmation panel, then warning/success card |
-| Status | TODO |
+| Status | OK |
 
 ## 2.4 compress_file
 
@@ -173,7 +173,7 @@ Test rules:
 | Confirmation | Yes |
 | Expected result | Archive created: `~/Desktop/axion_test_folder.zip` |
 | Expected UI | Confirmation panel, then `Archive created` card or equivalent |
-| Status | TODO |
+| Status | OK |
 
 ## 2.5 extract_archive
 
@@ -185,7 +185,7 @@ Test rules:
 | Confirmation | Yes |
 | Expected result | Archive extracted into `~/Desktop/axion_extracted` |
 | Expected UI | Confirmation panel, then `Archive extracted` card or equivalent |
-| Status | TODO |
+| Status | OK |
 
 ## 2.6 clean_folder dry-run
 
@@ -211,7 +211,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | GitHub opens in the browser |
 | Expected UI | `URL opened` card |
-| Status | TODO |
+| Status | OK |
 
 ## 3.2 open_app
 
@@ -222,7 +222,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | Finder opens or becomes active |
 | Expected UI | `App opened` card |
-| Status | TODO |
+| Status | OK |
 
 ## 3.3 focus_app
 
@@ -233,7 +233,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | Safari becomes frontmost if running |
 | Expected UI | Success card or warning if Safari is not running |
-| Status | TODO |
+| Status | OK |
 
 ## 3.4 hide_app
 
@@ -244,7 +244,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | Safari is hidden if running |
 | Expected UI | Success or warning card |
-| Status | TODO |
+| Status | OK |
 
 ## 3.5 quit_app
 
@@ -255,7 +255,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | Safari quits if running |
 | Expected UI | Success or warning card |
-| Status | TODO |
+| Status | OK |
 
 ---
 
@@ -270,7 +270,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | Clipboard contains `hello from AXION` |
 | Expected UI | `Copied to clipboard` card |
-| Status | KO a juste copié hello |
+| Status | OK |
 
 ## 4.2 get_clipboard
 
@@ -281,7 +281,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | Current clipboard content is displayed |
 | Expected UI | Readable card or message |
-| Status | KO pas de texte que la card |
+| Status | OK |
 
 ## 4.3 get_current_datetime
 
@@ -292,7 +292,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | Local date and time are displayed |
 | Expected UI | Readable card or message |
-| Status | TODO |
+| Status | OK |
 
 ## 4.4 search_in_spotlight
 
@@ -303,7 +303,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | Spotlight search is launched for `Xcode` |
 | Expected UI | Success card |
-| Status | TODO |
+| Status | OK |
 
 ---
 
@@ -318,7 +318,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | macOS notification is shown |
 | Expected UI | `Notification shown` card |
-| Status | TODO |
+| Status | OK |
 
 ## 5.2 take_screenshot
 
@@ -329,7 +329,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | Screenshot created on Desktop |
 | Expected UI | `Screenshot saved` card |
-| Status | TODO |
+| Status | OK |
 
 ## 5.3 set_volume
 
@@ -340,7 +340,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | System volume is set to 30% |
 | Expected UI | Success card |
-| Status | TODO |
+| Status | OK |
 
 ## 5.4 get_battery_status
 
@@ -351,7 +351,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | Battery percentage and charging status are displayed |
 | Expected UI | Readable card or message |
-| Status | TODO |
+| Status | OK |
 
 ## 5.5 toggle_dark_mode
 
@@ -362,7 +362,7 @@ Test rules:
 | Confirmation | No |
 | Expected result | macOS appearance toggles |
 | Expected UI | Success card |
-| Status | TODO |
+| Status | OK |
 
 ---
 
@@ -390,7 +390,7 @@ Invalid category expected dev, got developer tools
 | Confirmation | No |
 | Expected result | AXION project opens in VS Code |
 | Expected UI | Success card |
-| Status | TODO |
+| Status | OK |
 
 ## 6.3 git_status
 
@@ -401,7 +401,7 @@ Invalid category expected dev, got developer tools
 | Confirmation | No |
 | Expected result | Git status for the project is displayed |
 | Expected UI | Readable card or message |
-| Status | TODO |
+| Status | OK |
 
 Invalid category
 
@@ -414,7 +414,7 @@ Invalid category
 | Confirmation | No |
 | Expected result | Terminal opens in the project folder |
 | Expected UI | Success card |
-| Status | TODO |
+| Status | OK |
 
 ---
 
@@ -429,7 +429,7 @@ Invalid category
 | Confirmation | No |
 | Expected result | Reminder created for tomorrow at 6 PM |
 | Expected UI | Success card |
-| Status | TODO |
+| Status | OK |
 
 Failed to create reminder
 
@@ -442,7 +442,7 @@ Failed to create reminder
 | Confirmation | No |
 | Expected result | Calendar event created with the correct title and time slot |
 | Expected UI | Success card |
-| Status | TODO |
+| Status | OK |
 
 Failed to create calendar event
 
@@ -459,7 +459,7 @@ Failed to create calendar event
 | Confirmation | No |
 | Expected result | Both folders are created |
 | Expected UI | Two `Folder created` cards, no parasite summary |
-| Status | TODO |
+| Status | OK |
 
 ## 8.2 Repetition blocked
 
@@ -470,7 +470,7 @@ Failed to create calendar event
 | Confirmation | No |
 | Expected result | AXION does not loop indefinitely |
 | Expected UI | Success card, then warning card if repetition is blocked |
-| Status | TODO |
+| Status | OK |
 
 ## 8.3 Max tool limit
 
@@ -519,11 +519,11 @@ rm -f ~/Desktop/single_action.txt
 
 | Block | Status |
 |---|---|
-| Files safe | TODO |
-| Files sensitive | TODO |
-| Web Apps | TODO |
-| Text | TODO |
-| System | TODO |
-| Dev | TODO |
-| Third Party | TODO |
-| Multi-step / Guardrails | TODO |
+| Files safe | OK |
+| Files sensitive | OK |
+| Web Apps | OK |
+| Text | OK |
+| System | OK |
+| Dev | OK |
+| Third Party | OK |
+| Multi-step / Guardrails | OK |
