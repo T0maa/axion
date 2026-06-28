@@ -61,7 +61,8 @@ struct ToolCall: Decodable {
 
         case "copy_to_clipboard",
              "get_clipboard",
-             "get_current_datetime":
+             "get_current_datetime",
+             "summarize_text":
             return "text"
 
         case "show_notification",
@@ -192,6 +193,9 @@ struct ToolCall: Decodable {
                 
             case "copy_to_clipboard":
                 return params["text"] ?? ""
+
+            case "summarize_text":
+                return params["text"] ?? params["content"] ?? params["message"] ?? params["input"] ?? params["value"] ?? ""
 
             case "create_text_file", "append_text_file":
                 let path = params["path"] ?? ""

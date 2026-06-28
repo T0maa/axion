@@ -47,6 +47,7 @@ final class ToolRegistry {
         "copy_to_clipboard": "text",
         "get_clipboard": "text",
         "get_current_datetime": "text",
+        "summarize_text": "text",
         
         "create_reminder": "third_party",
         "create_calendar_event": "third_party"
@@ -90,6 +91,7 @@ final class ToolRegistry {
         register(OpenTerminalHereTool())
         register(OrganizeFolderTool())
         register(CleanFolderTool())
+        register(SummarizeTextTool())
     }
 
     func register(_ tool: Tool) {

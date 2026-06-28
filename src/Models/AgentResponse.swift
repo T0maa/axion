@@ -250,6 +250,21 @@ enum AgentResponse {
             }
         }
 
+        if tool == "summarize_text" {
+            if normalized["text"] == nil {
+                for key in ["content", "message", "input", "value", "string"] {
+                    if let value = normalized.removeValue(forKey: key) {
+                        normalized["text"] = value
+                        break
+                    }
+                }
+            }
+
+            if normalized["style"] == nil || normalized["style"]?.isEmpty == true {
+                normalized["style"] = "short"
+            }
+        }
+
         if tool == "create_text_file" {
             if normalized["path"] == nil {
                 if let value = normalized.removeValue(forKey: "file_path") {
@@ -594,6 +609,12 @@ enum AgentResponse {
         "copy_process_list": "copy_to_clipboard",
         "write_text": "copy_to_clipboard",
         "write_string": "copy_to_clipboard",
+        "summarize": "summarize_text",
+        "summary": "summarize_text",
+        "summarise": "summarize_text",
+        "summarize_content": "summarize_text",
+        "summarize_message": "summarize_text",
+        "summarize_text_content": "summarize_text",
         "display_notification": "show_notification",
         "send_notification": "show_notification",
         "notify": "show_notification",
@@ -620,6 +641,7 @@ enum AgentResponse {
         "spotlight_search": "search_in_spotlight",
         "mdfind": "search_in_spotlight",
         "text/copy_to_clipboard": "copy_to_clipboard",
+        "text/summarize_text": "summarize_text",
         "system/show_notification": "show_notification",
         "dev/open_in_vscode": "open_in_vscode",
         "web_apps/open_url": "open_url",
@@ -659,6 +681,7 @@ enum AgentResponse {
         "get_clipboard": "text",
         "get_current_datetime": "text",
         "search_in_spotlight": "text",
+        "summarize_text": "text",
         "show_notification": "system",
         "take_screenshot": "system",
         "set_volume": "system",

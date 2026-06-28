@@ -223,6 +223,10 @@ final class AgentService {
             onMessage: onMessage
         )
 
+        if shouldStopAfterSuccessfulTool(toolCall) {
+            return false
+        }
+
         return true
     }
 
@@ -251,6 +255,10 @@ final class AgentService {
             executedToolNames: &context.executedToolNames,
             onMessage: onMessage
         )
+
+        if shouldStopAfterSuccessfulTool(context.toolCall) {
+            return
+        }
 
         guard !context.remainingPlan.isEmpty else {
             return
@@ -489,6 +497,14 @@ final class AgentService {
         }
 
         return nil
+    }
+
+    private func shouldStopAfterSuccessfulTool(_ toolCall: ToolCall) -> Bool {
+        let terminalTools = [
+            "summarize_text"
+        ]
+
+        return terminalTools.contains(toolCall.tool)
     }
 
     private func shouldStopAfterRejectedExtraTool(
