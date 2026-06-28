@@ -195,7 +195,19 @@ struct ToolCall: Decodable {
                 return params["text"] ?? ""
 
             case "summarize_text":
-                return params["text"] ?? params["content"] ?? params["message"] ?? params["input"] ?? params["value"] ?? ""
+                let text = params["text"] ?? params["content"] ?? params["message"] ?? params["input"] ?? params["value"] ?? ""
+                let style = params["style"] ?? params["format"] ?? params["mode"] ?? "short"
+                let payload: [String: String] = [
+                    "text": text,
+                    "style": style
+                ]
+
+                guard let data = try? JSONSerialization.data(withJSONObject: payload),
+                      let json = String(data: data, encoding: .utf8) else {
+                    return text
+                }
+
+                return json
 
             case "create_text_file", "append_text_file":
                 let path = params["path"] ?? ""

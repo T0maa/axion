@@ -10,7 +10,7 @@ import Foundation
 final class AppendTextFileTool: Tool {
     let name = "append_text_file"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let parts = argument.split(separator: "|", maxSplits: 1)
 
         guard parts.count == 2 else {

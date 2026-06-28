@@ -10,7 +10,7 @@ import Foundation
 final class OrganizeFolderTool: Tool {
     let name = "organize_folder"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let parts = argument.split(separator: "|", omittingEmptySubsequences: false)
         let rawPath = parts.indices.contains(0) ? String(parts[0]) : ""
         let mode = parts.indices.contains(1) ? String(parts[1]) : "by_extension"

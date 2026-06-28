@@ -10,7 +10,7 @@ import Foundation
 final class GetCurrentDateTimeTool: Tool {
     let name = "get_current_datetime"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let formatter = DateFormatter()
 
         formatter.locale = Locale(identifier: "en_US_POSIX")

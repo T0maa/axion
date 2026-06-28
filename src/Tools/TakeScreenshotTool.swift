@@ -10,7 +10,7 @@ import Foundation
 final class TakeScreenshotTool: Tool {
     let name = "take_screenshot"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
 

@@ -10,7 +10,7 @@ import AppKit
 final class CopyToClipboardTool: Tool {
     let name = "copy_to_clipboard"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let text = argument.trimmingCharacters(
             in: .whitespacesAndNewlines
         )

@@ -10,7 +10,7 @@ import AppKit
 final class HideAppTool: Tool {
     let name = "hide_app"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let appName = clean(argument)
 
         guard !appName.isEmpty else {

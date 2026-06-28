@@ -12,7 +12,7 @@ final class DeleteFileTool: Tool {
     let name = "delete_file"
     let requiresConfirmation = true
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
         let url = URL(fileURLWithPath: expandedPath)

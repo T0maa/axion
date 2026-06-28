@@ -10,7 +10,7 @@ import Foundation
 final class SetVolumeTool: Tool {
     let name = "set_volume"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let cleaned = argument.trimmingCharacters(in: .whitespacesAndNewlines)
         guard let volume = Int(cleaned), volume >= 0, volume <= 100 else {
             return .failure(title: "Invalid volume", detail: "Expected a number between 0 and 100.")

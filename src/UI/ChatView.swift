@@ -420,12 +420,12 @@ struct ChatView: View {
             await agentService.run(
                 messages: [userMessage],
                 onMessage: { message in
-                    Task { @MainActor in
+                    await MainActor.run {
                         appendAgentMessage(message)
                     }
                 },
                 onConfirmationRequired: { toolCall in
-                    Task { @MainActor in
+                    await MainActor.run {
                         pendingToolCall = toolCall
                         isLoading = false
                     }
@@ -458,19 +458,24 @@ struct ChatView: View {
         }
 
         messages.append(ChatMessage(role: .user, content: text))
-
-        let result = toolRegistry.execute(ToolCall(
-            tool: "open_url",
-            param: cleaned
-        ))
-
-        messages.append(ChatMessage(
-            role: .assistant,
-            content: result.userMessage,
-            toolResult: result
-        ))
         inputText = ""
-        isLoading = false
+        isLoading = true
+
+        Task {
+            let result = await toolRegistry.execute(ToolCall(
+                tool: "open_url",
+                param: cleaned
+            ))
+
+            await MainActor.run {
+                messages.append(ChatMessage(
+                    role: .assistant,
+                    content: result.userMessage,
+                    toolResult: result
+                ))
+                isLoading = false
+            }
+        }
 
         return true
     }
@@ -499,12 +504,12 @@ struct ChatView: View {
             await agentService.confirmPendingToolCall(
                 toolCall,
                 onMessage: { message in
-                    Task { @MainActor in
+                    await MainActor.run {
                         appendAgentMessage(message)
                     }
                 },
                 onConfirmationRequired: { toolCall in
-                    Task { @MainActor in
+                    await MainActor.run {
                         pendingToolCall = toolCall
                         isLoading = false
                     }

@@ -10,7 +10,7 @@ import AppKit
 final class OpenAppTool: Tool {
     let name = "open_app"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let workspace = NSWorkspace.shared
         let bundleId = bundleId(for: argument)
 
@@ -21,9 +21,13 @@ final class OpenAppTool: Tool {
         }
 
         let configuration = NSWorkspace.OpenConfiguration()
-        workspace.openApplication(at: appURL, configuration: configuration)
 
-        return .success(title: "Opened app", detail: argument)
+        do {
+            try await workspace.openApplication(at: appURL, configuration: configuration)
+            return .success(title: "Opened app", detail: argument)
+        } catch {
+            return .failure(title: "Unable to open app", detail: error.localizedDescription)
+        }
     }
 
     private func bundleId(for appName: String) -> String {

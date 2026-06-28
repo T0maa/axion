@@ -43,16 +43,16 @@ final class AgentService {
 
     init(
         chatService: ChatService = ChatService(),
-        toolRegistry: ToolRegistry = ToolRegistry()
+        toolRegistry: ToolRegistry? = nil
     ) {
         self.chatService = chatService
-        self.toolRegistry = toolRegistry
+        self.toolRegistry = toolRegistry ?? ToolRegistry(chatService: chatService)
     }
 
     func run(
         messages: [ChatMessage],
-        onMessage: @escaping (ChatMessage) -> Void,
-        onConfirmationRequired: @escaping (ToolCall) -> Void
+        onMessage: @escaping (ChatMessage) async -> Void,
+        onConfirmationRequired: @escaping (ToolCall) async -> Void
     ) async {
         var workingMessages = messages
         var executedToolKeys = Set<String>()
@@ -63,19 +63,19 @@ final class AgentService {
             let rawResponse = await chatService.send(messages: workingMessages)
             let trimmedResponse = rawResponse.trimmingCharacters(in: .whitespacesAndNewlines)
 
-            guard !trimmedResponse.isEmpty else {
-                onMessage(ChatMessage(role: .assistant, content: "Empty model response."))
+                guard !trimmedResponse.isEmpty else {
+                await onMessage(ChatMessage(role: .assistant, content: "Empty model response."))
                 return
             }
 
             if let agentResponse = AgentResponse(rawResponse: trimmedResponse) {
                 switch agentResponse {
                 case .final(let content):
-                    onMessage(ChatMessage(role: .assistant, content: content))
+                    await onMessage(ChatMessage(role: .assistant, content: content))
                     return
 
                 case .toolCall(let toolCall):
-                    let shouldContinue = handleToolCall(
+                    let shouldContinue = await handleToolCall(
                         toolCall,
                         initialUserPrompt: initialUserPrompt,
                         workingMessages: &workingMessages,
@@ -95,7 +95,7 @@ final class AgentService {
                         let guardrailMessage = makeGuardrailMessage(
                             "A plan was returned after a Tool result. After a Tool result, return exactly one next tool_call JSON object, or final if every requested action is complete."
                         )
-                        onMessage(guardrailMessage)
+                        await onMessage(guardrailMessage)
                         workingMessages.append(guardrailMessage)
                         continue
                     }
@@ -104,7 +104,7 @@ final class AgentService {
 
                     for index in limitedToolCalls.indices {
                         let remainingPlan = Array(limitedToolCalls.dropFirst(index + 1))
-                        let shouldContinue = handleToolCall(
+                        let shouldContinue = await handleToolCall(
                             limitedToolCalls[index],
                             initialUserPrompt: initialUserPrompt,
                             workingMessages: &workingMessages,
@@ -121,7 +121,7 @@ final class AgentService {
                     }
 
                     if toolCalls.count > maxSteps {
-                        onMessage(ChatMessage(
+                        await onMessage(ChatMessage(
                             role: .assistant,
                             content: "Maximum number of planned tool calls reached."
                         ))
@@ -135,7 +135,7 @@ final class AgentService {
 
             if let data = trimmedResponse.data(using: .utf8),
                let toolCall = try? JSONDecoder().decode(ToolCall.self, from: data) {
-                let shouldContinue = handleToolCall(
+                let shouldContinue = await handleToolCall(
                     toolCall,
                     initialUserPrompt: initialUserPrompt,
                     workingMessages: &workingMessages,
@@ -153,11 +153,11 @@ final class AgentService {
                 continue
             }
 
-            onMessage(ChatMessage(role: .assistant, content: trimmedResponse))
+            await onMessage(ChatMessage(role: .assistant, content: trimmedResponse))
             return
         }
 
-        onMessage(ChatMessage(
+        await onMessage(ChatMessage(
             role: .assistant,
             content: "Maximum number of steps reached."
         ))
@@ -170,9 +170,9 @@ final class AgentService {
         executedToolKeys: inout Set<String>,
         executedToolNames: inout [String],
         remainingPlanAfterConfirmation: [ToolCall],
-        onMessage: (ChatMessage) -> Void,
-        onConfirmationRequired: (ToolCall) -> Void
-    ) -> Bool {
+        onMessage: (ChatMessage) async -> Void,
+        onConfirmationRequired: (ToolCall) async -> Void
+    ) async -> Bool {
         if let rejectionReason = guardrailRejectionReason(
             for: toolCall,
             initialUserPrompt: initialUserPrompt,
@@ -184,7 +184,7 @@ final class AgentService {
                 initialUserPrompt: initialUserPrompt,
                 executedToolNames: executedToolNames
             ) {
-                onMessage(ChatMessage(
+                await onMessage(ChatMessage(
                     role: .assistant,
                     content: "Done."
                 ))
@@ -192,13 +192,13 @@ final class AgentService {
             }
 
             let guardrailMessage = makeGuardrailMessage(rejectionReason)
-            onMessage(guardrailMessage)
+            await onMessage(guardrailMessage)
             workingMessages.append(guardrailMessage)
             return true
         }
 
         let toolMessage = makeToolCallMessage(toolCall)
-        onMessage(toolMessage)
+        await onMessage(toolMessage)
         workingMessages.append(toolMessage)
 
         if requiresConfirmation(toolCall) {
@@ -210,11 +210,11 @@ final class AgentService {
                 executedToolNames: executedToolNames,
                 initialUserPrompt: initialUserPrompt
             )
-            onConfirmationRequired(toolCall)
+            await onConfirmationRequired(toolCall)
             return false
         }
 
-        executeToolCall(
+        await executeToolCall(
             toolCall,
             confirmed: false,
             workingMessages: &workingMessages,
@@ -232,12 +232,12 @@ final class AgentService {
 
     func confirmPendingToolCall(
         _ confirmedToolCall: ToolCall,
-        onMessage: @escaping (ChatMessage) -> Void,
-        onConfirmationRequired: @escaping (ToolCall) -> Void
+        onMessage: @escaping (ChatMessage) async -> Void,
+        onConfirmationRequired: @escaping (ToolCall) async -> Void
     ) async {
         guard var context = pendingConfirmationContext else {
-            let result = toolRegistry.execute(confirmedToolCall, confirmed: true)
-            onMessage(ChatMessage(
+            let result = await toolRegistry.execute(confirmedToolCall, confirmed: true)
+            await onMessage(ChatMessage(
                 role: .tool,
                 content: compactToolResult(result),
                 toolResult: result
@@ -247,7 +247,7 @@ final class AgentService {
 
         pendingConfirmationContext = nil
 
-        executeToolCall(
+        await executeToolCall(
             context.toolCall,
             confirmed: true,
             workingMessages: &context.workingMessages,
@@ -266,7 +266,7 @@ final class AgentService {
 
         for index in context.remainingPlan.indices {
             let remainingPlan = Array(context.remainingPlan.dropFirst(index + 1))
-            let shouldContinue = handleToolCall(
+            let shouldContinue = await handleToolCall(
                 context.remainingPlan[index],
                 initialUserPrompt: context.initialUserPrompt,
                 workingMessages: &context.workingMessages,
@@ -289,12 +289,12 @@ final class AgentService {
         workingMessages: inout [ChatMessage],
         executedToolKeys: inout Set<String>,
         executedToolNames: inout [String],
-        onMessage: (ChatMessage) -> Void
-    ) {
+        onMessage: (ChatMessage) async -> Void
+    ) async {
         executedToolKeys.insert(toolExecutionKey(toolCall))
         executedToolNames.append(toolCall.tool)
 
-        let result = toolRegistry.execute(toolCall, confirmed: confirmed)
+        let result = await toolRegistry.execute(toolCall, confirmed: confirmed)
         let resultMessage = ChatMessage(
             role: .tool,
             content: """
@@ -306,7 +306,7 @@ final class AgentService {
             toolResult: result
         )
 
-        onMessage(resultMessage)
+        await onMessage(resultMessage)
         workingMessages.append(resultMessage)
     }
 

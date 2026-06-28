@@ -10,7 +10,7 @@ import Foundation
 final class ShowNotificationTool: Tool {
     let name = "show_notification"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let parts = argument.split(separator: "|", maxSplits: 1).map(String.init)
 
         let title = parts.first?.trimmingCharacters(in: .whitespacesAndNewlines)

@@ -10,7 +10,7 @@ import AppKit
 final class OpenURLTool: Tool {
     let name = "open_url"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let cleaned = clean(argument)
         let urlString = normalizedURL(cleaned)
 

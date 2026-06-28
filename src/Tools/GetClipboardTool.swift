@@ -10,7 +10,7 @@ import AppKit
 final class GetClipboardTool: Tool {
     let name = "get_clipboard"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let pasteboard = NSPasteboard.general
 
         guard let text = pasteboard.string(forType: .string),

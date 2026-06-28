@@ -10,7 +10,7 @@ import AppKit
 final class RevealFileTool: Tool {
     let name = "reveal_file"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
         let url = URL(fileURLWithPath: expandedPath)

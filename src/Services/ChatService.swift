@@ -53,36 +53,40 @@ final class ChatService {
     func send(messages: [ChatMessage]) async -> String {
         let payload = makePayload(from: messages)
         
+        return await sendPayload(payload, maxTokens: 160)
+    }
+    
+    private func sendPayload(_ payload: [[String: String]], maxTokens: Int) async -> String {
         guard let url = URL(string: "http://localhost:8080/v1/chat/completions") else {
             return "Error: invalid local server URL"
         }
-        
+
         let requestBody: [String: Any] = [
             "model": "local",
             "messages": payload,
             "temperature": 0,
-            "max_tokens": 160,
+            "max_tokens": maxTokens,
             "stream": false
         ]
-        
+
         guard let body = try? JSONSerialization.data(withJSONObject: requestBody) else {
             return "Error: failed to encode conversation"
         }
-        
+
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         request.httpBody = body
-        
+
         do {
             let (data, response) = try await URLSession.shared.data(for: request)
-            
+
             if let httpResponse = response as? HTTPURLResponse,
                !(200...299).contains(httpResponse.statusCode) {
                 let errorBody = String(data: data, encoding: .utf8) ?? "Unknown server error"
                 return "HTTP \(httpResponse.statusCode): \(errorBody)"
             }
-            
+
             guard let json = try JSONSerialization.jsonObject(with: data) as? [String: Any],
                   let choices = json["choices"] as? [[String: Any]],
                   let firstChoice = choices.first,
@@ -91,7 +95,7 @@ final class ChatService {
                 let raw = String(data: data, encoding: .utf8) ?? "Unreadable response"
                 return "Error: invalid model response: \(raw)"
             }
-            
+
             return content.trimmingCharacters(in: .whitespacesAndNewlines)
         } catch {
             return "Error: \(error.localizedDescription)"
@@ -187,5 +191,45 @@ final class ChatService {
         }
         
         return String(content.prefix(limit)) + "\n\n[Context truncated]"
+    }
+    
+    func summarizeText(text: String, style: String = "short") async -> String {
+        let styleInstruction: String
+
+        switch style {
+        case "detailed":
+            styleInstruction = "Write a detailed summary."
+        case "bullet_points":
+            styleInstruction = "Write a concise bullet point summary."
+        case "technical":
+            styleInstruction = "Write a technical summary focused on implementation details."
+        default:
+            styleInstruction = "Write a short summary."
+        }
+
+        let payload = [
+            [
+                "role": "system",
+                "content": """
+                You are a summarization engine.
+                Return only the summary.
+                Do not return JSON.
+                Do not call tools.
+                Do not add explanations before or after the summary.
+                """
+            ],
+            [
+                "role": "user",
+                "content": """
+                \(styleInstruction)
+
+                Text:
+                \(text)
+                """
+            ]
+        ]
+
+        return await sendPayload(payload, maxTokens: 300)
+            .trimmingCharacters(in: .whitespacesAndNewlines)
     }
 }

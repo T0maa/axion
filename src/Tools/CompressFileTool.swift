@@ -10,7 +10,7 @@ import Foundation
 final class CompressFileTool: Tool {
     let name = "compress_file"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let parts = argument.split(separator: "|", maxSplits: 1).map(String.init)
 
         guard parts.count == 2 else {

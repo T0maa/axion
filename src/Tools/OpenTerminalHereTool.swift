@@ -10,7 +10,7 @@ import Foundation
 final class OpenTerminalHereTool: Tool {
     let name = "open_terminal_here"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
 

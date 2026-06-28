@@ -10,7 +10,7 @@ import Foundation
 final class GitStatusTool: Tool {
     let name = "git_status"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
 

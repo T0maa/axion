@@ -10,7 +10,7 @@ import AppKit
 final class FocusAppTool: Tool {
     let name = "focus_app"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let appName = clean(argument)
 
         guard !appName.isEmpty else {

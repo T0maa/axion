@@ -10,7 +10,7 @@ import Foundation
 final class SearchInSpotlightTool: Tool {
     let name = "search_in_spotlight"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let query = clean(argument)
 
         guard !query.isEmpty else {

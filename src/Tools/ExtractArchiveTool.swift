@@ -10,7 +10,7 @@ import Foundation
 final class ExtractArchiveTool: Tool {
     let name = "extract_archive"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let parts = argument.split(separator: "|", maxSplits: 1).map(String.init)
 
         guard parts.count == 2 else {

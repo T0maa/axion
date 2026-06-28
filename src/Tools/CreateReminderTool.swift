@@ -10,7 +10,7 @@ import Foundation
 final class CreateReminderTool: Tool {
     let name = "create_reminder"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let parts = argument.split(separator: "|", maxSplits: 1).map(String.init)
 
         let title = clean(parts.first ?? "")

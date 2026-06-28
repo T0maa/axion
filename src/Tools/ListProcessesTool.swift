@@ -10,7 +10,7 @@ import Foundation
 final class ListProcessesTool: Tool {
     let name = "list_processes"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let process = Process()
         let pipe = Pipe()
 

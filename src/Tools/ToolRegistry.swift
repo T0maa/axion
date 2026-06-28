@@ -7,6 +7,7 @@
 
 final class ToolRegistry {
     private var tools: [String: Tool] = [:]
+    private let chatService: ChatService
     private let categoryByTool: [String: String] = [
         "open_file": "files",
         "reveal_file": "files",
@@ -53,7 +54,8 @@ final class ToolRegistry {
         "create_calendar_event": "third_party"
     ]
 
-    init() {
+    init(chatService: ChatService = ChatService()) {
+        self.chatService = chatService
         register(OpenAppTool())
         register(OpenURLTool())
         register(OpenFileTool())
@@ -91,14 +93,14 @@ final class ToolRegistry {
         register(OpenTerminalHereTool())
         register(OrganizeFolderTool())
         register(CleanFolderTool())
-        register(SummarizeTextTool())
+        register(SummarizeTextTool(chatService: chatService))
     }
 
     func register(_ tool: Tool) {
         tools[tool.name] = tool
     }
 
-    func execute(_ toolCall: ToolCall, confirmed: Bool = false) -> ToolExecutionResult {
+    func execute(_ toolCall: ToolCall, confirmed: Bool = false) async -> ToolExecutionResult {
         if let expectedCategory = categoryByTool[toolCall.tool],
            toolCall.resolvedCategory != expectedCategory {
             return .failure(
@@ -124,6 +126,6 @@ final class ToolRegistry {
             )
         }
 
-        return tool.execute(argument: toolCall.argument)
+        return await tool.execute(argument: toolCall.argument)
     }
 }

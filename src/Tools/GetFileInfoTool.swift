@@ -10,7 +10,7 @@ import Foundation
 final class GetFileInfoTool: Tool {
     let name = "get_file_info"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
         let url = URL(fileURLWithPath: expandedPath)

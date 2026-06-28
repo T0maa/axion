@@ -10,7 +10,7 @@ import AppKit
 final class QuitAppTool: Tool {
     let name = "quit_app"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let appName = clean(argument)
 
         guard !appName.isEmpty else {

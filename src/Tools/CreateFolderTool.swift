@@ -10,7 +10,7 @@ import Foundation
 final class CreateFolderTool: Tool {
     let name = "create_folder"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let path = clean(argument)
         let expandedPath = (path as NSString).expandingTildeInPath
         let url = URL(fileURLWithPath: expandedPath)

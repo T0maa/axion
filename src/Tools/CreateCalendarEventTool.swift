@@ -10,7 +10,7 @@ import Foundation
 final class CreateCalendarEventTool: Tool {
     let name = "create_calendar_event"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let parts = argument.split(separator: "|", maxSplits: 2).map(String.init)
 
         guard parts.count == 3 else {

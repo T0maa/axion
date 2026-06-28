@@ -10,7 +10,7 @@ import Foundation
 final class ToggleDarkModeTool: Tool {
     let name = "toggle_dark_mode"
 
-    func execute(argument: String) -> ToolExecutionResult {
+    func execute(argument: String) async -> ToolExecutionResult {
         let script = """
         tell application "System Events"
             tell appearance preferences
