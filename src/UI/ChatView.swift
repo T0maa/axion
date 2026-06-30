@@ -93,7 +93,8 @@ struct ChatView: View {
                 .stroke(statusColor(for: result.status).opacity(0.35), lineWidth: 1)
         )
         .cornerRadius(14)
-        .frame(maxWidth: 320, alignment: .leading)
+        .frame(maxWidth: isSummaryResult(result) ? 360 : 320, alignment: .leading)
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     @ViewBuilder
@@ -103,18 +104,28 @@ struct ChatView: View {
             Text(result.detail)
                 .font(.caption)
                 .foregroundStyle(.secondary)
-                .lineLimit(4)
+                .lineLimit(isSummaryResult(result) ? nil : 4)
+                .fixedSize(horizontal: false, vertical: true)
                 .textSelection(.enabled)
 
         case .textBlock:
-            ScrollView {
+            if isSummaryResult(result) {
                 Text(result.detail)
                     .font(.caption)
                     .foregroundStyle(.secondary)
                     .frame(maxWidth: .infinity, alignment: .leading)
+                    .fixedSize(horizontal: false, vertical: true)
                     .textSelection(.enabled)
+            } else {
+                ScrollView {
+                    Text(result.detail)
+                        .font(.caption)
+                        .foregroundStyle(.secondary)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .textSelection(.enabled)
+                }
+                .frame(maxHeight: 120)
             }
-            .frame(maxHeight: 120)
 
         case .codeBlock:
             ScrollView {
@@ -140,6 +151,11 @@ struct ChatView: View {
                 }
             }
         }
+    }
+
+    private func isSummaryResult(_ result: ToolExecutionResult) -> Bool {
+        let normalizedTitle = result.title.lowercased()
+        return normalizedTitle.contains("summary")
     }
 
     private func iconName(for status: ToolExecutionStatus) -> String {

@@ -233,7 +233,17 @@ enum AgentResponse {
         var normalized = params.reduce(into: [String: String]()) { result, item in
             result[item.key] = stringify(item.value)
         }
+        
+        if tool == "summarize_file" {
+            if normalized["path"] == nil {
+                normalized["path"] = normalized["file"] ?? normalized["file_path"] ?? normalized["source"]
+            }
 
+            if normalized["style"] == nil || normalized["style"]?.isEmpty == true {
+                normalized["style"] = "short"
+            }
+        }
+        
         if tool == "copy_to_clipboard" {
             if normalized["text"] == nil {
                 for key in ["content", "string", "message", "value", "url"] {
@@ -651,6 +661,9 @@ enum AgentResponse {
         "files/append_text_file": "append_text_file",
         "dev/open_terminal_here": "open_terminal_here",
         "files/extract_archive": "extract_archive",
+        "summarize_file": "summarize_file",
+        "summarize_document": "summarize_file",
+        "summarize_pdf": "summarize_file",
         "files/compress_file": "compress_file"
     ]
 
@@ -672,6 +685,7 @@ enum AgentResponse {
         "extract_archive": "files",
         "organize_folder": "files",
         "clean_folder": "files",
+        "summarize_file": "files",
         "open_app": "web_apps",
         "open_url": "web_apps",
         "quit_app": "web_apps",

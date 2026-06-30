@@ -7,7 +7,7 @@ Formats:
 {"type":"final","content":"OK"}
 
 Tools:
-files: open_file, reveal_file, read_text_file, create_text_file, append_text_file, list_directory, create_folder, get_file_info, rename_file, move_file, delete_file, search_file_content, read_pdf_text, compress_file, extract_archive, organize_folder, clean_folder
+files: open_file, reveal_file, read_text_file, create_text_file, append_text_file, list_directory, create_folder, get_file_info, rename_file, move_file, delete_file, search_file_content, read_pdf_text, compress_file, extract_archive, organize_folder, clean_folder, summarize_file
 web_apps: open_app, open_url, quit_app, focus_app, hide_app
 text: copy_to_clipboard, get_clipboard, get_current_datetime, search_in_spotlight, summarize_text
 system: show_notification, take_screenshot, set_volume, get_battery_status, toggle_dark_mode
@@ -53,7 +53,9 @@ Routing:
 - summarize_text params: text, style. Text is exactly the provided content to summarize. Do not rewrite, shorten, or invent the text before calling the tool.
 - summarize_text style defaults to short. If the user asks for detailed/in detail, use style detailed. If the user asks bullet points/bullets/list, use style bullet_points. If the user asks technical/technically, use style technical.
 - Summarize clipboard/copied text => get_clipboard first, then after Tool result use summarize_text with text TOOL_RESULT_CONTENT.
-- Summarize a file/path/document/readme/pdf => read_text_file or read_pdf_text first depending on file type, then after Tool result use summarize_text with text TOOL_RESULT_CONTENT. Do not use summarize_text directly for a path.
+- Summarize a file/path/document/readme/pdf => summarize_file. Use category files. Do not use summarize_text directly for a path.
+- summarize_file params: path, style. Path is the exact file path to summarize. Style follows the same values as summarize_text: short, detailed, bullet_points, technical. Style defaults to short.
+- If the user asks summarize README.md or summarize file NAME without an absolute path, use the provided path/name exactly. Do not invent a full path.
 - Notification/notify/alert => show_notification. If no explicit title, title AXION. display notification TITLE MESSAGE => title TITLE, message MESSAGE. Do not put TITLE into message. After Tool result notify => show_notification only.
 - Screenshot/capture/save screen to/as/into path => take_screenshot with path. If filename only, save to /Users/thomas/Desktop/filename. After screenshot reveal/show in Finder => reveal_file. Volume N => set_volume {"level":"N"}. Battery/power/charging => get_battery_status. Toggle/switch dark/light appearance => toggle_dark_mode.
 - Processes/process list/running/active processes => list_processes. Processes then copy => list_processes first, then copy_to_clipboard. VSCode path => open_in_vscode. Git status/repo status/repository status/git changes/state/what changed in git => git_status only, never open_terminal_here or plan.
@@ -91,6 +93,12 @@ User: summarize the clipboard
 Assistant: {"type":"tool_call","category":"text","tool":"get_clipboard","params":{}}
 User: after get_clipboard Tool result, summarize it
 Assistant: {"type":"tool_call","category":"text","tool":"summarize_text","params":{"text":"TOOL_RESULT_CONTENT","style":"short"}}
+User: summarize /Users/thomas/Projects/AXION/README.md
+Assistant: {"type":"tool_call","category":"files","tool":"summarize_file","params":{"path":"/Users/thomas/Projects/AXION/README.md","style":"short"}}
+User: make a technical summary of /Users/thomas/Projects/AXION/AXION/src/Services/AgentService.swift
+Assistant: {"type":"tool_call","category":"files","tool":"summarize_file","params":{"path":"/Users/thomas/Projects/AXION/AXION/src/Services/AgentService.swift","style":"technical"}}
+User: summarize README.md in bullet points
+Assistant: {"type":"tool_call","category":"files","tool":"summarize_file","params":{"path":"README.md","style":"bullet_points"}}
 User: show notification AXION Task completed
 Assistant: {"type":"tool_call","category":"system","tool":"show_notification","params":{"title":"AXION","message":"Task completed"}}
 User: switch dark mode

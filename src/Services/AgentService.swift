@@ -501,7 +501,8 @@ final class AgentService {
 
     private func shouldStopAfterSuccessfulTool(_ toolCall: ToolCall) -> Bool {
         let terminalTools = [
-            "summarize_text"
+            "summarize_text",
+            "summarize_file"
         ]
 
         return terminalTools.contains(toolCall.tool)

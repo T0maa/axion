@@ -26,6 +26,7 @@ final class ToolRegistry {
         "extract_archive": "files",
         "organize_folder": "files",
         "clean_folder": "files",
+        "summarize_file": "files",
 
         "open_app": "web_apps",
         "open_url": "web_apps",
@@ -94,6 +95,7 @@ final class ToolRegistry {
         register(OrganizeFolderTool())
         register(CleanFolderTool())
         register(SummarizeTextTool(chatService: chatService))
+        register(SummarizeFileTool(chatService: chatService))
     }
 
     func register(_ tool: Tool) {

@@ -44,15 +44,17 @@ struct ToolCall: Decodable {
              "compress_file",
              "extract_archive",
              "organize_folder",
-             "clean_folder":
-            return "files"
-            
-        case "rename_file",
+             "clean_folder",
+             "rename_file",
              "move_file",
-             "delete_file":
+             "delete_file",
+             "summarize_file":
             return "files"
 
-        case "open_terminal_here":
+        case "open_terminal_here",
+             "list_processes",
+             "open_in_vscode",
+             "git_status":
             return "dev"
 
         case "create_reminder",
@@ -62,36 +64,23 @@ struct ToolCall: Decodable {
         case "copy_to_clipboard",
              "get_clipboard",
              "get_current_datetime",
-             "summarize_text":
+             "summarize_text",
+             "search_in_spotlight":
             return "text"
 
         case "show_notification",
-             "take_screenshot":
-            return "system"
-
-        case "open_app",
-             "open_url":
-            return "web_apps"
-        
-        case "set_volume",
+             "take_screenshot",
+             "set_volume",
              "get_battery_status",
              "toggle_dark_mode":
             return "system"
 
-        case "quit_app",
-             "focus_app":
+        case "open_app",
+             "open_url",
+             "quit_app",
+             "focus_app",
+             "hide_app":
             return "web_apps"
-            
-        case "hide_app":
-            return "web_apps"
-
-        case "list_processes",
-             "open_in_vscode",
-             "git_status":
-            return "dev"
-
-        case "search_in_spotlight":
-            return "text"
 
         default:
             return "unknown"
@@ -116,6 +105,11 @@ struct ToolCall: Decodable {
 
             case "open_url":
                 return params["url"] ?? ""
+                
+            case "summarize_file":
+                let path = params["path"] ?? params["file"] ?? params["file_path"] ?? ""
+                let style = params["style"] ?? params["format"] ?? params["mode"] ?? "short"
+                return "\(path)|\(style)"
             
             case "search_file_content":
                 let path = params["path"] ?? ""
