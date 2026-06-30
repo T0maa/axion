@@ -94,6 +94,31 @@ The runtime deliberately performs a second validation layer after generation:
 
 This split is intentional: the prompt defines the contract, while the runtime absorbs recoverable deviations and blocks unsafe behavior.
 
+## Feature branch: summarize tools
+
+This branch adds two LLM-powered summarization tools:
+
+- `summarize_text`: summarizes provided text.
+- `summarize_file`: reads and summarizes a local text-based file.
+
+Supported summary styles:
+- `short`
+- `detailed`
+- `bullet_points`
+- `technical`
+
+Examples:
+
+```json
+{"type":"tool_call","category":"text","tool":"summarize_text","params":{"text":"AXION is a local macOS assistant.","style":"short"}}
+```
+
+```json
+{"type":"tool_call","category":"files","tool":"summarize_file","params":{"path":"/Users/thomas/Projects/AXION/README.md","style":"bullet_points"}}
+```
+
+The tools use the local LLM through *ChatService* with a dedicated summarization prompt, separated from the main tool-routing prompt.
+
 ## Setup
 
 ### Requirements
