@@ -24,31 +24,31 @@
 {"prompt":"open the Google website","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.google.com\"}}"}
 {"prompt":"open stackoverflow.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://stackoverflow.com\"}}"}
 {"prompt":"open wikipedia.org","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://www.wikipedia.org\"}}"}
-{"prompt":"open /Users/thomas/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"open /Users/thomas/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
-{"prompt":"open /Users/thomas/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
-{"prompt":"open /Users/thomas/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
-{"prompt":"open the file /Users/thomas/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"open the file /Users/thomas/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
+{"prompt":"open ~/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"~/Desktop/test.pdf\"}}"}
+{"prompt":"open ~/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"~/Desktop/test.png\"}}"}
+{"prompt":"open ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
+{"prompt":"open ~/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"~/Documents/report.md\"}}"}
+{"prompt":"open the file ~/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"~/Desktop/test.pdf\"}}"}
+{"prompt":"open the file ~/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"~/Desktop/test.png\"}}"}
 {"prompt":"launch /Applications/Calculator.app","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Calculator\"}}"}
 {"prompt":"open /Applications/Calculator.app","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Calculator\"}}"}
 {"prompt":"open ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
 {"prompt":"open ~/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"~/Desktop/test.png\"}}"}
-{"prompt":"reveal /Users/thomas/Desktop/test.pdf in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"reveal /Users/thomas/Desktop/test.png in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
-{"prompt":"show /Users/thomas/Desktop/axon-note.txt in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
-{"prompt":"locate /Users/thomas/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
-{"prompt":"find /Users/thomas/Desktop/test.pdf in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"show me where /Users/thomas/Desktop/test.png is","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
+{"prompt":"reveal ~/Desktop/test.pdf in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/test.pdf\"}}"}
+{"prompt":"reveal ~/Desktop/test.png in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/test.png\"}}"}
+{"prompt":"show ~/Desktop/axon-note.txt in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
+{"prompt":"locate ~/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Documents/report.md\"}}"}
+{"prompt":"find ~/Desktop/test.pdf in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/test.pdf\"}}"}
+{"prompt":"show me where ~/Desktop/test.png is","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/test.png\"}}"}
 {"prompt":"reveal ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
 {"prompt":"locate ~/Desktop/test.png in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/test.png\"}}"}
-{"prompt":"read /Users/thomas/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
-{"prompt":"read /Users/thomas/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
-{"prompt":"read /Users/thomas/Projects/AXION/AXION/docs/tool_test_matrix.md","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/AXION/docs/tool_test_matrix.md\"}}"}
-{"prompt":"show the content of /Users/thomas/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
-{"prompt":"inspect /Users/thomas/Projects/AXION/AXION/data/test.jsonl","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/AXION/data/test.jsonl\"}}"}
-{"prompt":"read the file /Users/thomas/Projects/AXION/AXION/benchmark.py","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/AXION/benchmark.py\"}}"}
-{"prompt":"open and read /Users/thomas/Desktop/notes.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/notes.txt\"}}"}
+{"prompt":"read ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
+{"prompt":"read ~/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"~/Documents/report.md\"}}"}
+{"prompt":"read ~/Projects/AXION/AXION/docs/tool_test_matrix.md","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"~/Projects/AXION/AXION/docs/tool_test_matrix.md\"}}"}
+{"prompt":"show the content of ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
+{"prompt":"inspect ~/Projects/AXION/AXION/data/test.jsonl","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"~/Projects/AXION/AXION/data/test.jsonl\"}}"}
+{"prompt":"read the file ~/Projects/AXION/AXION/benchmark.py","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"~/Projects/AXION/AXION/benchmark.py\"}}"}
+{"prompt":"open and read ~/Desktop/notes.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"~/Desktop/notes.txt\"}}"}
 {"prompt":"show me the content of ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"read_text_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
 {"prompt":"copy hello AXON to the clipboard","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"hello AXON\"}}"}
 {"prompt":"copy AXON benchmark ready to clipboard","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"AXON benchmark ready\"}}"}
@@ -56,24 +56,24 @@
 {"prompt":"put hello world in my clipboard","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"hello world\"}}"}
 {"prompt":"copy the sentence SwiftUI plus C++ core","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"SwiftUI plus C++ core\"}}"}
 {"prompt":"copy Qwen local model to clipboard","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"Qwen local model\"}}"}
-{"prompt":"copy the path /Users/thomas/Desktop/test.pdf","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"/Users/thomas/Desktop/test.pdf\"}}"}
+{"prompt":"copy the path ~/Desktop/test.pdf","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"~/Desktop/test.pdf\"}}"}
 {"prompt":"copy AXION to the pasteboard","completion":"{\"category\":\"text\",\"tool\":\"copy_to_clipboard\",\"params\":{\"text\":\"AXION\"}}"}
-{"prompt":"create /Users/thomas/Desktop/axon-note.txt with hello AXON","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\",\"content\":\"hello AXON\"}}"}
-{"prompt":"create a file /Users/thomas/Desktop/todo.txt with buy milk","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/todo.txt\",\"content\":\"buy milk\"}}"}
-{"prompt":"write hello world into /Users/thomas/Desktop/hello.txt","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/hello.txt\",\"content\":\"hello world\"}}"}
-{"prompt":"make a text file /Users/thomas/Desktop/meeting-notes.txt containing AXON meeting notes","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/meeting-notes.txt\",\"content\":\"AXON meeting notes\"}}"}
-{"prompt":"create /Users/thomas/Documents/axon-log.txt with initial log entry","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Documents/axon-log.txt\",\"content\":\"initial log entry\"}}"}
+{"prompt":"create ~/Desktop/axon-note.txt with hello AXON","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\",\"content\":\"hello AXON\"}}"}
+{"prompt":"create a file ~/Desktop/todo.txt with buy milk","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"~/Desktop/todo.txt\",\"content\":\"buy milk\"}}"}
+{"prompt":"write hello world into ~/Desktop/hello.txt","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"~/Desktop/hello.txt\",\"content\":\"hello world\"}}"}
+{"prompt":"make a text file ~/Desktop/meeting-notes.txt containing AXON meeting notes","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"~/Desktop/meeting-notes.txt\",\"content\":\"AXON meeting notes\"}}"}
+{"prompt":"create ~/Documents/axon-log.txt with initial log entry","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"~/Documents/axon-log.txt\",\"content\":\"initial log entry\"}}"}
 {"prompt":"write project status ready into ~/Desktop/status.txt","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"~/Desktop/status.txt\",\"content\":\"project status ready\"}}"}
 {"prompt":"create a note at ~/Desktop/quick-note.md with AXON works","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"~/Desktop/quick-note.md\",\"content\":\"AXON works\"}}"}
-{"prompt":"create /Users/thomas/Desktop/shopping.txt with eggs and bread","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/shopping.txt\",\"content\":\"eggs and bread\"}}"}
-{"prompt":"append second line to /Users/thomas/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\",\"content\":\"second line\"}}"}
-{"prompt":"add buy coffee to /Users/thomas/Desktop/todo.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/todo.txt\",\"content\":\"buy coffee\"}}"}
-{"prompt":"append AXON benchmark passed to /Users/thomas/Documents/axon-log.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Documents/axon-log.txt\",\"content\":\"AXON benchmark passed\"}}"}
+{"prompt":"create ~/Desktop/shopping.txt with eggs and bread","completion":"{\"category\":\"files\",\"tool\":\"create_text_file\",\"params\":{\"path\":\"~/Desktop/shopping.txt\",\"content\":\"eggs and bread\"}}"}
+{"prompt":"append second line to ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\",\"content\":\"second line\"}}"}
+{"prompt":"add buy coffee to ~/Desktop/todo.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"~/Desktop/todo.txt\",\"content\":\"buy coffee\"}}"}
+{"prompt":"append AXON benchmark passed to ~/Documents/axon-log.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"~/Documents/axon-log.txt\",\"content\":\"AXON benchmark passed\"}}"}
 {"prompt":"add another note to ~/Desktop/quick-note.md","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"~/Desktop/quick-note.md\",\"content\":\"another note\"}}"}
-{"prompt":"append eggs to /Users/thomas/Desktop/shopping.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/shopping.txt\",\"content\":\"eggs\"}}"}
-{"prompt":"add final line to /Users/thomas/Desktop/hello.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/hello.txt\",\"content\":\"final line\"}}"}
+{"prompt":"append eggs to ~/Desktop/shopping.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"~/Desktop/shopping.txt\",\"content\":\"eggs\"}}"}
+{"prompt":"add final line to ~/Desktop/hello.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"~/Desktop/hello.txt\",\"content\":\"final line\"}}"}
 {"prompt":"append task completed to ~/Desktop/status.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"~/Desktop/status.txt\",\"content\":\"task completed\"}}"}
-{"prompt":"add AXON is local-first to /Users/thomas/Desktop/meeting-notes.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/meeting-notes.txt\",\"content\":\"AXON is local-first\"}}"}
+{"prompt":"add AXON is local-first to ~/Desktop/meeting-notes.txt","completion":"{\"category\":\"files\",\"tool\":\"append_text_file\",\"params\":{\"path\":\"~/Desktop/meeting-notes.txt\",\"content\":\"AXON is local-first\"}}"}
 {"prompt":"what time is it","completion":"{\"category\":\"text\",\"tool\":\"get_current_datetime\",\"params\":{}}"}
 {"prompt":"what is the current time","completion":"{\"category\":\"text\",\"tool\":\"get_current_datetime\",\"params\":{}}"}
 {"prompt":"what date is it today","completion":"{\"category\":\"text\",\"tool\":\"get_current_datetime\",\"params\":{}}"}
@@ -83,34 +83,34 @@
 {"prompt":"I need the timestamp now","completion":"{\"category\":\"text\",\"tool\":\"get_current_datetime\",\"params\":{}}"}
 {"prompt":"give me a timestamp for my note","completion":"{\"category\":\"text\",\"tool\":\"get_current_datetime\",\"params\":{}}"}
 {"prompt":"open Safari then go to github.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://github.com\"}}"}
-{"prompt":"open Finder and show /Users/thomas/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
+{"prompt":"open Finder and show ~/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/test.png\"}}"}
 {"prompt":"open the website not the app: safari.com","completion":"{\"category\":\"web_apps\",\"tool\":\"open_url\",\"params\":{\"url\":\"https://safari.com\"}}"}
 {"prompt":"open the app Safari, not a website","completion":"{\"category\":\"web_apps\",\"tool\":\"open_app\",\"params\":{\"app\":\"Safari\"}}"}
-{"prompt":"read /Users/thomas/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"show /Users/thomas/Desktop/test.pdf in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"list files in /Users/thomas/Desktop","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"/Users/thomas/Desktop\"}}"}
+{"prompt":"read ~/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"open_file\",\"params\":{\"path\":\"~/Desktop/test.pdf\"}}"}
+{"prompt":"show ~/Desktop/test.pdf in Finder","completion":"{\"category\":\"files\",\"tool\":\"reveal_file\",\"params\":{\"path\":\"~/Desktop/test.pdf\"}}"}
+{"prompt":"list files in ~/Desktop","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Desktop\"}}"}
 {"prompt":"list files in ~/Downloads","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Downloads\"}}"}
-{"prompt":"show contents of /Users/thomas/Desktop","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"/Users/thomas/Desktop\"}}"}
+{"prompt":"show contents of ~/Desktop","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Desktop\"}}"}
 {"prompt":"show contents of ~/Downloads","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Downloads\"}}"}
-{"prompt":"what is inside /Users/thomas/Documents","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"/Users/thomas/Documents\"}}"}
-{"prompt":"list directory /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"what is inside ~/Documents","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Documents\"}}"}
+{"prompt":"list directory ~/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
 {"prompt":"show me the files in ~/Desktop","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Desktop\"}}"}
-{"prompt":"display the contents of /Users/thomas/Downloads","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"/Users/thomas/Downloads\"}}"}
-{"prompt":"create folder /Users/thomas/Desktop/AXIONTestFolder","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"/Users/thomas/Desktop/AXIONTestFolder\"}}"}
-{"prompt":"make folder /Users/thomas/Desktop/NewFolder","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"/Users/thomas/Desktop/NewFolder\"}}"}
+{"prompt":"display the contents of ~/Downloads","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Downloads\"}}"}
+{"prompt":"create folder ~/Desktop/AXIONTestFolder","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"~/Desktop/AXIONTestFolder\"}}"}
+{"prompt":"make folder ~/Desktop/NewFolder","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"~/Desktop/NewFolder\"}}"}
 {"prompt":"create directory ~/Desktop/BenchFolder","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"~/Desktop/BenchFolder\"}}"}
 {"prompt":"make a new folder at ~/Downloads/TestFolder","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"~/Downloads/TestFolder\"}}"}
-{"prompt":"add folder /Users/thomas/Documents/AXIONFolder","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"/Users/thomas/Documents/AXIONFolder\"}}"}
-{"prompt":"create a directory named /Users/thomas/Desktop/ProjectsTest","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"/Users/thomas/Desktop/ProjectsTest\"}}"}
+{"prompt":"add folder ~/Documents/AXIONFolder","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"~/Documents/AXIONFolder\"}}"}
+{"prompt":"create a directory named ~/Desktop/ProjectsTest","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"~/Desktop/ProjectsTest\"}}"}
 {"prompt":"make the directory ~/Documents/LocalModels","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"~/Documents/LocalModels\"}}"}
-{"prompt":"create folder path /Users/thomas/Downloads/AXIONExports","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"/Users/thomas/Downloads/AXIONExports\"}}"}
-{"prompt":"get info about /Users/thomas/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.png\"}}"}
-{"prompt":"show file info for /Users/thomas/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-note.txt\"}}"}
-{"prompt":"what is the size of /Users/thomas/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"metadata for /Users/thomas/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
+{"prompt":"create folder path ~/Downloads/AXIONExports","completion":"{\"category\":\"files\",\"tool\":\"create_folder\",\"params\":{\"path\":\"~/Downloads/AXIONExports\"}}"}
+{"prompt":"get info about ~/Desktop/test.png","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"~/Desktop/test.png\"}}"}
+{"prompt":"show file info for ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
+{"prompt":"what is the size of ~/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"~/Desktop/test.pdf\"}}"}
+{"prompt":"metadata for ~/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"~/Documents/report.md\"}}"}
 {"prompt":"get file information for ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
-{"prompt":"tell me the type of /Users/thomas/Downloads/params-test.txt","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"/Users/thomas/Downloads/params-test.txt\"}}"}
-{"prompt":"when was /Users/thomas/Desktop/note.txt modified","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"/Users/thomas/Desktop/note.txt\"}}"}
+{"prompt":"tell me the type of ~/Downloads/params-test.txt","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"~/Downloads/params-test.txt\"}}"}
+{"prompt":"when was ~/Desktop/note.txt modified","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"~/Desktop/note.txt\"}}"}
 {"prompt":"show metadata of ~/Downloads/params-test.txt","completion":"{\"category\":\"files\",\"tool\":\"get_file_info\",\"params\":{\"path\":\"~/Downloads/params-test.txt\"}}"}
 {"prompt":"what is in my clipboard","completion":"{\"category\":\"text\",\"tool\":\"get_clipboard\",\"params\":{}}"}
 {"prompt":"show clipboard content","completion":"{\"category\":\"text\",\"tool\":\"get_clipboard\",\"params\":{}}"}
@@ -128,13 +128,13 @@
 {"prompt":"create notification AXION Benchmark passed","completion":"{\"category\":\"system\",\"tool\":\"show_notification\",\"params\":{\"title\":\"AXION\",\"message\":\"Benchmark passed\"}}"}
 {"prompt":"alert me with Local model loaded","completion":"{\"category\":\"system\",\"tool\":\"show_notification\",\"params\":{\"title\":\"AXION\",\"message\":\"Local model loaded\"}}"}
 {"prompt":"send local notification titled AXION saying Done","completion":"{\"category\":\"system\",\"tool\":\"show_notification\",\"params\":{\"title\":\"AXION\",\"message\":\"Done\"}}"}
-{"prompt":"take screenshot to /Users/thomas/Desktop/axon-screen.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"/Users/thomas/Desktop/axon-screen.png\"}}"}
-{"prompt":"capture screenshot at /Users/thomas/Desktop/screen.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"/Users/thomas/Desktop/screen.png\"}}"}
+{"prompt":"take screenshot to ~/Desktop/axon-screen.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"~/Desktop/axon-screen.png\"}}"}
+{"prompt":"capture screenshot at ~/Desktop/screen.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"~/Desktop/screen.png\"}}"}
 {"prompt":"save screenshot to ~/Desktop/capture.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"~/Desktop/capture.png\"}}"}
 {"prompt":"take a screenshot and save it to ~/Downloads/screenshot.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"~/Downloads/screenshot.png\"}}"}
-{"prompt":"capture the screen to /Users/thomas/Downloads/axon-capture.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"/Users/thomas/Downloads/axon-capture.png\"}}"}
-{"prompt":"screenshot /Users/thomas/Desktop/current-screen.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"/Users/thomas/Desktop/current-screen.png\"}}"}
-{"prompt":"save my screen as /Users/thomas/Desktop/debug-screen.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"/Users/thomas/Desktop/debug-screen.png\"}}"}
+{"prompt":"capture the screen to ~/Downloads/axon-capture.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"~/Downloads/axon-capture.png\"}}"}
+{"prompt":"screenshot ~/Desktop/current-screen.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"~/Desktop/current-screen.png\"}}"}
+{"prompt":"save my screen as ~/Desktop/debug-screen.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"~/Desktop/debug-screen.png\"}}"}
 {"prompt":"take screenshot into ~/Desktop/test-screenshot.png","completion":"{\"category\":\"system\",\"tool\":\"take_screenshot\",\"params\":{\"path\":\"~/Desktop/test-screenshot.png\"}}"}
 {"prompt":"set volume to 40","completion":"{\"category\":\"system\",\"tool\":\"set_volume\",\"params\":{\"level\":\"40\"}}"}
 {"prompt":"change volume to 25","completion":"{\"category\":\"system\",\"tool\":\"set_volume\",\"params\":{\"level\":\"25\"}}"}
@@ -192,21 +192,21 @@
 {"prompt":"display current processes","completion":"{\"category\":\"dev\",\"tool\":\"list_processes\",\"params\":{}}"}
 {"prompt":"show active macOS processes","completion":"{\"category\":\"dev\",\"tool\":\"list_processes\",\"params\":{}}"}
 {"prompt":"get process list","completion":"{\"category\":\"dev\",\"tool\":\"list_processes\",\"params\":{}}"}
-{"prompt":"open /Users/thomas/Projects/AXION in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"open ~/Projects/AXION in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
 {"prompt":"open ~/Projects/AXION in Visual Studio Code","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
-{"prompt":"open /Users/thomas/Desktop in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Desktop\"}}"}
-{"prompt":"open the folder /Users/thomas/Projects/AXION in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"open ~/Desktop in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"~/Desktop\"}}"}
+{"prompt":"open the folder ~/Projects/AXION in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
 {"prompt":"open project ~/Projects/AXION with VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
-{"prompt":"open /Users/thomas/Projects/AXION/AXION/docs/tool_test_matrix.md in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/AXION/docs/tool_test_matrix.md\"}}"}
-{"prompt":"open this path in Visual Studio Code /Users/thomas/Documents","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Documents\"}}"}
-{"prompt":"launch VSCode for /Users/thomas/Downloads","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"/Users/thomas/Downloads\"}}"}
-{"prompt":"git status in /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
-{"prompt":"show git status for /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"open ~/Projects/AXION/AXION/docs/tool_test_matrix.md in VSCode","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"~/Projects/AXION/AXION/docs/tool_test_matrix.md\"}}"}
+{"prompt":"open this path in Visual Studio Code ~/Documents","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"~/Documents\"}}"}
+{"prompt":"launch VSCode for ~/Downloads","completion":"{\"category\":\"dev\",\"tool\":\"open_in_vscode\",\"params\":{\"path\":\"~/Downloads\"}}"}
+{"prompt":"git status in ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
+{"prompt":"show git status for ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
 {"prompt":"repo status in ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
-{"prompt":"show git changes in /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"show git changes in ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
 {"prompt":"check repository status for ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
-{"prompt":"git state of /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
-{"prompt":"what changed in git for /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"git state of ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
+{"prompt":"what changed in git for ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
 {"prompt":"run git status on ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"git_status\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
 {"prompt":"search Spotlight for benchmark.py","completion":"{\"category\":\"text\",\"tool\":\"search_in_spotlight\",\"params\":{\"query\":\"benchmark.py\"}}"}
 {"prompt":"find with Spotlight AXION","completion":"{\"category\":\"text\",\"tool\":\"search_in_spotlight\",\"params\":{\"query\":\"AXION\"}}"}
@@ -216,30 +216,30 @@
 {"prompt":"find file with Spotlight llama-server","completion":"{\"category\":\"text\",\"tool\":\"search_in_spotlight\",\"params\":{\"query\":\"llama-server\"}}"}
 {"prompt":"search Spotlight AXION benchmark","completion":"{\"category\":\"text\",\"tool\":\"search_in_spotlight\",\"params\":{\"query\":\"AXION benchmark\"}}"}
 {"prompt":"search on macOS for params-test.txt","completion":"{\"category\":\"text\",\"tool\":\"search_in_spotlight\",\"params\":{\"query\":\"params-test.txt\"}}"}
-{"prompt":"rename /Users/thomas/Desktop/old.txt to new.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/old.txt\",\"new_name\":\"new.txt\"}}"}
-{"prompt":"rename /Users/thomas/Desktop/note.txt to final-note.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/note.txt\",\"new_name\":\"final-note.txt\"}}"}
-{"prompt":"change file name /Users/thomas/Downloads/test.txt to renamed.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"/Users/thomas/Downloads/test.txt\",\"new_name\":\"renamed.txt\"}}"}
+{"prompt":"rename ~/Desktop/old.txt to new.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"~/Desktop/old.txt\",\"new_name\":\"new.txt\"}}"}
+{"prompt":"rename ~/Desktop/note.txt to final-note.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"~/Desktop/note.txt\",\"new_name\":\"final-note.txt\"}}"}
+{"prompt":"change file name ~/Downloads/test.txt to renamed.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"~/Downloads/test.txt\",\"new_name\":\"renamed.txt\"}}"}
 {"prompt":"rename ~/Desktop/axon-note.txt as axon-final.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\",\"new_name\":\"axon-final.txt\"}}"}
-{"prompt":"rename file /Users/thomas/Documents/report.md to report-final.md","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\",\"new_name\":\"report-final.md\"}}"}
+{"prompt":"rename file ~/Documents/report.md to report-final.md","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"~/Documents/report.md\",\"new_name\":\"report-final.md\"}}"}
 {"prompt":"change the name of ~/Downloads/params-test.txt to params-final.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"~/Downloads/params-test.txt\",\"new_name\":\"params-final.txt\"}}"}
-{"prompt":"rename /Users/thomas/Desktop/shopping.txt new-shopping.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/shopping.txt\",\"new_name\":\"new-shopping.txt\"}}"}
-{"prompt":"rename path /Users/thomas/Desktop/status.txt to status-final.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/status.txt\",\"new_name\":\"status-final.txt\"}}"}
-{"prompt":"move /Users/thomas/Desktop/file.txt to /Users/thomas/Documents/file.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"/Users/thomas/Desktop/file.txt\",\"destination\":\"/Users/thomas/Documents/file.txt\"}}"}
-{"prompt":"move /Users/thomas/Desktop/note.txt to /Users/thomas/Downloads/note.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"/Users/thomas/Desktop/note.txt\",\"destination\":\"/Users/thomas/Downloads/note.txt\"}}"}
+{"prompt":"rename ~/Desktop/shopping.txt new-shopping.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"~/Desktop/shopping.txt\",\"new_name\":\"new-shopping.txt\"}}"}
+{"prompt":"rename path ~/Desktop/status.txt to status-final.txt","completion":"{\"category\":\"files\",\"tool\":\"rename_file\",\"params\":{\"path\":\"~/Desktop/status.txt\",\"new_name\":\"status-final.txt\"}}"}
+{"prompt":"move ~/Desktop/file.txt to ~/Documents/file.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"~/Desktop/file.txt\",\"destination\":\"~/Documents/file.txt\"}}"}
+{"prompt":"move ~/Desktop/note.txt to ~/Downloads/note.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"~/Desktop/note.txt\",\"destination\":\"~/Downloads/note.txt\"}}"}
 {"prompt":"move ~/Desktop/axon-note.txt to ~/Documents/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"~/Desktop/axon-note.txt\",\"destination\":\"~/Documents/axon-note.txt\"}}"}
-{"prompt":"move file /Users/thomas/Downloads/test.txt into /Users/thomas/Desktop/test.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"/Users/thomas/Downloads/test.txt\",\"destination\":\"/Users/thomas/Desktop/test.txt\"}}"}
-{"prompt":"move /Users/thomas/Documents/report.md /Users/thomas/Desktop/report.md","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"/Users/thomas/Documents/report.md\",\"destination\":\"/Users/thomas/Desktop/report.md\"}}"}
+{"prompt":"move file ~/Downloads/test.txt into ~/Desktop/test.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"~/Downloads/test.txt\",\"destination\":\"~/Desktop/test.txt\"}}"}
+{"prompt":"move ~/Documents/report.md ~/Desktop/report.md","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"~/Documents/report.md\",\"destination\":\"~/Desktop/report.md\"}}"}
 {"prompt":"move ~/Downloads/params-test.txt to ~/Desktop/params-test.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"~/Downloads/params-test.txt\",\"destination\":\"~/Desktop/params-test.txt\"}}"}
-{"prompt":"move the file /Users/thomas/Desktop/shopping.txt to /Users/thomas/Documents/shopping.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"/Users/thomas/Desktop/shopping.txt\",\"destination\":\"/Users/thomas/Documents/shopping.txt\"}}"}
-{"prompt":"put /Users/thomas/Desktop/status.txt into /Users/thomas/Downloads/status.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"/Users/thomas/Desktop/status.txt\",\"destination\":\"/Users/thomas/Downloads/status.txt\"}}"}
-{"prompt":"delete /Users/thomas/Desktop/file.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/file.txt\"}}"}
-{"prompt":"remove /Users/thomas/Desktop/note.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/note.txt\"}}"}
-{"prompt":"trash /Users/thomas/Downloads/test.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"/Users/thomas/Downloads/test.txt\"}}"}
-{"prompt":"move /Users/thomas/Desktop/old.txt to Trash","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/old.txt\"}}"}
+{"prompt":"move the file ~/Desktop/shopping.txt to ~/Documents/shopping.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"~/Desktop/shopping.txt\",\"destination\":\"~/Documents/shopping.txt\"}}"}
+{"prompt":"put ~/Desktop/status.txt into ~/Downloads/status.txt","completion":"{\"category\":\"files\",\"tool\":\"move_file\",\"params\":{\"source\":\"~/Desktop/status.txt\",\"destination\":\"~/Downloads/status.txt\"}}"}
+{"prompt":"delete ~/Desktop/file.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"~/Desktop/file.txt\"}}"}
+{"prompt":"remove ~/Desktop/note.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"~/Desktop/note.txt\"}}"}
+{"prompt":"trash ~/Downloads/test.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"~/Downloads/test.txt\"}}"}
+{"prompt":"move ~/Desktop/old.txt to Trash","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"~/Desktop/old.txt\"}}"}
 {"prompt":"delete ~/Desktop/axon-note.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"~/Desktop/axon-note.txt\"}}"}
-{"prompt":"remove file /Users/thomas/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"/Users/thomas/Documents/report.md\"}}"}
+{"prompt":"remove file ~/Documents/report.md","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"~/Documents/report.md\"}}"}
 {"prompt":"trash ~/Downloads/params-test.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"~/Downloads/params-test.txt\"}}"}
-{"prompt":"delete the file /Users/thomas/Desktop/shopping.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"/Users/thomas/Desktop/shopping.txt\"}}"}
+{"prompt":"delete the file ~/Desktop/shopping.txt","completion":"{\"category\":\"files\",\"tool\":\"delete_file\",\"params\":{\"path\":\"~/Desktop/shopping.txt\"}}"}
 {"prompt":"remind me to buy milk tomorrow at 18:00","completion":"{\"category\":\"third_party\",\"tool\":\"create_reminder\",\"params\":{\"title\":\"buy milk\",\"due_date\":\"tomorrow at 18:00\"}}"}
 {"prompt":"create reminder call the bank tomorrow morning","completion":"{\"category\":\"third_party\",\"tool\":\"create_reminder\",\"params\":{\"title\":\"call the bank\",\"due_date\":\"tomorrow morning\"}}"}
 {"prompt":"add reminder submit AXION benchmark tonight","completion":"{\"category\":\"third_party\",\"tool\":\"create_reminder\",\"params\":{\"title\":\"submit AXION benchmark\",\"due_date\":\"tonight\"}}"}
@@ -256,64 +256,64 @@
 {"prompt":"schedule Gym tonight 19:00 to 20:30","completion":"{\"category\":\"third_party\",\"tool\":\"create_calendar_event\",\"params\":{\"title\":\"Gym\",\"start\":\"tonight 19:00\",\"end\":\"tonight 20:30\"}}"}
 {"prompt":"add event Project call next Tuesday 15:00 to 16:00","completion":"{\"category\":\"third_party\",\"tool\":\"create_calendar_event\",\"params\":{\"title\":\"Project call\",\"start\":\"next Tuesday 15:00\",\"end\":\"next Tuesday 16:00\"}}"}
 {"prompt":"calendar event Doctor appointment tomorrow 08:00 to 08:30","completion":"{\"category\":\"third_party\",\"tool\":\"create_calendar_event\",\"params\":{\"title\":\"Doctor appointment\",\"start\":\"tomorrow 08:00\",\"end\":\"tomorrow 08:30\"}}"}
-{"prompt":"search ToolRegistry in /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\",\"query\":\"ToolRegistry\"}}"}
-{"prompt":"search ChatService in /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\",\"query\":\"ChatService\"}}"}
-{"prompt":"find PendingToolCall inside /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\",\"query\":\"PendingToolCall\"}}"}
-{"prompt":"search for executeToolCall in /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\",\"query\":\"executeToolCall\"}}"}
-{"prompt":"search category in /Users/thomas/Projects/AXION/AXION/data/test.jsonl","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION/AXION/data/test.jsonl\",\"query\":\"category\"}}"}
-{"prompt":"find search_file_content in /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\",\"query\":\"search_file_content\"}}"}
-{"prompt":"look for open_terminal_here in /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\",\"query\":\"open_terminal_here\"}}"}
-{"prompt":"search README in /Users/thomas/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\",\"query\":\"README\"}}"}
-{"prompt":"read pdf /Users/thomas/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"extract text from /Users/thomas/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"/Users/thomas/Desktop/test.pdf\"}}"}
-{"prompt":"read PDF file /Users/thomas/Documents/report.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"/Users/thomas/Documents/report.pdf\"}}"}
-{"prompt":"show text inside /Users/thomas/Downloads/document.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"/Users/thomas/Downloads/document.pdf\"}}"}
+{"prompt":"search ToolRegistry in ~/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"~/Projects/AXION\",\"query\":\"ToolRegistry\"}}"}
+{"prompt":"search ChatService in ~/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"~/Projects/AXION\",\"query\":\"ChatService\"}}"}
+{"prompt":"find PendingToolCall inside ~/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"~/Projects/AXION\",\"query\":\"PendingToolCall\"}}"}
+{"prompt":"search for executeToolCall in ~/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"~/Projects/AXION\",\"query\":\"executeToolCall\"}}"}
+{"prompt":"search category in ~/Projects/AXION/AXION/data/test.jsonl","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"~/Projects/AXION/AXION/data/test.jsonl\",\"query\":\"category\"}}"}
+{"prompt":"find search_file_content in ~/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"~/Projects/AXION\",\"query\":\"search_file_content\"}}"}
+{"prompt":"look for open_terminal_here in ~/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"~/Projects/AXION\",\"query\":\"open_terminal_here\"}}"}
+{"prompt":"search README in ~/Projects/AXION","completion":"{\"category\":\"files\",\"tool\":\"search_file_content\",\"params\":{\"path\":\"~/Projects/AXION\",\"query\":\"README\"}}"}
+{"prompt":"read pdf ~/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"~/Desktop/test.pdf\"}}"}
+{"prompt":"extract text from ~/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"~/Desktop/test.pdf\"}}"}
+{"prompt":"read PDF file ~/Documents/report.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"~/Documents/report.pdf\"}}"}
+{"prompt":"show text inside ~/Downloads/document.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"~/Downloads/document.pdf\"}}"}
 {"prompt":"extract pdf text from ~/Desktop/test.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"~/Desktop/test.pdf\"}}"}
-{"prompt":"read the content of pdf /Users/thomas/Desktop/invoice.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"/Users/thomas/Desktop/invoice.pdf\"}}"}
-{"prompt":"get text from /Users/thomas/Documents/course.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"/Users/thomas/Documents/course.pdf\"}}"}
-{"prompt":"parse pdf /Users/thomas/Downloads/notes.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"/Users/thomas/Downloads/notes.pdf\"}}"}
-{"prompt":"zip /Users/thomas/Desktop/AXIONZipTest to /Users/thomas/Desktop/AXIONZipTest.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"/Users/thomas/Desktop/AXIONZipTest\",\"destination\":\"/Users/thomas/Desktop/AXIONZipTest.zip\"}}"}
-{"prompt":"compress /Users/thomas/Desktop/AXIONZipTest into /Users/thomas/Desktop/AXIONZipTest.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"/Users/thomas/Desktop/AXIONZipTest\",\"destination\":\"/Users/thomas/Desktop/AXIONZipTest.zip\"}}"}
-{"prompt":"archive /Users/thomas/Documents/report.md to /Users/thomas/Desktop/report.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"/Users/thomas/Documents/report.md\",\"destination\":\"/Users/thomas/Desktop/report.zip\"}}"}
+{"prompt":"read the content of pdf ~/Desktop/invoice.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"~/Desktop/invoice.pdf\"}}"}
+{"prompt":"get text from ~/Documents/course.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"~/Documents/course.pdf\"}}"}
+{"prompt":"parse pdf ~/Downloads/notes.pdf","completion":"{\"category\":\"files\",\"tool\":\"read_pdf_text\",\"params\":{\"path\":\"~/Downloads/notes.pdf\"}}"}
+{"prompt":"zip ~/Desktop/AXIONZipTest to ~/Desktop/AXIONZipTest.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"~/Desktop/AXIONZipTest\",\"destination\":\"~/Desktop/AXIONZipTest.zip\"}}"}
+{"prompt":"compress ~/Desktop/AXIONZipTest into ~/Desktop/AXIONZipTest.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"~/Desktop/AXIONZipTest\",\"destination\":\"~/Desktop/AXIONZipTest.zip\"}}"}
+{"prompt":"archive ~/Documents/report.md to ~/Desktop/report.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"~/Documents/report.md\",\"destination\":\"~/Desktop/report.zip\"}}"}
 {"prompt":"create zip from ~/Desktop/FolderTest to ~/Desktop/FolderTest.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"~/Desktop/FolderTest\",\"destination\":\"~/Desktop/FolderTest.zip\"}}"}
-{"prompt":"compress folder /Users/thomas/Downloads/Export into /Users/thomas/Desktop/Export.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"/Users/thomas/Downloads/Export\",\"destination\":\"/Users/thomas/Desktop/Export.zip\"}}"}
-{"prompt":"zip file /Users/thomas/Desktop/notes.txt as /Users/thomas/Desktop/notes.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"/Users/thomas/Desktop/notes.txt\",\"destination\":\"/Users/thomas/Desktop/notes.zip\"}}"}
-{"prompt":"make archive /Users/thomas/Projects/AXION at /Users/thomas/Desktop/AXION.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"/Users/thomas/Projects/AXION\",\"destination\":\"/Users/thomas/Desktop/AXION.zip\"}}"}
+{"prompt":"compress folder ~/Downloads/Export into ~/Desktop/Export.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"~/Downloads/Export\",\"destination\":\"~/Desktop/Export.zip\"}}"}
+{"prompt":"zip file ~/Desktop/notes.txt as ~/Desktop/notes.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"~/Desktop/notes.txt\",\"destination\":\"~/Desktop/notes.zip\"}}"}
+{"prompt":"make archive ~/Projects/AXION at ~/Desktop/AXION.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"~/Projects/AXION\",\"destination\":\"~/Desktop/AXION.zip\"}}"}
 {"prompt":"compress ~/Downloads/params-test.txt to ~/Desktop/params-test.zip","completion":"{\"category\":\"files\",\"tool\":\"compress_file\",\"params\":{\"source\":\"~/Downloads/params-test.txt\",\"destination\":\"~/Desktop/params-test.zip\"}}"}
-{"prompt":"unzip /Users/thomas/Desktop/AXIONZipTest.zip to /Users/thomas/Desktop/AXIONExtracted","completion":"{\"category\":\"files\",\"tool\":\"extract_archive\",\"params\":{\"source\":\"/Users/thomas/Desktop/AXIONZipTest.zip\",\"destination\":\"/Users/thomas/Desktop/AXIONExtracted\"}}"}
-{"prompt":"extract /Users/thomas/Desktop/AXIONZipTest.zip into /Users/thomas/Desktop/AXIONExtracted2","completion":"{\"category\":\"files\",\"tool\":\"extract_archive\",\"params\":{\"source\":\"/Users/thomas/Desktop/AXIONZipTest.zip\",\"destination\":\"/Users/thomas/Desktop/AXIONExtracted2\"}}"}
-{"prompt":"extract archive /Users/thomas/Desktop/report.zip to /Users/thomas/Desktop/report","completion":"{\"category\":\"files\",\"tool\":\"extract_archive\",\"params\":{\"source\":\"/Users/thomas/Desktop/report.zip\",\"destination\":\"/Users/thomas/Desktop/report\"}}"}
+{"prompt":"unzip ~/Desktop/AXIONZipTest.zip to ~/Desktop/AXIONExtracted","completion":"{\"category\":\"files\",\"tool\":\"extract_archive\",\"params\":{\"source\":\"~/Desktop/AXIONZipTest.zip\",\"destination\":\"~/Desktop/AXIONExtracted\"}}"}
+{"prompt":"extract ~/Desktop/AXIONZipTest.zip into ~/Desktop/AXIONExtracted2","completion":"{\"category\":\"files\",\"tool\":\"extract_archive\",\"params\":{\"source\":\"~/Desktop/AXIONZipTest.zip\",\"destination\":\"~/Desktop/AXIONExtracted2\"}}"}
+{"prompt":"extract archive ~/Desktop/report.zip to ~/Desktop/report","completion":"{\"category\":\"files\",\"tool\":\"extract_archive\",\"params\":{\"source\":\"~/Desktop/report.zip\",\"destination\":\"~/Desktop/report\"}}"}
 {"prompt":"uncompress ~/Desktop/FolderTest.zip into ~/Desktop/FolderTest","completion":"{\"category\":\"files\",\"tool\":\"extract_archive\",\"params\":{\"source\":\"~/Desktop/FolderTest.zip\",\"destination\":\"~/Desktop/FolderTest\"}}"}
-{"prompt":"unzip /Users/thomas/Desktop/Export.zip /Users/thomas/Downloads/Export","completion":"{\"category\":\"files\",\"tool\":\"extract_archive\",\"params\":{\"source\":\"/Users/thomas/Desktop/Export.zip\",\"destination\":\"/Users/thomas/Downloads/Export\"}}"}
-{"prompt":"extract zip /Users/thomas/Desktop/notes.zip to /Users/thomas/Desktop/notes","completion":"{\"category\":\"files\",\"tool\":\"extract_archive\",\"params\":{\"source\":\"/Users/thomas/Desktop/notes.zip\",\"destination\":\"/Users/thomas/Desktop/notes\"}}"}
+{"prompt":"unzip ~/Desktop/Export.zip ~/Downloads/Export","completion":"{\"category\":\"files\",\"tool\":\"extract_archive\",\"params\":{\"source\":\"~/Desktop/Export.zip\",\"destination\":\"~/Downloads/Export\"}}"}
+{"prompt":"extract zip ~/Desktop/notes.zip to ~/Desktop/notes","completion":"{\"category\":\"files\",\"tool\":\"extract_archive\",\"params\":{\"source\":\"~/Desktop/notes.zip\",\"destination\":\"~/Desktop/notes\"}}"}
 {"prompt":"extract ~/Desktop/AXION.zip to ~/Desktop/AXIONExtracted","completion":"{\"category\":\"files\",\"tool\":\"extract_archive\",\"params\":{\"source\":\"~/Desktop/AXION.zip\",\"destination\":\"~/Desktop/AXIONExtracted\"}}"}
 {"prompt":"unzip ~/Desktop/params-test.zip to ~/Desktop/params-test","completion":"{\"category\":\"files\",\"tool\":\"extract_archive\",\"params\":{\"source\":\"~/Desktop/params-test.zip\",\"destination\":\"~/Desktop/params-test\"}}"}
-{"prompt":"open terminal in /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
-{"prompt":"open Terminal here /Users/thomas/Desktop","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"/Users/thomas/Desktop\"}}"}
-{"prompt":"launch terminal at /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"open terminal in ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
+{"prompt":"open Terminal here ~/Desktop","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"~/Desktop\"}}"}
+{"prompt":"launch terminal at ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
 {"prompt":"open terminal in ~/Desktop","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"~/Desktop\"}}"}
-{"prompt":"terminal here /Users/thomas/Downloads","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"/Users/thomas/Downloads\"}}"}
-{"prompt":"open a terminal window in /Users/thomas/Documents","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"/Users/thomas/Documents\"}}"}
+{"prompt":"terminal here ~/Downloads","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"~/Downloads\"}}"}
+{"prompt":"open a terminal window in ~/Documents","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"~/Documents\"}}"}
 {"prompt":"start Terminal in ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
-{"prompt":"open shell at /Users/thomas/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"/Users/thomas/Projects/AXION\"}}"}
+{"prompt":"open shell at ~/Projects/AXION","completion":"{\"category\":\"dev\",\"tool\":\"open_terminal_here\",\"params\":{\"path\":\"~/Projects/AXION\"}}"}
 {"prompt":"sort my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"by_extension\"}}"}
 {"prompt":"organize my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"by_extension\"}}"}
 {"prompt":"tidy my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"by_extension\"}}"}
 {"prompt":"arrange files in my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"by_extension\"}}"}
 {"prompt":"classify files in ~/Downloads","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"by_extension\"}}"}
-{"prompt":"organize /Users/thomas/Desktop by file type","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"/Users/thomas/Desktop\",\"mode\":\"by_extension\"}}"}
-{"prompt":"sort /Users/thomas/Downloads by extension","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"/Users/thomas/Downloads\",\"mode\":\"by_extension\"}}"}
-{"prompt":"organize folder /Users/thomas/Documents","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"/Users/thomas/Documents\",\"mode\":\"by_extension\"}}"}
+{"prompt":"organize ~/Desktop by file type","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"~/Desktop\",\"mode\":\"by_extension\"}}"}
+{"prompt":"sort ~/Downloads by extension","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"by_extension\"}}"}
+{"prompt":"organize folder ~/Documents","completion":"{\"category\":\"files\",\"tool\":\"organize_folder\",\"params\":{\"path\":\"~/Documents\",\"mode\":\"by_extension\"}}"}
 {"prompt":"clean my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"dry_run\"}}"}
 {"prompt":"clean ~/Downloads","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"dry_run\"}}"}
 {"prompt":"find junk files in my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"dry_run\"}}"}
 {"prompt":"find duplicates in ~/Downloads","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"dry_run\"}}"}
-{"prompt":"scan /Users/thomas/Desktop for useless files","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"/Users/thomas/Desktop\",\"mode\":\"dry_run\"}}"}
-{"prompt":"check /Users/thomas/Downloads for junk files","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"/Users/thomas/Downloads\",\"mode\":\"dry_run\"}}"}
-{"prompt":"dry run clean /Users/thomas/Documents","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"/Users/thomas/Documents\",\"mode\":\"dry_run\"}}"}
+{"prompt":"scan ~/Desktop for useless files","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Desktop\",\"mode\":\"dry_run\"}}"}
+{"prompt":"check ~/Downloads for junk files","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"dry_run\"}}"}
+{"prompt":"dry run clean ~/Documents","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Documents\",\"mode\":\"dry_run\"}}"}
 {"prompt":"safely clean my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"safe\"}}"}
 {"prompt":"move clean candidates from ~/Downloads safely","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Downloads\",\"mode\":\"safe\"}}"}
-{"prompt":"safely move junk files from /Users/thomas/Desktop","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"/Users/thomas/Desktop\",\"mode\":\"safe\"}}"}
+{"prompt":"safely move junk files from ~/Desktop","completion":"{\"category\":\"files\",\"tool\":\"clean_folder\",\"params\":{\"path\":\"~/Desktop\",\"mode\":\"safe\"}}"}
 {"prompt":"show my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Downloads\"}}"}
 {"prompt":"list my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Downloads\"}}"}
 {"prompt":"what is inside my Downloads folder","completion":"{\"category\":\"files\",\"tool\":\"list_directory\",\"params\":{\"path\":\"~/Downloads\"}}"}

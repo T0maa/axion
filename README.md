@@ -114,7 +114,7 @@ Examples:
 ```
 
 ```json
-{"type":"tool_call","category":"files","tool":"summarize_file","params":{"path":"/Users/thomas/Projects/AXION/README.md","style":"bullet_points"}}
+{"type":"tool_call","category":"files","tool":"summarize_file","params":{"path":"~/Projects/AXION/README.md","style":"bullet_points"}}
 ```
 
 The tools use the local LLM through *ChatService* with a dedicated summarization prompt, separated from the main tool-routing prompt.

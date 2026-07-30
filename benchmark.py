@@ -15,6 +15,9 @@ except ImportError:
 
 URL = "http://localhost:8080/v1/chat/completions"
 SCRIPT_DIR = Path(__file__).resolve().parent
+HOME_DIR = Path.home()
+DESKTOP_DIR = HOME_DIR / "Desktop"
+DOWNLOADS_DIR = HOME_DIR / "Downloads"
 DEFAULT_DATASET_PATH = SCRIPT_DIR / "data" / "test.jsonl"
 DEFAULT_MIN_TOOL_ACCURACY = 0.98
 DEFAULT_MIN_PARAM_ACCURACY = 0.97
@@ -197,7 +200,7 @@ EMPTY_PARAM_TOOLS = {
 
 def ask_model(prompt):
     payload = {
-        "model": "local",
+        "model": "Qwen/Qwen2.5-3B-Instruct",
         "messages": [
             {"role": "system", "content": SYSTEM_PROMPT},
             {"role": "user", "content": prompt},
@@ -308,7 +311,7 @@ def normalize_path(value):
     value = value.replace("'", "").replace('"', "")
 
     if value.startswith("~/"):
-        return value.replace("~", "/Users/thomas", 1)
+        return str(HOME_DIR / value[2:])
 
     return value
 
@@ -678,7 +681,7 @@ def canonical_params(tool, data):
             normalized["path"] = normalized.pop("file")
 
     if tool == "take_screenshot" and "path" not in normalized and "name" in normalized:
-        normalized["path"] = str(Path("/Users/thomas/Desktop") / normalized.pop("name"))
+        normalized["path"] = str(DESKTOP_DIR / normalized.pop("name"))
 
     if tool == "create_calendar_event" and "start" in normalized and "end" not in normalized:
         start = normalized["start"]
@@ -774,17 +777,17 @@ def normalize_prediction_from_prompt(prompt, tool, params):
         return "search_file_content", {"path": path, "query": normalize_text(query)}
 
     if (prompt_lower.startswith("arrange ") or prompt_lower.startswith("classify ")) and tool != "organize_folder":
-        path = "/Users/thomas/Downloads" if "downloads" in prompt_lower else ""
+        path = str(DOWNLOADS_DIR) if "downloads" in prompt_lower else ""
         return "organize_folder", {"path": path, "mode": "by_extension"}
 
     if ("safely" in prompt_lower or "move clean candidates" in prompt_lower or "move junk" in prompt_lower) and tool != "clean_folder":
         paths = extract_paths(prompt)
-        path = paths[0] if paths else "/Users/thomas/Downloads" if "downloads" in prompt_lower else ""
+        path = paths[0] if paths else str(DOWNLOADS_DIR) if "downloads" in prompt_lower else ""
         return "clean_folder", {"path": path, "mode": "apply"}
 
     if "find duplicates" in prompt_lower and tool != "clean_folder":
         paths = extract_paths(prompt)
-        path = paths[0] if paths else "/Users/thomas/Downloads" if "downloads" in prompt_lower else ""
+        path = paths[0] if paths else str(DOWNLOADS_DIR) if "downloads" in prompt_lower else ""
         return "clean_folder", {"path": path, "mode": "dry_run"}
 
     if prompt_lower.startswith("schedule ") and tool != "create_calendar_event":
@@ -1034,7 +1037,7 @@ def choose_plan_step_from_prompt(prompt, steps):
         }
 
     if prompt_lower.startswith("arrange ") or prompt_lower.startswith("classify "):
-        path = "/Users/thomas/Downloads" if "downloads" in prompt_lower else ""
+        path = str(DOWNLOADS_DIR) if "downloads" in prompt_lower else ""
         return {
             "type": "tool_call",
             "category": "files",
@@ -1043,7 +1046,7 @@ def choose_plan_step_from_prompt(prompt, steps):
         }
 
     if "safely" in prompt_lower or "move clean candidates" in prompt_lower or "move junk" in prompt_lower:
-        path = "/Users/thomas/Downloads" if "downloads" in prompt_lower else ""
+        path = str(DOWNLOADS_DIR) if "downloads" in prompt_lower else ""
         paths = extract_paths(prompt)
         if paths:
             path = paths[0]
