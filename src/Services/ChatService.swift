@@ -30,7 +30,8 @@ final class ChatService {
             .appendingPathComponent("data/system_prompt.txt")
         let nestedDevelopmentURL = currentDirectoryURL
             .appendingPathComponent("AXION/data/system_prompt.txt")
-        let projectURL = URL(fileURLWithPath: "/Users/thomas/Projects/AXION/AXION/data/system_prompt.txt")
+        let projectURL = fileManager.homeDirectoryForCurrentUser
+            .appendingPathComponent("Projects/AXION/AXION/data/system_prompt.txt")
         
         let candidates = [resourceURL, developmentURL, nestedDevelopmentURL, projectURL].compactMap { $0 }
         
