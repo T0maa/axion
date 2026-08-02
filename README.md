@@ -2,7 +2,30 @@
 
 AXION is a personal local-first macOS agent built with SwiftUI, AppKit, and a bundled `llama-server` runtime.
 
+This repository is also used as an experimentation space around prompt engineering and fine-tuning for local LLM agents. The different branches represent distinct stages of that work, and the detailed methodology is documented in the notebooks under `Notebooks/`.
+
 It is designed as a structured tool-routing system rather than a general chat assistant: the model is prompted to return compact JSON, the app parses that JSON into typed tool calls, applies runtime guardrails, executes local actions, and feeds tool results back into the conversation loop when needed.
+
+## Branches Overview
+
+- `main`
+  - Base project.
+  - Includes the baseline LLM setup and the main system prompt.
+  - Corresponds to the prompt engineering foundation of the project.
+- `features/summarize-file`
+  - Extends the prompt engineering work.
+  - Adds a `summarize_file` tool used to summarize documents and text.
+  - This tool relies on a second LLM call with a different system prompt specialized for summarization.
+- `features/finetuning`
+  - Dedicated branch for clean fine-tuning experiments.
+  - Used to evaluate whether fine-tuning improved routing performance and overall results.
+  - Serves as the main experimentation branch for comparing prompt engineering and fine-tuning approaches.
+
+## Research Notes
+
+- The prompt engineering work is documented in `Notebooks/`.
+- The fine-tuning workflow, experiments, and observations are also documented in `Notebooks/`.
+- The notebooks are the best entry point if you want the reasoning, methodology, and evaluation details behind the different branches.
 
 ## Design Goals
 
@@ -94,31 +117,6 @@ The runtime deliberately performs a second validation layer after generation:
 
 This split is intentional: the prompt defines the contract, while the runtime absorbs recoverable deviations and blocks unsafe behavior.
 
-## Feature branch: summarize tools
-
-This branch adds two LLM-powered summarization tools:
-
-- `summarize_text`: summarizes provided text.
-- `summarize_file`: reads and summarizes a local text-based file.
-
-Supported summary styles:
-- `short`
-- `detailed`
-- `bullet_points`
-- `technical`
-
-Examples:
-
-```json
-{"type":"tool_call","category":"text","tool":"summarize_text","params":{"text":"AXION is a local macOS assistant.","style":"short"}}
-```
-
-```json
-{"type":"tool_call","category":"files","tool":"summarize_file","params":{"path":"~/Projects/AXION/README.md","style":"bullet_points"}}
-```
-
-The tools use the local LLM through *ChatService* with a dedicated summarization prompt, separated from the main tool-routing prompt.
-
 ## Setup
 
 ### Requirements
@@ -189,4 +187,3 @@ The project therefore prioritizes:
 - benchmark-driven iteration
 
 It is opinionated, experimental, and optimized for iteration on agent reliability rather than for becoming a generic SDK.
-
