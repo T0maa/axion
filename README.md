@@ -6,6 +6,34 @@ This repository is also used as an experimentation space around prompt engineeri
 
 It is designed as a structured tool-routing system rather than a general chat assistant: the model is prompted to return compact JSON, the app parses that JSON into typed tool calls, applies runtime guardrails, executes local actions, and feeds tool results back into the conversation loop when needed.
 
+## Demo
+
+![AXION chat window](docs/screenshot.png)
+
+## Key Findings
+
+Three configurations of `Qwen2.5-3B-Instruct` were benchmarked on the same
+routing suite (320 single-step prompts, 50 multi-step scenarios) to answer
+one question: how far can prompt engineering alone take a small local model
+before fine-tuning is worth the added complexity?
+
+| Configuration               | Strict pass rate | Multi-step loop completion |
+| ---------------------------- | -----------------: | ----------------------------: |
+| Raw base model                | 0%                 | 42%                            |
+| + Engineered system prompt    | 89%                | 98%                            |
+| + LoRA fine-tuning (`v6`)     | 89%                | 86%                            |
+
+Prompt engineering alone accounts for nearly all of the usable routing
+behavior. A dedicated LoRA fine-tuning experiment — leakage-free dataset,
+validation-loss-based checkpoint selection, and a learning-rate ablation to
+rule out an under-trained adapter — did not outperform the prompt-engineered
+baseline on this benchmark, and in fact degraded multi-step tool ordering.
+
+This is treated as a real result rather than a discarded experiment: the
+prompt-engineered configuration is the one shipped, and the full reasoning,
+including the threats to validity that could explain the gap, is documented
+in `Notebooks/05_evaluation.ipynb`.
+
 ## Branches Overview
 
 - `main`
@@ -30,6 +58,7 @@ It is designed as a structured tool-routing system rather than a general chat as
 ## Design Goals
 
 - Keep inference local.
+- Run entirely on constrained consumer hardware (tested on Apple M4, 16 GB unified memory) rather than assuming a server-class GPU.
 - Constrain model output to a narrow JSON protocol.
 - Normalize predictable model drift in code when it is safe to do so.
 - Separate prompt routing, parsing, guardrails, and tool execution.
@@ -181,7 +210,7 @@ How far can a local model be pushed as a reliable macOS tool router when the run
 The project therefore prioritizes:
 
 - native app shell
-- local inference
+- local inference, including on constrained consumer hardware
 - strict tool routing
 - defensive runtime normalization
 - benchmark-driven iteration
