@@ -1,0 +1,15 @@
+jupyterlab
+ipykernel
+
+numpy
+pandas
+matplotlib
+
+psutil
+tqdm
+
+mlx
+mlx-lm
+transformers
+huggingface-hub
+safetensors
