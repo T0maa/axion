@@ -44,3 +44,16 @@ notebooks/assets/*.png
 *.zip
 *.tar
 *.tar.gz
+
+# Xcode
+build/
+DerivedData/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+xcuserdata/
+*.xccheckout
+*.moved-aside
+*.xcuserstate
+.DS_Store
