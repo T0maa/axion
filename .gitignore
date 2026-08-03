@@ -10,15 +10,6 @@ axion-env/
 
 .ipynb_checkpoints/
 
-.DS_Store
-
-.build/
-DerivedData/
-*.xcuserstate
-xcuserdata/
-*.xcodeproj/project.xcworkspace/xcuserdata/
-*.xcworkspace/xcuserdata/
-
 *.log
 logs/
 
